@@ -141,6 +141,7 @@ static lv_image_dsc_t s_plane_img;
 static lv_obj_t *g_canvas;
 static lv_obj_t *g_lbl_flight;
 static lv_obj_t *g_lbl_origin;
+static lv_obj_t *g_lbl_route_arrow;
 static lv_obj_t *g_lbl_destination;
 static lv_obj_t *g_lbl_aircraft_code;
 static lv_obj_t *g_lbl_airline;
@@ -572,6 +573,62 @@ static lv_obj_t *make_label(lv_obj_t *parent, const char *txt,
     return l;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+ *  Origin → destination row (tight layout + marquee for long names)
+ *  Text longer than 12 chars scrolls left (SCROLL_CIRCULAR); short text
+ *  keeps its natural width so the arrow sits right after the text.
+ * ═══════════════════════════════════════════════════════════════════════*/
+#define ROUTE_ROW_X      40
+#define ROUTE_ROW_Y      72
+#define ROUTE_ROW_MAX_W  196   /* ROUTE_ROW_X .. right edge minus margin */
+#define ROUTE_ROW_GAP    4
+
+static lv_coord_t route_text_width(const char *text)
+{
+    lv_point_t sz;
+    lv_text_get_size(&sz, text, &lv_font_montserrat_10, 0, 0, LV_COORD_MAX,
+                     LV_TEXT_FLAG_NONE);
+    return sz.x;
+}
+
+static void update_route_label(lv_obj_t *lbl, const char *text, lv_coord_t scroll_w)
+{
+    /* Skip if text unchanged so an active marquee keeps scrolling */
+    if (strcmp(lv_label_get_text(lbl), text) == 0)
+        return;
+
+    lv_label_set_text(lbl, text);
+    if (strlen(text) > 12)
+    {
+        lv_label_set_long_mode(lbl, LV_LABEL_LONG_SCROLL_CIRCULAR);
+        lv_obj_set_width(lbl, scroll_w);
+    }
+    else
+    {
+        lv_label_set_long_mode(lbl, LV_LABEL_LONG_CLIP);
+        lv_obj_set_width(lbl, route_text_width(text));
+    }
+}
+
+static void update_route_row(const char *origin, const char *destination)
+{
+    lv_coord_t x = ROUTE_ROW_X;
+
+    update_route_label(g_lbl_origin, origin, 76);
+    lv_obj_set_pos(g_lbl_origin, x, ROUTE_ROW_Y);
+    x += lv_obj_get_width(g_lbl_origin) + ROUTE_ROW_GAP;
+
+    lv_obj_set_pos(g_lbl_route_arrow, x, ROUTE_ROW_Y - 2);
+    x += lv_obj_get_width(g_lbl_route_arrow) + ROUTE_ROW_GAP;
+
+    update_route_label(g_lbl_destination, destination, 88);
+    lv_coord_t dw = lv_obj_get_width(g_lbl_destination);
+    if (x + dw > ROUTE_ROW_X + ROUTE_ROW_MAX_W)
+        dw = ROUTE_ROW_X + ROUTE_ROW_MAX_W - x;
+    lv_obj_set_width(g_lbl_destination, dw);
+    lv_obj_set_pos(g_lbl_destination, x, ROUTE_ROW_Y);
+}
+
 // Returns pointer to direction string (8-point compass)
 const char *heading_to_direction(float heading)
 {
@@ -623,8 +680,7 @@ static void ui_timer_cb(lv_timer_t *t)
 
         lv_label_set_text(g_lbl_flight, g_flight.flight);
         lv_label_set_text(g_lbl_aircraft_code, g_flight.aircraft_code);
-        lv_label_set_text(g_lbl_origin, g_flight.origin);
-        lv_label_set_text(g_lbl_destination, g_flight.destination);
+        update_route_row(g_flight.origin, g_flight.destination);
         lv_label_set_text(g_lbl_airline, g_flight.airline);
 
         snprintf(buf, sizeof(buf), "%d ft", g_flight.altitude_ft);
@@ -767,21 +823,14 @@ void flight_tracker_ui_init(void)
     g_lbl_aircraft_code = make_label(scr, g_flight.aircraft_code, &lv_font_montserrat_12, CLR_WHITE,
                                      LV_ALIGN_TOP_LEFT, 40, 58);
 
-    // origin — municipality name (clipped if too long)
+    // origin → destination — tight row, marquee if either name is long
     g_lbl_origin = make_label(scr, g_flight.origin, &lv_font_montserrat_10, CLR_WHITE,
                               LV_ALIGN_TOP_LEFT, 40, 72);
-    lv_obj_set_width(g_lbl_origin, 88);
-    lv_label_set_long_mode(g_lbl_origin, LV_LABEL_LONG_CLIP);
-
-    // arrow
-    make_label(scr, "\ue941", &material_icons, CLR_WHITE,
-               LV_ALIGN_TOP_LEFT, 132, 68);
-
-    // destination — municipality name (clipped if too long)
+    g_lbl_route_arrow = make_label(scr, LV_SYMBOL_RIGHT, &lv_font_montserrat_10, CLR_WHITE,
+                                   LV_ALIGN_TOP_LEFT, 0, 0);
     g_lbl_destination = make_label(scr, g_flight.destination, &lv_font_montserrat_10, CLR_WHITE,
-                                   LV_ALIGN_TOP_LEFT, 142, 72);
-    lv_obj_set_width(g_lbl_destination, 92);
-    lv_label_set_long_mode(g_lbl_destination, LV_LABEL_LONG_CLIP);
+                                   LV_ALIGN_TOP_LEFT, 0, 0);
+    update_route_row(g_flight.origin, g_flight.destination);
 
     make_label(scr, "AIRLINE", &lv_font_montserrat_10, CLR_GRAY,
                LV_ALIGN_TOP_RIGHT, -4, 34);
@@ -789,7 +838,7 @@ void flight_tracker_ui_init(void)
     g_lbl_airline = make_label(scr, g_flight.airline, &lv_font_montserrat_14, CLR_GREEN,
                                LV_ALIGN_TOP_RIGHT, -4, 50);
     lv_obj_set_content_width(g_lbl_airline, 100);
-    lv_label_set_long_mode(g_lbl_airline, LV_LABEL_LONG_WRAP);
+    lv_label_set_long_mode(g_lbl_airline, LV_LABEL_LONG_CLIP);
     lv_obj_set_style_text_align(g_lbl_airline, LV_TEXT_ALIGN_RIGHT, 0);
 
     add_divider(scr, 88);
