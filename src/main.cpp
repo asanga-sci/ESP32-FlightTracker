@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <new>
 #include "ui/flight_tracker_ui.h"
 #include "flight_info.h"
 #include "airport_info.h"
@@ -43,10 +44,10 @@ typedef struct
     char icao_address[7];       // ICAO 24-bit address as hex string (e.g. "4CA853")
     char flight[10];
     char aircraft_code[8];
-    char origin[4];
-    char destination[4];
+    char origin[32];            // municipality from adsbdb (e.g. "Bangkok")
+    char destination[32];       // municipality from adsbdb (e.g. "Khon Kaen")
     char airline[4];
-    char airline_name[50]; // Resolved airline name from ICAO code
+    char airline_name[50]; // Resolved airline name from adsbdb
     float latitude;
     float longitude;
     float distance_km;
@@ -250,27 +251,34 @@ void http_fetch_task(void *param)
     int base_fetch_interval_ms = 10000; /* Start with a 10s base poll interval */
     int fetch_interval_ms = base_fetch_interval_ms;
     uint32_t last_fetch = millis();
+    uint32_t last_http_hb = 0;
     while (true)
     {
         uint32_t now = millis();
+        if (now - last_http_hb >= 2000)
+        {
+            last_http_hb = now;
+            log_i("[HTTP] alive @%u ms, free heap=%u, HTTP stack HWM=%u",
+                  (unsigned)now, (unsigned)ESP.getFreeHeap(),
+                  (unsigned)uxTaskGetStackHighWaterMark(NULL));
+        }
         if (now - last_fetch >= fetch_interval_ms)
         {
             last_fetch = now;
             log_i("[Flight Fetch Task]: Fetching flight data...");
-            flights_wrapper_msg_t wrapper_msg;
+            static flights_wrapper_msg_t wrapper_msg;
             String error_message;
             std::vector<flight_info> local_flights;
 
-            if(ESP.getFreeHeap()< sizeof(flight_info) *30){
-                log_i("[Flight Fetch Task]: Not enough memory reserving for 20");
-                local_flights.reserve(20);
-            }else{
-                local_flights.reserve(30);
-            }
+            /* No explicit reserve: get_flights grows via push_back, and a large
+               upfront alloc was the OOM point. Heap guards live in get_flights(). */
+            log_i("[Flight Fetch Task]: sizeof(flight_info)=%u, free=%u, largest=%u",
+                  (unsigned)sizeof(flight_info), (unsigned)ESP.getFreeHeap(),
+                  (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
 
             // Fetch into temporary list (no mutex needed here)
-            // 1.0° range ≈ 100km diameter ≈ 50km radius for full radar coverage
-            get_flights(cfg.lat, cfg.lon, (cfg.radiusKm * 2)/100.0, (cfg.radiusKm * 2)/100.0, true, false, true, true, local_flights, error_message);
+            // range_latitude now carries the search radius in km
+            get_flights(cfg.lat, cfg.lon, cfg.radiusKm, cfg.radiusKm, true, false, true, true, local_flights, error_message);
 
             const bool have_flight_data = !local_flights.empty();
             int target_interval_ms = base_fetch_interval_ms;
@@ -291,6 +299,12 @@ void http_fetch_task(void *param)
                 // Send to UI queue (non-blocking)
                 for (const flight_info &f : local_flights)
                 {
+                    if (wrapper_msg.count >= (int)(sizeof(wrapper_msg.flights) / sizeof(wrapper_msg.flights[0])))
+                    {
+                        log_w("Flight queue full, dropping %u remaining aircraft", local_flights.size() - wrapper_msg.count);
+                        break;
+                    }
+
                     /* Calculate distance and bearing */
                     double dist = calc_dist_km(cfg.lat, cfg.lon, f.latitude, f.longitude);
                     int bearing = calc_bearing_deg(cfg.lat, cfg.lon, f.latitude, f.longitude);
@@ -305,14 +319,17 @@ void http_fetch_task(void *param)
                     strncpy(flight_msg.aircraft_code, f.aircraft_code.c_str(), sizeof(flight_msg.aircraft_code) - 1);
                     flight_msg.aircraft_code[sizeof(flight_msg.aircraft_code) - 1] = '\0';
 
-                    strncpy(flight_msg.origin, f.iata_origin_airport.c_str(), sizeof(flight_msg.origin) - 1);
+                    strncpy(flight_msg.origin, f.origin_airport.c_str(), sizeof(flight_msg.origin) - 1);
                     flight_msg.origin[sizeof(flight_msg.origin) - 1] = '\0';
 
-                    strncpy(flight_msg.destination, f.iata_destination_airport.c_str(), sizeof(flight_msg.destination) - 1);
+                    strncpy(flight_msg.destination, f.destination_airport.c_str(), sizeof(flight_msg.destination) - 1);
                     flight_msg.destination[sizeof(flight_msg.destination) - 1] = '\0';
 
                     strncpy(flight_msg.airline, f.icao_airline.c_str(), sizeof(flight_msg.airline) - 1);
                     flight_msg.airline[sizeof(flight_msg.airline) - 1] = '\0';
+
+                    strncpy(flight_msg.airline_name, f.airline_name.c_str(), sizeof(flight_msg.airline_name) - 1);
+                    flight_msg.airline_name[sizeof(flight_msg.airline_name) - 1] = '\0';
 
                     flight_msg.latitude = f.latitude;
                     flight_msg.longitude = f.longitude;
@@ -368,6 +385,7 @@ void ui_update_task(void *param)
     flight_tracker_ui_init();
 
     uint32_t last_update = 0;
+    uint32_t last_ui_hb = 0;
     String previous_tracked_flight;
     char airline_name[NAME_LEN + 1] = {0};
 
@@ -389,7 +407,7 @@ void ui_update_task(void *param)
         }
 
         /* Check for new flight data from HTTP task */
-        flights_wrapper_msg_t wrapper_msg;
+        static flights_wrapper_msg_t wrapper_msg;
         std::vector<latlon_t> planes_in_radar;
         if (xQueueReceive(g_flight_queue, &wrapper_msg, 0) == pdTRUE)
         {
@@ -403,11 +421,20 @@ void ui_update_task(void *param)
 
                 log_i("UI Task: Received flight data, updating UI...");
 
-                // resolve airline name from ICAO code
+                // resolve airline name — prefer adsbdb, fall back to LittleFS lookup
                 if (strcmp(previous_tracked_flight.c_str(), msg.flight) != 0)
                 {
-                    lookupAirline(airlines, msg.airline, airline_name);
-                    log_i("Resolved airline name: %s", airline_name);
+                    if (msg.airline_name[0] != '\0')
+                    {
+                        strncpy(airline_name, msg.airline_name, NAME_LEN);
+                        airline_name[NAME_LEN] = '\0';
+                        log_i("Airline name from adsbdb: %s", airline_name);
+                    }
+                    else
+                    {
+                        lookupAirline(airlines, msg.airline, airline_name);
+                        log_i("Resolved airline name (lookup): %s", airline_name);
+                    }
                     previous_tracked_flight = msg.flight; // Update tracked flight to avoid redundant lookups
                     log_i("prepare logo req for airline : %s", msg.airline);
                     airline_logo_req_t req;
@@ -477,7 +504,11 @@ void ui_update_task(void *param)
         }
 
         /* Update UI (50 ms = 20 fps) */
+        uint32_t t0_lv = millis();
         lv_timer_handler();
+        uint32_t dt_lv = millis() - t0_lv;
+        if (dt_lv > 200)
+            log_w("lv_timer_handler took %u ms", (unsigned)dt_lv);
 
         /* Update time every second */
         if (millis() - last_update >= 1000)
@@ -489,6 +520,23 @@ void ui_update_task(void *param)
             char time_str[16];
             strftime(time_str, sizeof(time_str), "%H:%M", timeinfo);
             update_time(time_str);
+        }
+
+        uint32_t now_ui = millis();
+        if (now_ui - last_ui_hb >= 2000)
+        {
+            last_ui_hb = now_ui;
+            log_i("[UI] alive @%u ms, free heap=%u, largest=%u, UI stack HWM=%u",
+                  (unsigned)now_ui, (unsigned)ESP.getFreeHeap(),
+                  (unsigned)ESP.getMaxAllocHeap(),
+                  (unsigned)uxTaskGetStackHighWaterMark(NULL));
+            if ((now_ui / 4000) % 2 == 0)
+            {
+                if (heap_caps_check_integrity_all(true))
+                    log_i("[UI] heap integrity OK");
+                else
+                    log_e("[UI] HEAP CORRUPTED!");
+            }
         }
 
         vTaskDelay(50 / portTICK_PERIOD_MS);
@@ -707,7 +755,7 @@ void setup()
     xTaskCreatePinnedToCore(
         http_fetch_task, /* Task function */
         "HTTP_Task",     /* Task name */
-        12288,           /* Stack size (bytes) - HTTP needs more */
+        16384,           /* Stack size (bytes) - TLS handshake ~8KB + frames; the 9KB flights_wrapper_msg_t is static, so 32KB was overkill */
         NULL,            /* Parameters */
         5,               /* Priority */
         NULL,            /* Task handle */

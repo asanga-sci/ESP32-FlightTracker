@@ -1,16 +1,19 @@
 # ESP32 Flight Radar (CYD Edition)
 
-A real-time flight tracking station designed for the **ESP32-2432S028R** (Cheap Yellow Display). This project fetches live ADS-B data from FlightRadar24 and visualizes aircraft on a radar-style interface.
+A real-time flight tracking station designed for the **ESP32-2432S028R** (Cheap Yellow Display). This project fetches live ADS-B data and visualizes aircraft on a radar-style interface.
+
+> **Data source migration:** We are moving away from the proprietary FlightRadar24 feed toward fully open, community-driven sources — [airplanes.live](https://airplanes.live) for live flight data and [adsbdb.com](https://adsbdb.com) for aircraft and airline metadata.
 
 ## 🚀 Features
 
 *   **Real-time Tracking:** Fetches live flight data including ICAO address, flight number, aircraft type, altitude, speed, and heading.
+*   **Open Data Sources:** Live ADS-B positions from **airplanes.live** and aircraft/airline metadata from **adsbdb.com** — no proprietary API keys required.
 *   **Optimized UI:** Built with **LVGL 9.1**, featuring a radar display and detailed flight information panels optimized for the 2.8" TFT.
 *   **Dual-Core Architecture:** 
     *   **Core 0:** Dedicated to UI rendering and resistive touch handling.
     *   **Core 1:** Manages WiFi, HTTP requests, JSON parsing, and image decoding.
 *   **Web Configuration:** Integrated WiFi Manager and settings portal to configure your GPS coordinates and tracking radius without reflashing.
-*   **Airline Logos:** Dynamically fetches and caches airline logos using the LogoStream API.
+*   **Airline Logos:** Dynamically fetches and caches airline logos using the LogoStream API (optional).
 *   **Local Database:** Resolves airline ICAO codes to full names using a database stored in `LittleFS`.
 
 ## 🛠️ Hardware
@@ -63,10 +66,10 @@ On first boot, the device will enter **Setup Mode**:
 
 ## 📜 Data Sources & Credits
 
-*   Flight data provided via the FlightRadar24 public feed.
-*   Airline logos provided by LogoStream.
+*   Flight data provided by the open-source **airplanes.live** ADS-B aggregator.
+*   Aircraft and airline metadata resolved via **adsbdb.com**.
+*   Airline logos provided by LogoStream (optional).
 *   Distance and bearing calculated using the Haversine formula.
 
 ---
-*Disclaimer: This project is for educational purposes. Ensure you comply with the terms of service of the data providers.*
-```
+*Disclaimer: This project is for educational purposes. Data from airplanes.live and adsbdb.com is open and freely licensed; ensure you comply with their respective usage policies.*

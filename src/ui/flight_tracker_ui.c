@@ -91,8 +91,8 @@ typedef struct
 {
     char icao_address[7];
     char flight[10];
-    char origin[4];
-    char destination[4];
+    char origin[32];        /* municipality from adsbdb (e.g. "Bangkok") */
+    char destination[32];   /* municipality from adsbdb (e.g. "Khon Kaen") */
     char aircraft_code[8];
     float latitude;
     float longitude;
@@ -767,17 +767,21 @@ void flight_tracker_ui_init(void)
     g_lbl_aircraft_code = make_label(scr, g_flight.aircraft_code, &lv_font_montserrat_12, CLR_WHITE,
                                      LV_ALIGN_TOP_LEFT, 40, 58);
 
-    // origin
-    g_lbl_origin = make_label(scr, g_flight.origin, &lv_font_montserrat_12, CLR_WHITE,
-                              LV_ALIGN_TOP_LEFT, 40, 70);
+    // origin — municipality name (clipped if too long)
+    g_lbl_origin = make_label(scr, g_flight.origin, &lv_font_montserrat_10, CLR_WHITE,
+                              LV_ALIGN_TOP_LEFT, 40, 72);
+    lv_obj_set_width(g_lbl_origin, 88);
+    lv_label_set_long_mode(g_lbl_origin, LV_LABEL_LONG_CLIP);
 
     // arrow
     make_label(scr, "\ue941", &material_icons, CLR_WHITE,
-               LV_ALIGN_TOP_LEFT, 70, 66);
+               LV_ALIGN_TOP_LEFT, 132, 68);
 
-    // destination
-    g_lbl_destination = make_label(scr, g_flight.destination, &lv_font_montserrat_12, CLR_WHITE,
-                                   LV_ALIGN_TOP_LEFT, 100, 70);
+    // destination — municipality name (clipped if too long)
+    g_lbl_destination = make_label(scr, g_flight.destination, &lv_font_montserrat_10, CLR_WHITE,
+                                   LV_ALIGN_TOP_LEFT, 142, 72);
+    lv_obj_set_width(g_lbl_destination, 92);
+    lv_label_set_long_mode(g_lbl_destination, LV_LABEL_LONG_CLIP);
 
     make_label(scr, "AIRLINE", &lv_font_montserrat_10, CLR_GRAY,
                LV_ALIGN_TOP_RIGHT, -4, 34);

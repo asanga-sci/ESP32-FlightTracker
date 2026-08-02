@@ -4,35 +4,34 @@
 #include <list>
 #include <vector>
 
-// Database of airplanes from https://openflights.org/data.html
-// #include <aircraft.h>
-// #include <airline.h>
-// #include <airport.h>
-
 // Conversions to metric
 #define FT_TO_M 0.3048
 #define KTS_TO_KMH 1.852f
 
+// Open-data flight model.
+// Positions/telemetry come from airplanes.live (community ADS-B aggregator);
+// origin/destination municipalities + airline details come from adsbdb.com.
 struct flight_info
 {
-    String icao_address;             //  0 => ICAO 24BIT ADDRESS - 4CA853
-    float latitude;                  //  1 => LAT - 52.3247
-    float longitude;                 //  2 => LON - 4.9812
-    int heading;                     //  3 => TRACK - 263 (Degrees)
-    int altitude;                    //  4 => ALTITUDE - 2100  (Feet)
-    int ground_speed;                //  5 => SPEED - 144 (Knots)
-    String squawk;                   //  6 => SQUAWK -
-    String radar;                    //  7 => RADAR -
-    String aircraft_code;            //  8 => TYPE - B744 => Boeing 747-4B5(BCF)
-    String registration;             //  9 => REGISTRATION - N709CK
-    time_t timestamp;                // 10 => TIMSTAMP - 1593976456
-    String iata_origin_airport;      // 11 => FROM - AMS
-    String iata_destination_airport; // 12 => TO - JFK
-    String flight;                   // 13 => FLIGHT NUMBER - LH8160
-    bool on_ground;                  // 14 => ON GROUND - 0
-    int vertical_speed;              // 15 => VSPEED - 0
-    String call_sign;                // 16 => TRA822
-    String icao_airline;             // 18 => OPERATOR - RYR
+    String icao_address;             // ICAO 24-bit address hex (e.g. "8832CB")
+    float latitude;
+    float longitude;
+    int heading;                     // degrees true
+    int altitude;                    // barometric altitude (feet), 0 when on ground
+    int ground_speed;                // knots
+    String squawk;
+    String radar;                    // unused (airplanes.live has no radar feed field)
+    String aircraft_code;            // ICAO type code (e.g. "B739")
+    String registration;             // tail number (e.g. "HS-LVK")
+    time_t timestamp;
+    String origin_airport;           // municipality from adsbdb (e.g. "Bangkok")
+    String destination_airport;      // municipality from adsbdb (e.g. "Khon Kaen")
+    String flight;                   // flight number / callsign (e.g. "TLM646")
+    bool on_ground;
+    int vertical_speed;              // ft/min
+    String call_sign;
+    String icao_airline;             // airline ICAO code from adsbdb (e.g. "TLM")
+    String airline_name;             // airline name from adsbdb (e.g. "Thai Lion Air")
 
     String toString() const;
 
@@ -43,12 +42,11 @@ struct flight_info
     bool squawk_hijack() const { return squawk == "7500"; }
     bool squawk_radio_failure() const { return squawk == "7600"; }
     bool squawk_emergency() const { return squawk == "7700"; }
-
-    //const aircraft_t *aircraft_type() const { return aircraft_code.isEmpty() ? nullptr : lookup_aircraft(aircraft_code.c_str()); }
-    //const airline_t *airline() const { return icao_airline.isEmpty() ? nullptr : lookup_airline(icao_airline.c_str()); }
-    //const airport_t *origin_airport() const { return iata_origin_airport.isEmpty() ? nullptr : lookup_airport(iata_origin_airport.c_str()); }
-    //const airport_t *destination_airport() const { return iata_destination_airport.isEmpty() ? nullptr : lookup_airport(iata_destination_airport.c_str()); }
 };
 
+// Fetches aircraft in a circle around (latitude, longitude).
+// range_latitude is the search radius in kilometres (range_longitude ignored).
+// Planes are sorted by distance (closest first); the closest aircraft is
+// enriched with route/airline data from adsbdb.com.
 extern bool get_flights(float latitude, float longitude, float range_latitude, float range_longitude, bool air, bool ground, bool gliders, bool vehicles, std::vector<flight_info> &flights, String &error_message);
 extern size_t get_logo(const char *icao_airline, std::vector<uint8_t> &buffer, String &error_message);
