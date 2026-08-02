@@ -1,8 +1,13 @@
-# ESP32 Flight Radar (CYD Edition)
+# ESP32 Flight Tracker
 
-A real-time flight tracking station designed for the **ESP32-2432S028R** (Cheap Yellow Display). This project fetches live ADS-B data and visualizes aircraft on a radar-style interface.
+A real-time flight tracking station for **ESP32 boards with a 2.8" 240x320 ILI9341 TFT**. This project fetches live ADS-B data from FlightRadar24 and visualizes aircraft on a radar-style interface.
 
-> **Data source migration:** We are moving away from the proprietary FlightRadar24 feed toward fully open, community-driven sources — [airplanes.live](https://airplanes.live) for live flight data and [adsbdb.com](https://adsbdb.com) for aircraft and airline metadata.
+Two hardware variants are supported:
+
+| Variant | Board | Env | Config |
+| :--- | :--- | :--- | :--- |
+| **CYD** (Cheap Yellow Display) | ESP32-2432S028R | `esp32-2432S028R` | `include/User_Setup.h` |
+| **CBD** (Cheap Black Display) | ESP32-S3 ES3C28P / Freenove FNK0104A-B | `esp32-s3-es3c28p` | `include/User_Setup_S3.h` |
 
 ## 🚀 Features
 
@@ -18,9 +23,8 @@ A real-time flight tracking station designed for the **ESP32-2432S028R** (Cheap 
 
 ## 🛠️ Hardware
 
-This project is pre-configured for the **ESP32-2432S028R**:
-*   **Display:** 2.8" 240x320 TFT (ILI9341).
-*   **Touch:** Resistive touch (XPT2046).
+*   **CYD:** ESP32-2432S028R (ESP32-WROOM-32) with 2.8" ILI9341 TFT, resistive touch (XPT2046), 4 MB flash.
+*   **CBD:** ESP32-S3 ES3C28P (ESP32-S3-WROOM-1) with 2.8" ILI9341 TFT, resistive touch (XPT2046), **16 MB flash + 8 MB OPI PSRAM**, native USB CDC (no UART bridge chip).
 *   **Storage:** Internal Flash used via `LittleFS` for configuration and airline data.
 
 ## 📦 Software Setup
@@ -29,20 +33,27 @@ This project is built using **PlatformIO**.
 
 ### Dependencies
 *   **LVGL 9.1.0+**
-*   **TFT_eSPI** (Pre-configured for CYD via `include/User_Setup.h`)
+*   **TFT_eSPI** (Pre-configured per board via `include/User_Setup.h` / `include/User_Setup_S3.h`)
 *   **ArduinoJson 7.x**
-*   **LodePNG**
+*   **LodePNG** (vendored under `lib/lodepng`)
 
-### Installation
+### Build & Flash
 
-1.  **Clone the repository.**
-2.  **Upload Airline Database:** 
-    *   Place your `airlines.txt` in the `data` folder.
-    *   Use the PlatformIO "Upload Filesystem Image" task to flash the `LittleFS` partition.
-3.  **Partition Scheme:** 
-    *   The project requires the `huge_app.csv` scheme (specified in `platformio.ini`) to accommodate LVGL and the firmware.
-4.  **Flash:**
-    *   Build and upload the project to your ESP32.
+```bash
+pio run -e esp32-2432S028R          # compile the CYD variant
+pio run -e esp32-s3-es3c28p         # compile the CBD variant
+pio run -t upload                   # build + flash the active variant
+pio run -t uploadfs                 # flash LittleFS image (airlines.txt, etc.)
+```
+
+Notes:
+*   The **CYD** variant uses the `huge_app.csv` partition scheme; the **CBD** variant uses `default_16MB.csv` (specified in `platformio.ini`).
+*   The CBD variant flashes over native USB CDC at 921600 baud.
+
+### Uploading the Airline Database
+
+1.  Place your `airlines.txt` in the `data` folder.
+2.  Use `pio run -t uploadfs` to flash the `LittleFS` partition.
 
 ## ⚙️ Configuration
 
@@ -72,4 +83,4 @@ On first boot, the device will enter **Setup Mode**:
 *   Distance and bearing calculated using the Haversine formula.
 
 ---
-*Disclaimer: This project is for educational purposes. Data from airplanes.live and adsbdb.com is open and freely licensed; ensure you comply with their respective usage policies.*
+*Disclaimer: This project is for educational purposes. Ensure you comply with the terms of service of the data providers.*
