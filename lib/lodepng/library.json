@@ -1,0 +1,12 @@
+{
+  "name": "lodepng",
+  "version": "0.0.0",
+  "description": "Vendored minimal LodePNG (lodepng.cpp/.h) - the registry package ships example files that do not compile for ESP32.",
+  "frameworks": "*",
+  "platforms": "*",
+  "build": {
+    "srcFilter": [
+      "+<lodepng.cpp>"
+    ]
+  }
+}
