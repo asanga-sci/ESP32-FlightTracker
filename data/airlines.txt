@@ -1,0 +1,4111 @@
+AAC|United Kingdom - Army Air Corps
+AAD|flytrip
+AAH|Aloha Air Cargo
+AAJ|Alfa Airlines
+AAL|American Airlines
+AAN|Atmospherica Aviation
+AAO|Alpha Aviation
+AAR|Asiana Airlines
+AAT|Africa Airlines
+AAW|Afriqiyah Airways
+AAY|Allegiant Air
+ABA|Aero-Beta Flight Training
+ABF|Scanwings
+ABL|Air Busan
+ABQ|airblue
+ABR|ASL Airlines
+ABS|FlyGabon
+ABT|Benin Airlines
+ABW|AirBridgeCargo
+ABX|ABX Air
+ABY|Air Arabia
+ACA|Air Canada
+ACI|Aircalin
+ACL|AerCaribe Cargo
+ACN|Azul Conecta
+ACP|Astral Aviation
+ACW|Fly Across
+ACY|Alpha Crux
+ADB|Antonov Airlines
+ADJ|Aladdin Jet
+ADM|Air Dream College
+ADN|Aero-Dienst
+ADO|Air Do
+ADV|Advanced Flight Training
+ADZ|Compass Air Cargo
+AEA|Air Europa
+AED|EADS CASA
+AEE|Aegean Airlines
+AEG|Airest
+AEP|Aerotec
+AER|Alaska Central Express
+AEW|Aegean Executive
+AEZ|Aeroitalia
+AFB|Bulgaria - Air Force
+AFE|Airfast Indonesia
+AFG|Ariana Afghan Airlines
+AFL|Aeroflot
+AFP|Portugal - Air Force
+AFR|Air France
+AFW|Africa World Airlines
+AFZ|Atlantic Flight Training Academy
+AGH|Altagna
+AGR|Air Charters Europe
+AGU|Angara Airlines
+AGV|Air-Glaciers
+AHC|Ascent Helicopters
+AHF|Aspen Helicopters
+AHX|Amakusa Airlines
+AHY|Azerbaijan Airlines
+AIA|Amelia
+AIB|Airbus
+AIC|Air India
+AIE|Air Inuit
+AIH|AirZeta
+AIP|Alpine Air Express
+AIZ|arkia
+AJB|American Jet
+AJH|Aeroaljarafe
+AJI|Ameristar
+AJK|Allied Air
+AJO|Av8Jet
+AJP|Anap Jets
+AJT|Amerijet International
+AKF|Aero Toyota
+AKJ|Akasa Air
+AKK|Sundt Air
+AKL|Air Kiribati
+AKN|Alkan Air
+AKT|Canadian North
+ALE|AllianceJet
+ALI|Airlift
+ALK|SriLankan Airlines
+ALW|ALS
+ALZ|Azure Aviation
+AMA|Moalem Aviation
+AMB|DRF Luftrettung
+AMD|SA Red Cross Air Mercy Service
+AME|Spain - Air Force
+AMF|Ameriflight
+AMP|Atsa Airlines
+AMQ|AMC Aviation
+AMT|Air Mountain
+AMU|Air Macau
+AMV|AMC Airlines
+AMW|Armenia Airways
+AMX|Aeromexico
+ANA|All Nippon Airways
+ANG|Air Niugini
+ANK|Aero Nomad
+ANO|Airnorth
+ANR|YanAir
+ANS|Andes Lineas Aereas
+ANT|Air North
+ANX|Mexico - Navy
+ANZ|Air New Zealand
+AOJ|Avcon Jet
+AOM|Air Ocean Maroc
+AOS|Aeros Flight Training
+APC|AIRPAC Airlines
+APF|populAir
+APJ|Peach
+APK|Air Peace
+APW|Alpha Three Aviation
+APX|Naljets
+APY|Aeropapa
+APZ|Air Premia
+AQL|Altair Airlines
+AQS|Airstream
+ARA|Arik Air
+ARG|Aerolineas Argentinas
+ARI|Aerovics
+ARL|Airlec Air Espace
+ARR|Avalair Aircraft Management
+ARU|Aruba Airlines
+ARZ|Falcon Luxe
+ASA|Alaska Airlines
+ASB|Air Spray
+ASF|Austria - Air Force
+ASH|Mesa Airlines
+ASI|AeroGuard Flight Training Center
+ASJ|Astonjet
+ASL|AirSERBIA
+ASP|AirSprint
+ASR|Aero Sotravia
+ASV|Air Seoul
+ASY|Australia - Royal Australian Air Force
+ATC|Air Tanzania
+ATG|Aerotranscargo
+ATL|Atlas Air Service
+ATN|Air Transport International
+ATO|ATM Information Service Japan
+ATU|Aerotours
+ATV|Avanti Air
+ATX|AirSWIFT
+ATY|AirTraffic
+AUA|Austrian Airlines
+AUB|Auburn University School of Aviation
+AUG|Georgian Aviation University
+AUI|Ukraine International Airlines
+AUK|Auric Air
+AUL|Smartavia
+AUR|Aurigny
+AUU|Aurora Flight Sciences
+AVA|avianca
+AVJ|Avia Traffic
+AVL|Aviation Adventures
+AVM|Avemex
+AVN|Air Vanuatu
+AWA|Air Astra
+AWC|Titan Airways
+AWG|Animawings
+AWH|Aerowest
+AWI|Air Wisconsin
+AWK|Airwork
+AWS|Arab Wings
+AWU|Sylt Air
+AXB|Air India Express
+AXE|AirExplore
+AXH|Servicios Aéreos A&H
+AXK|African Express Airways
+AXL|Anguilla Air Services
+AXM|AirAsia
+AXO|Axio
+AXP|PULSE Flight School
+AXV|AVA Airlines
+AXY|AirX
+AYN|FlyArystan
+AYR|Flight Training Europe
+AYT|Ayit Aviation
+AYY|Air Alliance
+AZB|Zambia Airways
+AZE|Arcus Air
+AZG|Silk Way West Airlines
+AZH|ASG Helicopter Services
+AZM|Azman Air
+AZO|Azimuth
+AZP|Paranair
+AZQ|Silk Way Airlines
+AZS|Aviacon Zitotrans
+AZU|Azul
+AZV|Azur Air
+AZW|Air Zimbabwe
+AZY|Aztec Airways
+BAF|Belgium - Air Force
+BAG|Birdbase Aviation
+BAH|Bahrain Royal Flight
+BAO|Baden Aircraft Operations
+BAR|Abu Dhabi Aviation
+BAV|Bamboo Airways
+BAW|British Airways
+BAY|Bravo Airways
+BBA|Bombardier
+BBC|Biman Bangladesh Airlines
+BBG|Bluebird Airways
+BBK|Sunkar Air
+BBL|BBN Airlines Indonesia
+BBQ|Eastern Air Express
+BBT|BBN Airlines
+BBX|Bel Air Aviation
+BBZ|Bluebird Aviation
+BCP|Sybajet San Marino
+BCY|CityJet
+BDA|Blue Dart Aviation
+BDJ|Deer Jet Beijing
+BDR|Badr Airlines
+BEC|Berkut Air
+BEJ|SD Aviation
+BEL|Brussels Airlines
+BER|Fly Air41 Airways
+BFF|Air Nunavut
+BFK|Inner Mongolia Northern Express
+BFL|Buffalo Airways
+BFS|BAA Training
+BFX|Fly Away
+BFY|Bestfly Aruba
+BGA|Airbus Transport International
+BGB|Big Bend Community College Aviation
+BGF|Bulgaria - Government
+BGH|BH Air
+BGL|Binani Air
+BGR|Bridger Aerospace
+BGS|Sun Air Bulgaria
+BHA|Buddha Air
+BHD|Bangkok Helicopter Services
+BHL|Bristow Helicopters
+BHM|Bulgaria Heli Med Service
+BHR|Bighorn Airways
+BHS|Bahamasair
+BIC|Alphaland Aviation
+BID|BinAir
+BIO|Bioflight
+BJN|Beijing Airlines
+BKA|BankAir
+BKN|Saint Louis University Flight School
+BKP|Bangkok Airways
+BLK|Aero
+BLT|Astonfly
+BLW|Wermlandsflyg
+BMA|BermudAir
+BMG|Image Air Charter
+BMJ|Bemidji Aviation
+BNI|Bartolini Air
+BNL|Berniq Airways
+BOE|Boeing
+BOH|Air Bohemia
+BOL|TAB Cargo
+BOM|Haute Aviation
+BOO|Bookajet
+BOT|Air Botswana
+BOV|Boliviana de Aviacion
+BOX|AeroLogic
+BPC|Braspress Air Cargo
+BPS|BASe Airlines
+BPX|Phoenix East Aviation
+BQA|AXIS Aviation
+BRD|Bridges Air Cargo
+BRG|Bering Air
+BRH|Star Air Cargo
+BRJ|Bairline
+BRK|SAC Heavy Airlift Wing
+BRO|2Excel Aviation
+BRQ|Buraq Air
+BRS|Brazil - Air Force
+BRT|British International Helicopters
+BRU|Belavia
+BRW|AV8 Flight School
+BRX|BRA
+BSC|Aerostan
+BSF|Bluesky Airways
+BSM|Southeastern Oklahoma State University Aviation
+BSO|Aeroclub Barcelona-Sabadell
+BSV|bluestar
+BSW|Zhong Dong Business Jet
+BSX|Bassaka Air
+BTI|airBaltic
+BTK|Batik Air
+BTN|Bhutan Airlines
+BTO|Batot Air
+BTQ|Boutique Air
+BUC|European Air Charter
+BUY|Freedom II
+BVL|Bul Air
+BVT|Berjaya Air
+BWA|Caribbean Airlines
+BXR|Redding Aero Enterprises
+BYA|Berry Aviation
+BYB|Spot Jet Services
+BYD|beOnd
+BYF|San Carlos Flight School
+BZE|Zenith Aviation
+CAD|Cardig Air
+CAH|E+S Air
+CAI|Corendon Airlines
+CAK|Southwest Aircraft Charter
+CAL|China Airlines
+CAO|Air China Cargo
+CAP|Civil Air Patrol
+CAT|Copenhagen Airtaxi
+CAV|Calm Air
+CAY|Cayman Airways
+CAZ|Cat Aviation
+CBC|SkyShare
+CBG|GX Airlines
+CBJ|Capital Airlines
+CBM|DragonFly Executive
+CBN|Southern Illinois University School of Aviation
+CBW|Suzhou Aviation
+CCA|Air China
+CCD|Dalian Airlines
+CCK|Carlisle Air Group
+CCM|Air Corsica
+CCQ|Capital City Air Carriers
+CDC|Loong Air
+CDG|Shandong Airlines
+CDQ|Chodang University
+CDT|Aeroclub de Reus
+CEB|Cebu Pacific
+CEF|Czechia - Air Force
+CEL|Ceiba Intercontinental
+CEO|Jetset
+CES|China Eastern Airlines
+CEY|Air Century
+CFA|China Flying Dragon Aviation
+CFC|Canada - Royal Canadian Air Force
+CFG|Condor
+CFH|CareFlight
+CFI|China - Civil Aviation Administration
+CFL|Bromma Air Maintenance
+CFR|United States - California Department of Forestry
+CFZ|China Flight General Aviation Company
+CGF|Cargo Air
+CGH|Air Guilin
+CGN|Air Changan
+CGS|SolitAir
+CGX|United States - Coast Guard
+CGZ|Colorful Guizhou Airlines
+CHB|West Air
+CHC|CITIC Offshore Helicopter
+CHD|Russia - 223rd Flight Unit State Airline
+CHG|Challenge Airlines BE
+CHH|Hainan Airlines
+CHJ|Star Jet
+CHX|Germany - Air Ambulance
+CJR|Caverton Helicopters
+CJT|Cargojet Airways
+CJX|Jiangxi Air
+CKJ|China - Air Force
+CKK|China Cargo Airlines
+CKS|Kalitta Air
+CLA|Comlux
+CLF|Centreline
+CLG|Chalair Aviation
+CLH|Lufthansa CityLine
+CLS|Clemens Aviation
+CLX|Cargolux
+CLY|Clay Lacy Aviation
+CMA|CMA CGM Air Cargo
+CMD|Calstar
+CMF|Air Care Alliance
+CMP|Copa Airlines
+CMS|CAMEX Airlines
+CNA|Canavia
+CNF|CanaryFly
+CNK|Sunwest Aviation
+CNM|Air China Inner Mongolia
+CNS|PlaneSense
+CNV|United States - Navy
+CNW|North-Western Cargo
+COL|SC Aviation
+CON|ConocoPhillips
+CPA|Cathay Pacific
+CPI|Compagnia Aeronautica Italiana
+CPN|Caspian Airlines
+CPV|Air Corporate
+CQH|Spring Airlines
+CQN|Chongqing Airlines
+CRA|Cronos Airlines
+CRC|Camair-Co
+CRE|Jet OUT
+CRG|Costa Rica Green Airways
+CRK|Hong Kong Airlines
+CRL|Corsair
+CRN|Carson Air
+CRQ|Air Creebec
+CRX|Cross Aviation
+CSB|21 Air
+CSC|Sichuan Airlines
+CSG|China Southern Cargo
+CSH|Shanghai Airlines
+CSJ|Castle Aviation
+CSN|China Southern Airlines
+CSQ|IBC Airways
+CSR|CAE
+CSS|SF Airlines
+CST|Shoreline Aviation
+CSV|Coastal Aviation
+CSW|Chair Airlines
+CSZ|Shenzhen Airlines
+CTA|Aero Charter and Transport
+CTE|Atlanta Air Charter
+CTG|Canada - Coast Guard
+CTJ|Tianjin Air Cargo
+CTK|East Midlands Helicopters
+CTL|Central Air Southwest
+CTM|France - Air Forces Command
+CTN|Croatia Airlines
+CTP|CTP Aviation
+CTV|Citilink
+CTX|Centennial Aviation
+CUA|China United Airlines
+CUB|Cubana
+CUH|Urumqi Air
+CUL|Coulson Aviation
+CVA|Air Chathams
+CVK|Cavok Air
+CVR|Chevron USA
+CVU|Grand Canyon Airlines
+CVZ|Aerocaribe Venezuela
+CWA|CanWest Air
+CWE|Cargo Wings Express
+CWG|Wing Aviation
+CWL|Cranwell FTU
+CWN|Crown Airlines
+CWY|Woodgate Aviation
+CXA|Xiamen Air
+CXE|Caicos Express Airways
+CXK|ATP Flight School
+CYF|Tus Air
+CYN|Colorful Yunnan Airlines
+CYO|ATI Jet
+CYP|Cyprus Airways
+CYT|Crystal Air
+CYZ|China Postal Airlines
+DAH|Air Algerie
+DAK|4Airways
+DAL|Delta Air Lines
+DAN|Dana Air
+DAO|Daallo Airlines
+DAP|Aerovias DAP
+DAV|Dornier Aviation Nigeria Aiep
+DBP|CAA
+DBT|DB Aviation
+DCM|Fltplan
+DCS|DC Aviation
+DCT|Airtask
+DEF|Aviation Défense Service
+DER|Deer Jet
+DES|Servicios Aéreos Especializados Destinia
+DFC|Aeropartner
+DGC|Spain - Guardia Civil
+DGJ|DigaJet
+DHC|De Havilland Canada
+DHK|DHL Air
+DIG|PassionAir
+DIR|FLYYO
+DJR|Desert Jet
+DJT|La Compagnie
+DKH|Juneyao Air
+DKT|Encore Air Cargo
+DKZ|Dala Air
+DLA|Air Dolomiti
+DLH|Lufthansa
+DLX|Dreamline Aviation
+DLY|Air Independence
+DMR|Panorama Jets
+DMS|Diamond Sky
+DNA|Dan Air
+DNC|Aerodynamics Academy
+DOC|Norsk Luftambulanse
+DOI|United States - US Department of Interior
+DOJ|United States - Department of Justice
+DOR|General Atomic AeroTech Systems
+DOS|United States - Department of State
+DOW|Best Jets International
+DQA|Maldivian
+DRC|Air Congo
+DRK|Drukair
+DRL|Omni Air Transport
+DRU|Alrosa
+DSO|Dassault Falcon Service
+DST|Star Aviation
+DSU|Delta State University Aviation
+DTA|TAAG Angola Airlines
+DTH|Domestic Airlines
+DTL|Aero Dili
+DTR|DAT
+DUB|Dubai Air Wing
+DUC|Class Aviation
+DVR|Divi Divi Air
+DVY|Legends Airways
+DWI|Arajet
+DWW|DAS Private Jets
+DXT|Dexter Air Taxi
+DZD|Yazd Airways
+DZR|Midwest Aviation
+EAF|Electra Airways
+EAL|Eastern Airlines
+EAP|Aeropyrenees
+EAT|Air Transport Europe
+EAX|EAS Barcelona
+ECA|Excellent Air
+ECJ|East Coast Jets
+ECO|EcoJet
+EDC|Air Charter Scotland
+EDG|Jet Edge
+EDL|Germany - Police
+EDR|Fly AllWays
+EDW|Edelweiss
+EEF|Estonia - Air Force
+EFC|Emirates Flight Training Academy
+EFD|E-Aviation
+EFG|Elifriulia
+EFT|Execuflight
+EFY|Clic
+EGC|Eagle Creek Aviation
+EGL|Capital Air Ambulance
+EGS|National Jets
+EGT|EGT Jet
+EGY|Egypt - Air Force
+EIN|Aer Lingus
+EIS|EIS Aircraft
+EIX|Stellaer 212
+EJA|NetJets
+EJM|Executive Jet Management
+EKT|European SAO
+ELA|Elitaliana
+ELG|Elangeni
+ELN|Elin Group
+ELV|Elvetia Aviation
+ELW|Yellow Wings Air Services
+ELX|Elan Express
+ELY|El Al
+ELZ|Elite Air
+EMB|Embraer
+EMC|247 Aviation
+EMD|EagleMed
+EMM|Emperor Aviation
+ENG|ENG Aviation
+ENK|Executive Airlink
+ENT|Enter Air
+EOA|Elilombarda
+EOK|Aero K
+EOS|Eliossola
+EPA|Donghai Airlines
+EPE|Air Eagle
+EPI|Epic Flight Academy
+ERF|E-Cargo Airlines
+ERH|Bristow US
+ERS|Real Aeroclub de Sevilla
+ERU|Embry-Riddle Aeronautical University
+ERY|Sky Quest
+ESF|Estafeta Carga Aerea
+ESR|Eastar Jet
+ESW|ASG Business Aviation
+ETA|Reynolds Jet
+ETD|Etihad Airways
+ETF|Spain - Army
+ETH|Ethiopian Airlines
+ETI|Hummingbird Aviation
+ETP|QinetiQ
+ETR|Estelar
+EUL|Euro Link
+EUP|Pan Europeenne
+EUW|European Flight Service
+EVA|EVA Air
+EVC|RCS Services
+EVE|Iberojet
+EVQ|Everett Aviation
+EVX|ATR
+EWG|Eurowings
+EWR|EWA Air
+EWZ|East Wing
+EXB|Brazil - Army
+EXC|EC Charter
+EXP|Island Air Express
+EXS|Jet2
+EXV|FitsAir
+EZE|Eastern Airways
+EZR|Z Air
+EZT|Ezy Airlines
+EZY|easyJet
+EZZ|ETF Airways
+FAC|Colombia - Air Force
+FAD|flyadeal
+FAE|Ecuador - Air Force
+FAF|France - Air Force
+FAG|Argentina - Air Force
+FAM|Mexico - Air Force
+FAP|F AIR
+FAS|Florida Air Cargo
+FBA|Fly Baghdad
+FBU|French bee
+FBY|FlyBy
+FBZ|Flybondi
+FCA|Fly-Coop Air Service
+FCE|Max Air
+FCK|Flight Calibration Services
+FDA|Fuji Dream Airlines
+FDB|flydubai
+FDJ|Freedom Air
+FDL|Farmingdale State University Aviation
+FDR|Federal Airlines
+FDS|AMREF Flying Doctors
+FDT|Freedom Airline Express
+FDX|FedEx
+FDY|Southern Airways Express
+FEX|FlightExec
+FFA|Fly4 Airlines
+FFC|Fairoaks Flight Centre
+FFD|Feuerwehr-Flugdienst Niedersachsen
+FFE|FFL Flugschule
+FFM|Firefly
+FFS|United States - Florida Forest Service
+FFT|Frontier
+FFY|Florida Flyers Flight Academy
+FGB|Air65 Aviation
+FGD|Conair
+FGO|FTL Airlines
+FGS|Elitellina
+FHR|Hoper
+FHS|FlyJaya
+FHY|Freebird Airlines
+FIA|FlyOne
+FIC|Aerosafin
+FIH|FinnHEMS
+FIN|Finnair
+FIX|Fox Aviation
+FJE|Fanjet Express
+FJI|Fiji Airways
+FJK|Fly Jet.kz
+FJL|Fly Jinnah
+FJW|Fastjet
+FKH|Fly Khiva
+FLA|Fly Angola
+FLD|FlyDedicated
+FLE|Flair Airlines
+FLG|FlyBig
+FLI|Atlantic Airways
+FLN|FlyNamibia
+FLO|Flycom
+FLZ|Flightlink
+FML|Sky Mali
+FMY|France - Army
+FNA|Norlandair
+FNF|Finland - Air Force
+FNK|IAS Itzehoer Airservice
+FNY|France - Navy
+FPK|Air Falcon
+FPL|Australia - Federal Police
+FPR|Peru - Air Force
+FQA|Quikjet Cargo Airlines
+FRA|Draken Europe
+FRC|Franconia Air Service
+FRF|Fleet Air International
+FRG|Freight Runners Express
+FRO|FROST
+FRU|France - Securite Civile
+FRV|Revv Aviation
+FSE|Alpine Flightservice
+FSF|Fly 7
+FSK|Africa Charter Airline
+FSM|FlySchool
+FSQ|Fly Sky Airlines
+FSR|Flightstar
+FSY|Private Air
+FTA|Ravn Connect
+FTH|Mountain Aviation
+FTK|United States - North Carolina Forest Service
+FTL|Flightline
+FTN|Victory Air
+FTO|Tropic Ocean Airways
+FTR|Finistair
+FTT|Flight Fast Track
+FTU|Civil Aviation Flight University of China
+FTY|Fly Tyrol
+FUU|Fly My Sky
+FVJ|ValueJet
+FVS|Falcon Aviation Services
+FWI|Air Caraibes
+FWK|Flightworks
+FXT|Flexflight
+FXZ|FlyX Aero
+FYC|Fly Cham
+FYL|Flyinggroup
+FYS|European Flyers
+FZA|Fuzhou Airlines
+GAC|GlobeAir
+GAF|Germany - Air Force
+GAG|Greybird Aviation
+GAK|Global Air Transport
+GAM|Germany - Army
+GAO|Liat Air
+GAV|Global Reach Aviation
+GBA|Barrier Air
+GBB|Lift
+GBG|GullivAir
+GCI|Italy - Coast Guard
+GCM|Comair Flight Services - CFS
+GCR|Tianjin Airlines
+GDC|Grand China Air
+GDG|GoodJET
+GDK|Goldeck-Flug
+GDM|Small Fly
+GDY|LifeFlight Australia
+GEA|Global Aviation
+GEC|Lufthansa Cargo
+GEL|Geosky
+GER|German Airways
+GES|Gestair
+GFA|Gulf Air
+GFD|GFD
+GFM|Grafair
+GFT|G.A.D Flights
+GGL|SJL Aeronautica
+GGN|Great North Airlines
+GGT|Trans Island Airways
+GGW|Duke Energy
+GHN|Air Ghana
+GIA|Garuda Indonesia
+GJM|Airhub Airlines
+GJR|GJet
+GJS|GoJet
+GJT|GetJet Airlines
+GKA|United States - Army Parachute Team
+GLF|Gulfstream Aerospace
+GLO|GOL
+GLR|Central Mountain Air
+GLT|Aero Charter
+GLX|Gelix Airlines
+GMA|Gama Aviation
+GMH|Hughes Flying Service
+GMN|Garmin
+GMS|Ghadames Air Transport
+GMT|Magnicharters
+GNJ|GainJet
+GNX|Genex
+GNY|Germany - Navy
+GOA|Fly91
+GPD|Tradewind Aviation
+GPR|GPM Aeroservicio
+GPX|GP Aviation
+GRA|Guardian Air
+GRB|Phoenix Air
+GRL|Air Greenland
+GRO|Gryphon Air
+GRV|Epsilon Aviation
+GTI|Atlas Air
+GTR|Galistair Infinite Aviation
+GTS|Transair
+GTW|American Air Charter
+GTX|GTA Air
+GUA|Guna Airlines
+GUM|Gum Air
+GUN|Grant Aviation
+GWC|Gulf Wings
+GWG|Green Africa
+GXA|GlobalX
+GZP|Gazpromavia
+HAF|Greece - Air Force
+HAI|Hai Au Aviation
+HAK|Pegasus Helicopter
+HAL|Hawaiian Airlines
+HAT|Air Horizont
+HBH|Hebei Airlines
+HBR|Hebridean Air Services
+HDB|HeliDubai
+HDR|Helitrans
+HEL|Helicol
+HER|Hera Flight
+HET|TAF Helicopters
+HEY|ZondaJet
+HEZ|Arrow Aviation
+HFA|airHaifa
+HFY|Hi Fly
+HGB|Greater Bay Airlines
+HGD|Korea Aerospace University
+HGE|Martin's Famous Pastry Shoppe
+HGO|One Air
+HHE|Heli Holland
+HHN|Hahn Air
+HIB|Helibravo
+HIM|Himalaya Airlines
+HKC|Hong Kong Air Cargo
+HKE|HK express
+HLA|Greece - Army
+HLE|United Kingdom - Air Ambulance
+HLF|Central Airlines
+HLI|Heli Securite
+HLJ|HelloJets
+HLR|Heli Air Services
+HLU|Héli-Union
+HLV|Heliservicio
+HLY|Heli Air
+HMB|CHC Helicopter
+HMF|Sweden - Swedish Maritime Administration
+HMJ|Harmony Jets
+HND|Hinterland Aviation
+HNW|Honeywell International
+HNX|Hainan Aviation Academy
+HOT|Valletta Airlines
+HOV|Hoverfly
+HPJ|Hop-A-Jet
+HPP|Exjet Aviation
+HRC|Harco Aviation
+HRD|Marshall University Aviation
+HRN|Heron Aviation
+HRT|Chartright Air
+HRZ|Croatia - Air Force
+HSF|Hanseo University Flight Education Center
+HSI|Swiss Helicopter
+HSO|Heli Service International
+HSR|Helistar
+HST|Heston Airlines
+HSV|Heliservices
+HSY|Sky Helicopteros
+HTM|HTM Helicopter Travel Munich
+HTP|Hala Air
+HTS|Helistar
+HTT|Latitude Air Ambulance
+HTY|HELITY Copter Airlines
+HUA|Hungary Airlines
+HUF|Hungary - Air Force
+HVK|Turkey - Air Force
+HVN|Vietnam Airlines
+HVY|Sky Bus
+HXA|China Express Airlines
+HYA|Alhaya Aviation
+HYD|Hydro-Québec
+HYM|HiSky
+HYP|Hyperion Aviation
+HYT|YTO Cargo Airlines
+HYY|Hayways
+HZS|Aviation Horizons
+HZY|Hainan Lily Jet
+IAE|IrAero
+IAF|Israel - Air Force
+IAG|EPAG - Groupie Air France
+IAM|Italy - Air Force
+IAN|Ibom Air
+IAW|Iraqi Airways
+IBB|Binter Canarias
+IBE|Iberia
+IBJ|Air Taxi & Charter International
+IBS|Iberia Express
+IBX|Ibex Airlines
+ICE|Icelandair
+ICF|ICS-Aero
+IDA|Indonesia Air Transport
+IEI|Italy - Army
+IFA|FAI rent-a-jet
+IFC|India - Air Force
+IFJ|IFA - Instituto de Formacao Aeronautica
+IFL|IFL Group
+IFY|I-Fly Air
+IGC|Iraq Gate Company
+IGM|Aero Coatl Mexicano
+IGO|IndiGo
+IGT|Georgian Airlines
+IGY|United States - NASA
+IHO|748 Air Services
+IJA|International Jet
+IJM|International Jet Management
+ILS|Servicios Aéreos ILSA
+ILU|Parkland College Institute of Aviation
+IMX|Zimex Aviation
+INA|Air1Air
+INI|Initium Aviation
+INP|Peru - Navy
+INR|Avincis
+IOA|IndiaOne Air
+IOS|Skybus
+IPL|Airpull Aviation Academy
+IRA|Iran Air
+IRB|Iran Airtour
+IRC|Iran Aseman Airlines
+IRH|Atlas Air
+IRM|Mahan Air
+IRT|Toos Airlines
+IRU|Chabahar Airlines
+IRZ|Saha Airlines
+ISR|Israir Airlines
+ISU|Indiana State University Flight Academy
+ITL|Italfly
+ITY|ITA Airways
+IVC|Invicta Air Cargo
+IWL|Island Wings Charter
+IWY|interCaribbean Airways
+IXR|iXAir
+IYE|Yemenia
+IZA|Izhavia
+IZG|Zagros Airlines
+JAC|Japan Air Commuter
+JAG|AlphaSky
+JAL|Japan Airlines
+JAR|Airlink
+JAS|Jet Aviation Flight Services
+JAT|JetSMART
+JAV|Jordan Aviation
+JBA|Helijet International
+JBC|JetBee
+JBD|Jet Aviation Business Jets Deutschland
+JBE|Sino Jet Beijing
+JBU|JetBlue
+JCL|Jetcall
+JCM|Secure Air Charter
+JCY|Aerius Management
+JDA|J D Aviation
+JDI|Jet Story
+JDL|JD Airlines
+JDL|JDL Airlines
+JEI|Jet Executive
+JET|Svenskt Industriflyg
+JFA|Jetfly Aviation
+JFL|Jet Fly Airline
+JIT|Jet It
+JIV|Jivair
+JJA|Jeju Air
+JKA|LeTourneau University Aviation
+JKH|Jetkontor
+JKR|Justice Air
+JLA|Aero JL
+JLB|Jhonlin Air Transport
+JLG|Jet Logistics
+JMA|Jambojet
+JME|EJM Europe
+JMJ|Sam Airways
+JMP|Businesswings
+JMS|Arc en Ciel
+JNA|Jin Air
+JNJ|JoinJet
+JNK|Jonika
+JNL|JetNetherlands
+JNS|Jet Net Services
+JNY|Journey Aviation
+JON|Jonair
+JPL|JetsPlus
+JRE|flyExclusive
+JRT|JetRight
+JSC|Jetstream Aviation Congo
+JSH|JetStream
+JSI|Jet Air Group
+JSL|SelectJet
+JSM|JS Aviation
+JST|Jetstar
+JSU|Jiangsu Jet
+JSX|JSX
+JSY|Jung Sky
+JTA|Japan Transocean Air
+JTC|Jetica
+JTD|Jettime
+JTE|National Jet Express
+JTI|ImperialJet
+JTL|Jet Linx Aviation
+JTM|East Coast Flight Services
+JTY|Jetology
+JTZ|Nicholas Air
+JUP|Jump Air
+JUS|USA Jet Airlines
+JWD|Jayawijaya Dirgantara
+JWX|Jetways Airlines
+JXA|Jet Access
+JXX|Jinxiang Airlines
+JYH|9 Air
+JZR|Jazeera Airways
+KAC|Kuwait Airways
+KAE|Kangala Air Express
+KAG|Korea Aviation College
+KAI|KaiserAir
+KAL|Korean Air
+KAP|Cape Air
+KAR|Ikar
+KAT|Aero Tak
+KAY|K5 Aviation
+KBA|Kenn Borek Air
+KBJ|Karnavati Aviation
+KBZ|Mingalar
+KCR|Kolob Canyons Air Services
+KCU|Skyline Transportation
+KEJ|Kaz Air Jet
+KEM|CemAir
+KEN|Kenmore Air
+KES|Air Antilles
+KEW|Keewatin Air
+KFA|KF Aerospace
+KFB|STAjets
+KFS|Kalitta Charters
+KGA|Xinjiang Skylink General Aviation
+KGB|Sapsan Airline
+KGK|Sky KG Airlines
+KGN|Asman Airlines
+KHF|KhabAvia
+KHH|Alexandria Airlines
+KHV|Air Cambodia
+KII|Kalitta Charters II
+KIS|Kish Air
+KIW|New Zealand - Royal New Zealand Air Force
+KLJ|KlasJet
+KLM|KLM
+KME|Cambodia Airways
+KMF|Kam Air
+KMI|K-Mile Air
+KMK|Kamaka Air
+KMM|KM Malta Airlines
+KNA|Kunming Airlines
+KNE|flynas
+KNM|GB Helicopters
+KNT|Flightpath Charter Airways
+KNW|Kenai Aviation
+KOR|Air Koryo
+KOW|Baker Aviation
+KPO|Fly Alliance
+KQA|Kenya Airways
+KRE|Aerosucre
+KRF|United Kingdom - UK Royal/VIP Flights
+KRP|Carpatair
+KRU|Karun Airlines
+KSF|Kent State University College of Aeronautics
+KSU|Kansas State University Aviation
+KSZ|Sunrise Airways
+KTB|Transaviabaltika
+KTU|Korea National University of Transportation
+KUH|Kush Aviation
+KUK|Kudlik Aviation
+KWX|Air Key West
+KXA|Jiangxi Express Aviation
+KXP|MJets Air
+KZH|ZhezAir
+KZN|Aviaservice
+KZR|Air Astana
+KZU|ULS Airlines Cargo
+LAA|Libyan Airlines
+LAF|Latvia - Air Force
+LAM|LAM
+LAN|LATAM Airlines
+LAO|Lao Airlines
+LAU|LAS Cargo
+LAV|AlbaStar
+LAZ|Liz Aviation
+LBF|Libya - Air Force
+LBQ|Quest Diagnostics
+LBR|Air Borealis
+LBT|Nouvelair
+LCO|LATAM Cargo
+LCT|TAR Mexico
+LDA|Lauda Europe
+LDG|Leading Edge Aviation
+LDX|SPARFELL
+LED|Field Aviation
+LEJ|FSH Aviation
+LER|Laser Airlines
+LET|Aerolineas Ejecutivas
+LEU|Lions Air
+LFA|L3Harris Airline Academy
+LFG|Let's Jett
+LFO|Germany - DLR Flugbetriebe
+LGF|Legacy Airways
+LGL|Luxair
+LGT|Longtail Aviation
+LHA|Air Central
+LHB|Liebherr Aerospace
+LHK|Lahak Aviation
+LHX|Lufthansa City
+LID|Alidaunia
+LIF|Air Methods
+LIL|Flylili
+LIP|Lipican Aer
+LJC|The Little Jet Company
+LJY|L.J. Aviation
+LKE|Lucky Air
+LKF|Aviation Advisor
+LKN|Nam Air
+LLK|Life Line Aviation
+LLL|Lao Skyway
+LLM|Yamal Airlines
+LLR|Alliance Air
+LLS|Servicios Aéreos Estrella
+LMG|South Africa - Air Force
+LMU|AlMasria Universal Airlines
+LNI|Lion Air
+LNK|Airlink
+LOG|Loganair
+LOL|Easy Charter
+LOT|LOT
+LPR|Polish Medical Air Rescue
+LRK|SkyJet Aviation Services
+LRQ|Luxembourg Air Rescue
+LRS|SANSA
+LRT|Liberty Jet Management
+LSI|MSC Air
+LSJ|Air Liaison
+LSK|SkyLight
+LSO|Lone Star Communications
+LTA|LIFT Academy
+LTC|Charter Jets
+LTR|Lufttransport
+LUA|Luminair
+LUC|Albinati Aeronautics
+LUK|Global Sky
+LVA|30 West Jets
+LVL|Level
+LWA|Libyan Wings
+LWG|Luxwing
+LXA|Luxaviation
+LXC|CAE Aviation
+LXJ|Flexjet
+LXW|LaneXang
+LXX|Libyan Express
+LYC|Lynden Air Cargo
+LYD|Lydd Air
+LYF|Lithuania - Air Force
+LYM|Key Lime Air
+LYX|SmartLynx Malta
+LZB|Bulgaria Air
+MAA|mas
+MAE|Mali Air
+MAI|Mauritania Airlines
+MAR|Air Mediterranean
+MAS|Malaysia Airlines
+MAU|Air Mauritius
+MAV|Manta Air
+MAX|Max Aviation
+MAY|Malta Air
+MBB|Air Manas
+MBC|AirJet
+MBK|Chrono Jet
+MBR|Brazil - Navy
+MBU|Marabu
+MCK|Aeroways
+MCM|Heli Air Monaco
+MCR|Monacair
+MDA|Mandarin Airlines
+MDC|airmedic
+MDF|Swiftair Hellas
+MDI|IAS Medical
+MDM|Medavia
+MDN|McDan Aviation
+MDS|McNeely Charter Services
+MDT|Sundt Air
+MEA|MEA
+MEH|Mehr Airways
+MEK|Med-Trans
+MEM|Meridian
+MEN|MAE Aircraft Management
+MFB|Mountain Flyers
+MFC|Canlink Aviation
+MFT|Multiflight
+MFX|My Freighter
+MGB|Cranfield Flight Training
+MGE|Asia Pacific Airlines
+MGH|Mavi Gök Airlines
+MGL|MIAT Mongolian Airlines
+MGO|Mango
+MGP|Arirang Aviation
+MGW|Mongolian Airways
+MGY|Madagascar Airlines
+MHH|Mounthill Aviation
+MHV|MHS Aviation
+MIN|MinRes Air
+MJC|Mandarin Air
+MJE|Empire Aviation
+MJF|MJet
+MJJ|MJets
+MJN|Oman - Royal Air Force
+MJR|MidAmerica Jet
+MJS|Aircharters Worldwide
+MKB|Mack Air
+MLM|Comlux Malta
+MLN|Corporate Air
+MLO|Servicios Aereos Milenio
+MLT|Maleth-Aero
+MMA|Myanmar Airways International
+MMD|Air Alsie
+MMG|ARM Aviacion
+MMI|Italy - Navy
+MML|Hunnu Air
+MMM|Meridian Air Company
+MMN|ProAirways
+MMO|Malta MedAir
+MMY|IASCO Flight Training
+MMZ|EuroAtlantic Airways
+MNB|MNG Airlines
+MNE|Air Montenegro
+MNG|Aero Mongolia
+MNM|Manasik Aviation
+MNS|Medsky Airways
+MNT|FlyMontserrat
+MOD|Aero Clube de Coimbra
+MOG|BAE Systems
+MOZ|Salzburg Jet Aviation
+MPC|MPC Air
+MPH|Martinair
+MRA|Martinaire
+MRJ|Meraj Airlines
+MRV|XENA
+MSA|Poste Air Cargo
+MSC|Air Cairo
+MSI|Motor Sich Airlines
+MSJ|SkyJet Airlines
+MSK|MAK KG Airlines
+MSM|Aeromas
+MSP|Costa Rica - Ministry of Public Security
+MSR|Egyptair
+MSS|Global Aviation
+MSX|Egyptair Cargo
+MSY|Massey University School of Aviation
+MTL|RAF-Avia
+MTO|Marathon Airlines
+MTS|Jet Rescue Air Ambulance
+MTU|Middle Tennessee State University Aerospace
+MUI|Transair
+MUS|Air Adelphi
+MVK|North Star Aviation
+MWG|AirBorneo
+MWH|Elemental Aviation
+MWI|Malawi Airlines
+MWM|Modern Logistics
+MWT|Midwest Aviation Division
+MXA|Mexicana
+MXE|Moçambique Expresso
+MXM|Maximus Airlines
+MXY|Breeze Airways
+MYD|Maya Island Air
+MYJ|My Jet
+MYP|Mann Yadanarpon Airlines
+MYU|My Indo Airlines
+MYW|MyWay Airlines
+MZB|Zebu Air
+MZI|Zorte Air
+MZT|ZYB Lily Jet
+MZY|Mermoz Academy
+NAC|Northern Air Cargo
+NAE|National Airways
+NAF|Netherlands - Royal Air Force
+NAI|Novair
+NAK|ENAC Ecole Aviation Civile
+NAL|Northway Aviation
+NBT|Norse
+NCA|Nippon Cargo Airlines
+NCB|North Cariboo Air
+NCG|Netherlands - Coast Guard
+NCJ|North Central Aviation
+NCR|National Airlines
+NDL|Chrono Aviation
+NDU|UND Aerospace
+NEA|New England Airlines
+NEW|NEAJETS
+NFA|North Flying
+NGF|Air Charity Network
+NGH|Midwest Flying Service
+NGL|Max Air
+NGN|LEAV Aviation
+NGR|Nigeria - Air Force
+NHC|NHC Northern Helicopter
+NHD|NHV
+NHX|Noordzee Helikopters Vlaanderen
+NIA|Nile Air
+NIG|Aero
+NIS|La Costena
+NIT|Middle Georgia State University School of Aviation
+NJE|NetJets Europe
+NJM|Northern Jet Management
+NJZ|Neojets
+NKP|Abakan Air
+NKS|Spirit Airlines
+NKT|North Country Aviation
+NLI|Northern Air
+NMA|Nesma Airlines
+NMG|Tian Jiao Airlines
+NMJ|Northwoods Aviation
+NOF|Fonnafly Helifly
+NOJ|NovaJet
+NOK|Nok Air
+NOS|Neos
+NOU|Nordic Unmanned
+NOW|Norway - Air Force
+NOZ|Norwegian
+NPG|Supernova Airlines
+NPT|West Atlantic
+NRL|Nolinor Aviation
+NRN|Netherlands - Navy
+NSE|SATENA
+NSH|Sterling Aviation
+NSJ|Nanshan Jet
+NSO|Aerolineas Sosa
+NSP|Samaritan's Purse
+NSY|Nanshan Flying
+NTA|Northern Thunderbird Air
+NTF|OK Aviation
+NTH|Hokkaido Air System
+NTN|National Airways Corporation
+NTR|Air Moana
+NTW|Maxair
+NUA|United Nigeria Airlines
+NUS|N-Jet
+NVD|Avion Express
+NVQ|Novoair
+NVY|United Kingdom - Royal Navy
+NWC|North-West Air Company
+NWF|Northwest Flyers
+NWL|North-Wright Airways
+NWS|Nordwind Airlines
+NWX|Nationwide Aviation
+NWY|New Way Cargo Airlines
+NXC|ConciAir
+NYB|Belgium - Navy
+NYT|Yeti Airlines
+NYX|NyxAir
+OAL|Olympic Air
+OAN|NATO
+OAO|Arkhangelsk Airlines
+OAR|One Air
+OAV|OMNI Executive Aviation
+OAW|Helvetic Airways
+OCN|Discover Airlines
+OCO|Ostend Air College
+OEY|Rimbun Air
+OFT|Buffalo River Aviation
+OGN|Originair
+OKA|Okay Airways
+OKC|Private Jets
+OLA|Overland Airways
+OLC|Solar Cargo
+OLO|Volo
+OLV|AirStar Charter
+OLY|Olympus Airways
+OMA|Oman Air
+OMD|Nomadic Aviation
+OMI|Omni Taxi Aereo
+OMS|SalamAir
+OMT|CM Airlines
+ONI|OMNI Aviation Training Center
+ONT|Canada - Ontario Ministry of Natural Resources
+OPM|Fireblade Aviation
+OPN|K&R Aviation
+OPT|Flight Options
+ORC|Oriental Air Bridge
+ORF|Oman - Royal Flight
+ORO|ClipperJet
+ORT|Ortac
+OST|Oklahoma State University Aviation
+OSU|Ohio State University Aviation
+OTA|Business Aviators
+OTC|Air Travel
+OUA|University of Oklahoma School of Aviation
+OUL|Soulbird
+OXF|CAE
+OYA|Fly OYA
+OYO|Oyonnair
+OZN|Aviator Zone Academy
+OZT|Premier Flight Center
+PAG|Perimeter Aviation
+PAL|Philippine Airlines
+PAM|Map Linhas Aereas
+PAO|Samoa Airways
+PAS|Pelita Air
+PAV|ProAir Aviation
+PBD|Pobeda
+PBR|Fast Air
+PCH|Pilatus Flugzeugwerke
+PCJ|Diamond Aviation
+PCO|Pacific Coastal Airlines
+PDG|PDG Aviation Services
+PDU|Purdue University School of Aviation
+PEA|Pan Europeenne Air Service
+PEG|Pegasus Elite Aviation
+PEI|Panamedia
+PEO|Petro Air
+PER|Petroleum Air Services
+PEV|People's
+PFZ|Proflight Zambia
+PGC|European Aircraft Private Club
+PGN|Aliyah Aviation
+PGR|Prestige Air Group
+PGT|Pegasus
+PHJ|Corporate Jet
+PHM|PHI
+PHN|Phoenix Aviation
+PHX|SkyCare
+PIA|Pakistan International Airlines
+PIP|Pilot Flight Academy
+PIZ|Air Corviglia
+PJC|Private Jet Center
+PJJ|Paradox Jets
+PJP|Princely Jets
+PJS|Jet Aviation Business Jets
+PJX|VivaJets
+PJZ|Premium Jet
+PKW|Sierra West Airlines
+PKZ|Prime Aviation
+PLC|Specialist Aviation Services
+PLF|Poland - Air Force
+PLM|Wamos Air
+PLR|Northwestern Air
+PLS|Placar Linhas Aereas
+PLT|United States - South Carolina Aeronautics Comm.
+PMS|Planemaster Services
+PNC|Prince Aviation
+PNO|Panorama Aviation
+PNP|Pineapple Air
+PNX|AIS Airlines
+PNY|Poland - Navy
+POD|Craft Charter
+POL|Sweden - Police
+PPQ|Personas y Paquetes por Aire
+PPT|Patria Pilot Training
+PRD|Presidential Aviation
+PRE|Precision Aircraft Management
+PRF|Precision Air
+PRL|Premier Airlines
+PRO|Propair
+PRS|Pars Air
+PRV|Privat
+PRX|Pradhaan Air Express
+PRY|Priority Air Charter
+PSC|Pascan Aviation
+PSK|Prescott Support
+PST|Air Panama
+PTA|Parata Air
+PTB|VoePass
+PTK|Petropavlovsk-Kamchatsky Air
+PTN|Platoon Aviation
+PTO|European Flight Academy
+PTR|Porter
+PTW|Pattaya Airways
+PUE|Plus Ultra
+PUL|Ornge Air
+PVG|Privilege Style
+PVL|PAL Airlines
+PVO|Privaira
+PVR|Priv'Air
+PVV|Fly Pro
+PWA|Priester Aviation
+PWF|Private Wings
+PWR|Quanta Aviation Services
+PXG|Aitheras Aviation Group
+PXR|PixAir Survey
+PXT|Pacific Coast Jet
+PYA|Pouya Air
+PYN|FlyWales
+PYR|Pyramids Airlines
+QAF|Qatar - Amiri Flight
+QAI|Conquest Air
+QAJ|Quick Air Jet Charter
+QAV|QA Aviation
+QCL|Air Class Cargo
+QDA|Qingdao Airlines
+QFA|Qantas
+QFF|flyaden
+QFY|Quality Fly
+QGA|Windrose Air Jetcharter
+QHD|Meregrass
+QJT|Qingdao Jiutian International Flight Academy
+QLK|QantasLink
+QNT|Qanot Sharq
+QQE|Qatar Executive
+QSM|Qeshm Airlines
+QTR|Qatar Airways
+QUE|Canada - Quebec Government Air Service
+QYT|QAir
+RAC|Icar Air
+RAG|Glencore Canada
+RAI|Raimon Airways
+RAM|Royal Air Maroc
+RAN|Rano Air
+RAP|Air Center Helicopters
+RAR|Air Rarotonga
+RAX|Royal Air Freight
+RBA|Royal Brunei Airlines
+RCA|Richland Aviation
+RCH|United States - Air Force
+RDF|Eurocopter Deutschland
+RDK|Memorial Hermann Life Flight
+RDL|Heli-Team
+REA|RED Air
+RED|International Committee of the Red Cross
+REE|Exclusive Aviation
+REG|Regional Air Services
+REH|REACH Air Medical Services
+RER|Aeroregional
+REU|Air Austral
+REV|RVL Aviation
+RFD|Aerus
+RFE|Tulpar Aircompany
+RFF|Russia - Air Force
+RFR|United Kingdom - Royal Air Force
+RFS|Rainier Flight Service
+RGA|REGA Swiss Air-Rescue
+RGM|RGA-Black Stone Airlines
+RGN|Cygnus Air
+RGY|Regency Air
+RHD|Babcock
+RHE|UNC Air Operations
+RHH|Redstar Aviation
+RHT|Busy Bee Congo
+RIF|Russia - National Guard
+RIV|APG Airlines
+RJA|Royal Jordanian
+RJB|Panellenic Airlines
+RJC|Richmor Aviation
+RJD|Rotana Jet
+RJZ|Jordan - Air Force
+RKA|Polar Airlines
+RKJ|Charter Airlines
+RKS|Phenix Jet
+RLA|Tarp Aviation
+RLB|Sunlight Air
+RLH|Ruili Airlines
+RLI|Reliant Air
+RLT|Real Tonga Airline
+RLU|Rusline
+RLX|Go2Sky
+RLY|Air Oceania
+RMB|Air Adriatic
+RMF|Malaysia - Air Force
+RMX|AirMaster
+RMY|Raya Airways
+RNA|Nepal Airlines
+RNG|Renegade Air
+RNI|Rennia Aviation
+ROF|Romania - Air Force
+ROG|Centro de Estudios Superiores de la Aviación
+ROI|Avior Airlines
+ROJ|Royal Jet
+ROK|Red Rock Flight School
+RON|Nauru Airlines
+ROP|Oman - Police
+ROR|Roraima Airways
+ROT|Tarom
+ROU|Air Canada Rouge
+RPA|Republic Airways
+RPB|Wingo
+RPN|United States - US Immigration and Customs Enforcement
+RQJ|Air Trek
+RQT|AirQuest Aviation
+RRR|United Kingdom - Royal Air Force Air Transport
+RRT|Transportes Aereos Sierra Alta
+RRV|Mombasa Air Safari
+RSB|Rubystar
+RSD|Russia - Special Flight Squadron
+RSF|Saudi Arabia - Air Force
+RSI|Air Sunshine
+RSJ|RusJet
+RSM|Royal Star Aviation
+RSP|Superior Air Charter
+RSX|Red Sea Airlines
+RSY|I-Fly
+RTG|Rely
+RTL|Air Thanlwin
+RTO|Rectimo Air Transports
+RTV|Nortavia
+RTY|Aims Community College Aviation
+RUC|Rutaca Airlines
+RUF|Air 1st Aviation
+RUN|AirACT
+RVF|New Pacific Airlines
+RVJ|Aircraft Management Group
+RVP|Sevenair
+RVQ|REVA Air Ambulance
+RVR|Ravenair
+RVV|Reeve Air Alaska
+RWD|RwandAir
+RWL|RWL German Flight Academy
+RWN|RWS
+RWZ|Red Wings
+RXA|Rex
+RXF|Shandong Dagao International Flight Academy
+RXI|Riyadh Air
+RYA|Ryan Air (USA)
+RYL|Royalair Philippines
+RYR|Ryanair
+RYS|Buzz
+RZO|Azores Airlines
+SAA|South African Airways
+SAF|Singapore - Air Force
+SAG|China Southern Airlines General Aviation
+SAH|Smart Jet
+SAO|Sahel Aviation Service
+SAS|SAS
+SAT|SATA Air Acores
+SAU|Saurya Airlines
+SAW|Sarah Airways
+SAY|Sky Gates Airlines
+SAZ|REGA Swiss Air-Ambulance
+SBE|Leviate Air Group
+SBF|SevenBar Aviation
+SBI|S7 Airlines
+SBS|Seaborne
+SBU|St Barth Commuter
+SCA|Sierra Charlie Aviation
+SCJ|Spring City Aviation
+SCM|American Jet International
+SCQ|OSM Aviation Academy
+SCR|Silver Cloud Air
+SCT|SAAB Aircraft
+SCU|Spartan College of Aeronautics and Technology
+SCW|SkyWest Charter
+SCX|Sun Country Airlines
+SDA|Sounds Air
+SDG|Star Air
+SDM|Rossiya
+SDR|Sundair
+SEB|Euroavia Airlines
+SEH|SKY express
+SEJ|SpiceJet
+SEK|Star East Airlines
+SEN|Senor Air
+SET|Solenta Aviation
+SEW|Skyward Airlines
+SEY|Air Seychelles
+SFG|Spree Flug
+SFJ|Starflyer
+SFR|FlySafair
+SFY|Skyborne Airline Academy
+SGA|SkyGuard
+SGD|SEair International
+SGN|Siam General Aviation
+SGP|NordJet Airlines
+SGX|Slate Aviation
+SHA|Shree Airlines
+SHH|SKYhigh Dominicana
+SHI|Sepehran Airlines
+SHP|SAF Helicopteres
+SHS|Shirak Avia
+SHU|Aurora
+SHW|KN Helicopters
+SIA|Singapore Airlines
+SID|Sideral Linhas Aereas
+SIF|AirSial
+SIN|Sin-Kung Airways
+SIO|Sirio
+SIS|Silver Air
+SIY|Executive Aviation Corporation
+SJA|Sawyer Aviation
+SJB|SKS Airways
+SJI|Smart Jet International
+SJJ|SpiritJets
+SJO|Spring Japan
+SJV|Super Air Jet
+SJX|STARLUX
+SJY|Sriwijaya Air
+SKK|ASKY Airlines
+SKP|Skytrans Australia
+SKQ|Labcorp
+SKU|SKY Airline
+SKV|Skyside
+SKW|SkyWest Airlines
+SKY|Skymark Airlines
+SKZ|Skyway Enterprises
+SLD|Silver Air
+SLE|NAC Charter
+SLF|Skyline Airlines
+SLG|Canada - Saskatchewan Air Ambulance Service
+SLH|Silverhawk Aviation
+SLI|Aeromexico Connect
+SLM|Surinam Airways
+SLN|Sloane Helicopters
+SLQ|SkyLink Express
+SLS|Super Legacy
+SME|Smart Aviation
+SMF|San Marino Executive Aviation
+SMG|Smartline
+SMK|Freedom Airline Express
+SMR|Somon Air
+SNC|Air Cargo Carriers
+SND|Skytraders
+SNG|LongJiang Airlines
+SNJ|Solaseed Air
+SOA|Southern Air Charter
+SOL|Solomon Airlines
+SON|ACASS Ireland
+SOP|Solinair
+SOR|SonAir
+SOY|Island Aviation
+SPA|Sierra Pacific Airlines
+SPM|Air Saint-Pierre
+SPQ|Sun PhuQuoc Airways
+SPR|PAL Aerospace
+SQF|Slovakia - Air Force
+SQH|Backcountry Aviation
+SQP|SkyUp Airlines
+SQS|Susi Air
+SRB|Serbia - Air Force
+SRC|Searca
+SRD|United Kingdom - Coast Guard
+SRI|Air Safaris
+SRN|SprintAir
+SRR|Maersk Air Cargo
+SRS|Southern Sky
+SRU|Star Peru
+SSF|Severstal Aircompany
+SSG|Slovakia - Government
+SSJ|Krasavia
+SSM|Spain - Coast Guard
+SSR|Sardinian Sky
+SST|Canada - Royal Canadian Mounted Police
+SSU|SASCA Airlines
+SSZ|Specsavers Aviation
+STB|St Barth Executive
+STQ|Star Wings
+STT|Western Aircraft
+STV|Saturn Aviation
+STW|Southwind Airlines
+STY|Altius Aviation
+SUA|Silesia Air
+SUB|Suburban Air Freight
+SUD|Sudan Airways
+SUE|Su Airlines
+SUI|Switzerland - Air Force
+SUL|ASTA Linhas Aereas
+SUM|Russia - Ministry of Emergency Situations (MChS)
+SUS|Sun-Air
+SUT|Summit Air
+SUZ|Zeusch Aviation
+SVA|Saudia
+SVD|SVG Air
+SVF|Sweden - Air Force
+SVI|Sky Vision Airlines
+SVL|Alante Air Charter
+SVR|Ural Airlines
+SVW|Global Jet Luxembourg
+SVX|Security Aviation
+SWA|Southwest Airlines
+SWC|HeliAir Sweden
+SWE|Svenskt Ambulansflyg
+SWM|Sky Angkor Airlines
+SWP|Star Work Sky
+SWR|Swiss
+SWT|Swiftair
+SWU|SkyAlps
+SWV|Svensk Luftambulans
+SWW|Swiss Private Jet
+SXE|Air Sierra Leone
+SXM|SXM Airways
+SXN|SaxonAir
+SXS|SunExpress
+SYB|Skyservice Business Aviation
+SYG|Ascend Airways
+SYJ|Slate Falls Airways
+SYL|Yakutia Airlines
+SYR|Syrian Air
+SYS|Shawbury FTU
+SYZ|Zil Air
+SZL|Eswatini Air
+SZN|Air Senegal
+TAA|Aeroservicios de la Costa
+TAF|TopFlight Aero-Services
+TAH|Air Anka
+TAP|TAP Air Portugal
+TAR|Tunisair
+TBA|Tibet Airlines
+TBC|Tbilisi Airways
+TBJ|TAG Aviation Asia
+TBN|Taban Airlines
+TBZ|ATA Airlines
+TCB|Transporte Aereo de Colombia
+TCF|Florida Tech College of Aeronautics
+TCI|Amber Aviation
+TCN|Jet Excellence
+TCV|Cabo Verde Airlines
+TDR|Trade Air
+TDY|SeaPort Airlines
+TEK|Aero-Tech Services
+TES|Taespejo Portugal
+TEZ|Tez Jet Airlines
+TFF|Talon Air
+TFX|Team Global Express
+TGA|Taiga Air
+TGI|Air Tengri
+TGN|Trigana Air
+TGO|Canada - Department of Transport
+TGU|TagAirlines
+TGW|Scoot
+TGY|Trans Guyana Airways
+TGZ|Georgian Airways
+THA|Thai Airways
+THB|BBN Airlines Thailand
+THT|Air Tahiti Nui
+THU|Thunder Airlines
+THY|Turkish Airlines
+TIE|Time Air
+TIN|Air Tindi
+TIV|Thrive
+TIW|Transcarga International Airways
+TJD|Aliserio
+TJJ|Blessings Aviation Charter
+TJS|Tyrolean Jet Services
+TJT|Twin Jet
+TKJ|AJet
+TKK|Aero Ways
+TKN|Fly Kish
+TLK|Starlink Aviation
+TLM|Thai Lion Air
+TLR|Air Libya
+TMB|Volato
+TMC|Travel Management Company
+TMG|Asia Cargo Airlines
+TMH|TVS
+TMJ|Tamga Jet
+TMW|Trans Maldivian Airways
+TNR|Tanana Air Service
+TNU|TransNusa
+TNX|Tréner Flight Academy
+TOA|Air Tetiaroa
+TOK|PNG Air
+TOR|FLYGTA Airlines
+TOS|Tropic Air
+TOW|AirTanker
+TOY|Toyo Aviation
+TPA|avianca Cargo
+TPC|Air Caledonie
+TPG|Transportes Aéreos Pegaso
+TQQ|Tarco Air
+TRA|Transavia
+TRF|Thrust Flight
+TRH|Turukhan Airlines
+TRL|Starlite Aviation
+TRP|United States - Maryland State Police
+TSC|Air Transat
+TSG|Trans Air Congo
+TSW|Transwing
+TTE|AvCenter
+TTF|Russia - 224th Flight Unit State Airline
+TTJ|TatraJet
+TTL|Total Linhas Aereas
+TTR|Alaman Air
+TTW|Tigerair Taiwan
+TUA|Turkmenistan Airlines
+TUG|Turkmenistan - Government
+TUI|TUI fly
+TUL|Tulpar Air
+TUN|Tunisia - Air Force
+TUP|Aviastar-TU
+TUR|Aeroturpial
+TUX|Tunisair Express
+TVR|Terra Avia
+TVS|Smartwings
+TVV|Travira Air
+TWB|T'way Air
+TWC|Canadian Airways Congo
+TWG|Air-Taxi Europe
+TWI|Tailwind Airlines
+TWY|Solairus Aviation
+TXC|TAE Avia
+TXG|7Air Cargo
+TXH|Bell Helicopter
+TXJ|Brilliant Jet
+TXP|Asian Express Airlines
+TYA|NordStar
+TYG|Beijing Tianyi General Aviation
+TYW|Tyrol Air Ambulance
+TZP|Zipair
+UAA|UAS/AEF Leuchars
+UAD|UAS/AEF Colerne
+UAE|Emirates
+UAF|United Arab Emirates - Air Force
+UAG|Union Aviation
+UAH|AEF Cranwell
+UAI|NIUAS/13 AEF
+UAJ|UAS/AEF Glasgow
+UAL|United Airlines
+UAM|UAS/AEF Woodvale
+UAO|UAS/AEF Benson
+UAQ|UAS/AEF Leeming
+UAU|UAS/AEF Boscombe Down
+UAW|UAS/AEF St Athan
+UAX|UAS/AEF Church Fenton
+UAY|UAS/AEF Cosford
+UBA|Myanmar National Airlines
+UBD|UR Airlines
+UBG|US-Bangla Airlines
+UCA|CommuteAir
+UCG|UniWorld Air Cargo
+UCM|University of Central Missouri Aviation
+UEA|Chengdu Airlines
+UEE|United Eagle
+UFX|Uni-Fly
+UGD|Uganda Airlines
+UIA|UNI Air
+UJC|Ultimate Jet
+UKL|Ukraine Air Alliance
+UKP|United Kingdom - National Police Air Service
+ULA|Four Corners Aviation
+ULC|Albinati Aviation
+ULR|Offshore Helicopter Services
+UMZ|UmzaXpress
+UNA|Business Aviation Asia
+UNC|Uni-Fly
+UNI|Unicair
+UNO|United Nations
+UNQ|Unique Air
+UNY|Lunds University School of Aviation
+UPS|UPS
+URA|RS Avia
+URF|Surf Air
+URG|Air Urga
+URO|European Cargo
+USA|Silkavia
+USC|AirNet
+USY|USC
+UTA|UTair
+UTN|SkyLine Express
+UTS|Ukraine - State Air Traffic Service
+UTY|Alliance Airlines
+UVL|Universal Air
+UVT|UVT Aero
+UWD|Skyward Aviation
+UZA|Constanta Airline
+UZB|Uzbekistan Airways
+UZS|Air Samarkand
+UZU|SpaceBee Airlines
+UZZ|Stratos
+VAA|Van Air Europe
+VAG|Vietravel Airlines
+VAL|Voyageur Airways
+VAR|United Aviate Academy
+VAS|ATRAN
+VAW|Fly2Sky
+VBB|ALK Airlines
+VBW|Air Burkina
+VCG|Catreus
+VCV|Conviasa
+VDA|Volga-Dnepr Airlines
+VES|Vieques Air Link
+VET|Venture Aviation Group
+VFC|VASCO
+VGG|Aviation Services Management
+VID|Via Air
+VIO|AVIATOR.S5
+VIR|Virgin Atlantic
+VIV|Viva
+VJA|Vista America
+VJC|VietJet Air
+VJT|VistaJet
+VKG|Sunclass Airlines
+VLB|Air Volta
+VLG|Vueling
+VLJ|VallJet
+VLY|United States - Tennessee Valley Authority
+VLZ|Volare Aviation
+VND|Avionord
+VNE|Venezolana
+VNT|Ventura
+VOE|Volotea
+VOI|Volaris
+VOK|Centennial Jets
+VOR|Flight Calibration Services
+VOZ|Virgin Australia
+VPC|Panaviatic
+VQI|Villa Air
+VRE|Air Côte d'Ivoire
+VRH|Varesh Airlines
+VSR|Aviostart
+VSV|SCAT
+VTA|Air Tahiti
+VTE|Contour Aviation
+VTM|Aeronaves TSM
+VTS|Everts Air Alaska
+VTU|Turpial Airlines
+VVT|Aviatsa
+VVV|Valair
+VWA|Venture West Aviation
+VXP|Avelo Airlines
+VXS|Voluxis
+VYR|Executive Aviation Services
+VYU|Fly Vaayu
+WAA|Westair Aviation
+WAE|Western Air Express
+WAF|Air Flamenco
+WAL|World Atlantic Airlines
+WAV|Warbelows Air Ventures
+WCC|West Coast Charters
+WCD|Kyungwoon University Aviation
+WCG|Warsaw Cargo
+WCM|World Cargo Airlines
+WCP|Aviator College
+WDY|Chicago Jet Group
+WEJ|WEJET
+WEW|Rise Air
+WEY|AWA
+WFC|Swift Copters
+WFL|World2Fly
+WGN|Western Global Airlines
+WHS|Wiking Helikopter Service
+WHT|White
+WIA|Winair
+WIF|Wideroe
+WIG|Wiggins Airways
+WIL|Aero Air
+WIN|Awesome Cargo
+WIS|PACC Air
+WIT|Wittering FTU
+WJA|WestJet
+WKT|DEA Aviation
+WLF|Hubei Sky-Blue International Aviation Academy
+WLL|Weltall Avia
+WLN|West Link Airlines
+WMA|Makers Air
+WML|Chantilly Air
+WMN|Trident Aircraft
+WMU|Western Michigan University College of Aviation
+WNG|US Aviation Academy
+WON|Wings Air
+WPR|Auckland Rescue Helicopter
+WRC|Windrose Airlines
+WRF|Wright Air Service
+WSA|Solaris Aero
+WSG|Wasaya Airways
+WSN|Advanced Air
+WSP|VeriJet
+WST|Western Air
+WUA|Asian Express General Aviation Wuxi
+WUP|Wheels Up
+WWI|Worldwide Jet Charter
+WWN|Nova West Aviation
+WZZ|Wizz Air
+XAK|Airkenya Express
+XAV|Aviaprom Enterprises
+XAX|AirAsia X
+XCN|United States - US Forest Service
+XED|Xead Aviation
+XEJ|XE Jet
+XEN|Zenflight
+XFL|Executive Fliteways
+XGN|NextGen Flight Solutions
+XGO|AirGO Private Airline
+XKY|Skyway Airlines
+XLE|NG Eagle
+XLJ|XCEL JET
+XLK|Safarilink Aviation
+XLL|Air Excel
+XLR|Texel Air
+XRC|Express Air Cargo
+XRO|Exxaero
+XSM|AirSmart
+XSN|AirSF
+XSR|Airshare
+XTH|Xinjiang General Aviation
+XTX|AIR TXT
+XUM|sum air
+YEL|Summit Aviation
+YZR|Suparna Airlines
+ZAV|Zetavia
+ZOM|Zooom
+"@
+$content | Set-Content -Path 'e:\Projects\ESP32-FlightTracker\data\airlines.txt' -Encoding UTF8
+Write-Host "Airlines file updated with $(($content -split "`n").Count) airlines from FlightRadar24"
+
+Completed with input: $content = @"
+AAC|United Kingdom - Army Air Corps
+AAD|flytrip
+AAH|Aloha Air Cargo
+AAJ|Alfa Airlines
+AAL|American Airlines
+AAN|Atmospherica Aviation
+AAO|Alpha Aviation
+AAR|Asiana Airlines
+AAT|Africa Airlines
+AAW|Afriqiyah Airways
+AAY|Allegiant Air
+ABA|Aero-Beta Flight Training
+ABF|Scanwings
+ABL|Air Busan
+ABQ|airblue
+ABR|ASL Airlines
+ABS|FlyGabon
+ABT|Benin Airlines
+ABW|AirBridgeCargo
+ABX|ABX Air
+ABY|Air Arabia
+ACA|Air Canada
+ACI|Aircalin
+ACL|AerCaribe Cargo
+ACN|Azul Conecta
+ACP|Astral Aviation
+ACW|Fly Across
+ACY|Alpha Crux
+ADB|Antonov Airlines
+ADJ|Aladdin Jet
+ADM|Air Dream College
+ADN|Aero-Dienst
+ADO|Air Do
+ADV|Advanced Flight Training
+ADZ|Compass Air Cargo
+AEA|Air Europa
+AED|EADS CASA
+AEE|Aegean Airlines
+AEG|Airest
+AEP|Aerotec
+AER|Alaska Central Express
+AEW|Aegean Executive
+AEZ|Aeroitalia
+AFB|Bulgaria - Air Force
+AFE|Airfast Indonesia
+AFG|Ariana Afghan Airlines
+AFL|Aeroflot
+AFP|Portugal - Air Force
+AFR|Air France
+AFW|Africa World Airlines
+AFZ|Atlantic Flight Training Academy
+AGH|Altagna
+AGR|Air Charters Europe
+AGU|Angara Airlines
+AGV|Air-Glaciers
+AHC|Ascent Helicopters
+AHF|Aspen Helicopters
+AHX|Amakusa Airlines
+AHY|Azerbaijan Airlines
+AIA|Amelia
+AIB|Airbus
+AIC|Air India
+AIE|Air Inuit
+AIH|AirZeta
+AIP|Alpine Air Express
+AIZ|arkia
+AJB|American Jet
+AJH|Aeroaljarafe
+AJI|Ameristar
+AJK|Allied Air
+AJO|Av8Jet
+AJP|Anap Jets
+AJT|Amerijet International
+AKF|Aero Toyota
+AKJ|Akasa Air
+AKK|Sundt Air
+AKL|Air Kiribati
+AKN|Alkan Air
+AKT|Canadian North
+ALE|AllianceJet
+ALI|Airlift
+ALK|SriLankan Airlines
+ALW|ALS
+ALZ|Azure Aviation
+AMA|Moalem Aviation
+AMB|DRF Luftrettung
+AMD|SA Red Cross Air Mercy Service
+AME|Spain - Air Force
+AMF|Ameriflight
+AMP|Atsa Airlines
+AMQ|AMC Aviation
+AMT|Air Mountain
+AMU|Air Macau
+AMV|AMC Airlines
+AMW|Armenia Airways
+AMX|Aeromexico
+ANA|All Nippon Airways
+ANG|Air Niugini
+ANK|Aero Nomad
+ANO|Airnorth
+ANR|YanAir
+ANS|Andes Lineas Aereas
+ANT|Air North
+ANX|Mexico - Navy
+ANZ|Air New Zealand
+AOJ|Avcon Jet
+AOM|Air Ocean Maroc
+AOS|Aeros Flight Training
+APC|AIRPAC Airlines
+APF|populAir
+APJ|Peach
+APK|Air Peace
+APW|Alpha Three Aviation
+APX|Naljets
+APY|Aeropapa
+APZ|Air Premia
+AQL|Altair Airlines
+AQS|Airstream
+ARA|Arik Air
+ARG|Aerolineas Argentinas
+ARI|Aerovics
+ARL|Airlec Air Espace
+ARR|Avalair Aircraft Management
+ARU|Aruba Airlines
+ARZ|Falcon Luxe
+ASA|Alaska Airlines
+ASB|Air Spray
+ASF|Austria - Air Force
+ASH|Mesa Airlines
+ASI|AeroGuard Flight Training Center
+ASJ|Astonjet
+ASL|AirSERBIA
+ASP|AirSprint
+ASR|Aero Sotravia
+ASV|Air Seoul
+ASY|Australia - Royal Australian Air Force
+ATC|Air Tanzania
+ATG|Aerotranscargo
+ATL|Atlas Air Service
+ATN|Air Transport International
+ATO|ATM Information Service Japan
+ATU|Aerotours
+ATV|Avanti Air
+ATX|AirSWIFT
+ATY|AirTraffic
+AUA|Austrian Airlines
+AUB|Auburn University School of Aviation
+AUG|Georgian Aviation University
+AUI|Ukraine International Airlines
+AUK|Auric Air
+AUL|Smartavia
+AUR|Aurigny
+AUU|Aurora Flight Sciences
+AVA|avianca
+AVJ|Avia Traffic
+AVL|Aviation Adventures
+AVM|Avemex
+AVN|Air Vanuatu
+AWA|Air Astra
+AWC|Titan Airways
+AWG|Animawings
+AWH|Aerowest
+AWI|Air Wisconsin
+AWK|Airwork
+AWS|Arab Wings
+AWU|Sylt Air
+AXB|Air India Express
+AXE|AirExplore
+AXH|Servicios Aéreos A&H
+AXK|African Express Airways
+AXL|Anguilla Air Services
+AXM|AirAsia
+AXO|Axio
+AXP|PULSE Flight School
+AXV|AVA Airlines
+AXY|AirX
+AYN|FlyArystan
+AYR|Flight Training Europe
+AYT|Ayit Aviation
+AYY|Air Alliance
+AZB|Zambia Airways
+AZE|Arcus Air
+AZG|Silk Way West Airlines
+AZH|ASG Helicopter Services
+AZM|Azman Air
+AZO|Azimuth
+AZP|Paranair
+AZQ|Silk Way Airlines
+AZS|Aviacon Zitotrans
+AZU|Azul
+AZV|Azur Air
+AZW|Air Zimbabwe
+AZY|Aztec Airways
+BAF|Belgium - Air Force
+BAG|Birdbase Aviation
+BAH|Bahrain Royal Flight
+BAO|Baden Aircraft Operations
+BAR|Abu Dhabi Aviation
+BAV|Bamboo Airways
+BAW|British Airways
+BAY|Bravo Airways
+BBA|Bombardier
+BBC|Biman Bangladesh Airlines
+BBG|Bluebird Airways
+BBK|Sunkar Air
+BBL|BBN Airlines Indonesia
+BBQ|Eastern Air Express
+BBT|BBN Airlines
+BBX|Bel Air Aviation
+BBZ|Bluebird Aviation
+BCP|Sybajet San Marino
+BCY|CityJet
+BDA|Blue Dart Aviation
+BDJ|Deer Jet Beijing
+BDR|Badr Airlines
+BEC|Berkut Air
+BEJ|SD Aviation
+BEL|Brussels Airlines
+BER|Fly Air41 Airways
+BFF|Air Nunavut
+BFK|Inner Mongolia Northern Express
+BFL|Buffalo Airways
+BFS|BAA Training
+BFX|Fly Away
+BFY|Bestfly Aruba
+BGA|Airbus Transport International
+BGB|Big Bend Community College Aviation
+BGF|Bulgaria - Government
+BGH|BH Air
+BGL|Binani Air
+BGR|Bridger Aerospace
+BGS|Sun Air Bulgaria
+BHA|Buddha Air
+BHD|Bangkok Helicopter Services
+BHL|Bristow Helicopters
+BHM|Bulgaria Heli Med Service
+BHR|Bighorn Airways
+BHS|Bahamasair
+BIC|Alphaland Aviation
+BID|BinAir
+BIO|Bioflight
+BJN|Beijing Airlines
+BKA|BankAir
+BKN|Saint Louis University Flight School
+BKP|Bangkok Airways
+BLK|Aero
+BLT|Astonfly
+BLW|Wermlandsflyg
+BMA|BermudAir
+BMG|Image Air Charter
+BMJ|Bemidji Aviation
+BNI|Bartolini Air
+BNL|Berniq Airways
+BOE|Boeing
+BOH|Air Bohemia
+BOL|TAB Cargo
+BOM|Haute Aviation
+BOO|Bookajet
+BOT|Air Botswana
+BOV|Boliviana de Aviacion
+BOX|AeroLogic
+BPC|Braspress Air Cargo
+BPS|BASe Airlines
+BPX|Phoenix East Aviation
+BQA|AXIS Aviation
+BRD|Bridges Air Cargo
+BRG|Bering Air
+BRH|Star Air Cargo
+BRJ|Bairline
+BRK|SAC Heavy Airlift Wing
+BRO|2Excel Aviation
+BRQ|Buraq Air
+BRS|Brazil - Air Force
+BRT|British International Helicopters
+BRU|Belavia
+BRW|AV8 Flight School
+BRX|BRA
+BSC|Aerostan
+BSF|Bluesky Airways
+BSM|Southeastern Oklahoma State University Aviation
+BSO|Aeroclub Barcelona-Sabadell
+BSV|bluestar
+BSW|Zhong Dong Business Jet
+BSX|Bassaka Air
+BTI|airBaltic
+BTK|Batik Air
+BTN|Bhutan Airlines
+BTO|Batot Air
+BTQ|Boutique Air
+BUC|European Air Charter
+BUY|Freedom II
+BVL|Bul Air
+BVT|Berjaya Air
+BWA|Caribbean Airlines
+BXR|Redding Aero Enterprises
+BYA|Berry Aviation
+BYB|Spot Jet Services
+BYD|beOnd
+BYF|San Carlos Flight School
+BZE|Zenith Aviation
+CAD|Cardig Air
+CAH|E+S Air
+CAI|Corendon Airlines
+CAK|Southwest Aircraft Charter
+CAL|China Airlines
+CAO|Air China Cargo
+CAP|Civil Air Patrol
+CAT|Copenhagen Airtaxi
+CAV|Calm Air
+CAY|Cayman Airways
+CAZ|Cat Aviation
+CBC|SkyShare
+CBG|GX Airlines
+CBJ|Capital Airlines
+CBM|DragonFly Executive
+CBN|Southern Illinois University School of Aviation
+CBW|Suzhou Aviation
+CCA|Air China
+CCD|Dalian Airlines
+CCK|Carlisle Air Group
+CCM|Air Corsica
+CCQ|Capital City Air Carriers
+CDC|Loong Air
+CDG|Shandong Airlines
+CDQ|Chodang University
+CDT|Aeroclub de Reus
+CEB|Cebu Pacific
+CEF|Czechia - Air Force
+CEL|Ceiba Intercontinental
+CEO|Jetset
+CES|China Eastern Airlines
+CEY|Air Century
+CFA|China Flying Dragon Aviation
+CFC|Canada - Royal Canadian Air Force
+CFG|Condor
+CFH|CareFlight
+CFI|China - Civil Aviation Administration
+CFL|Bromma Air Maintenance
+CFR|United States - California Department of Forestry
+CFZ|China Flight General Aviation Company
+CGF|Cargo Air
+CGH|Air Guilin
+CGN|Air Changan
+CGS|SolitAir
+CGX|United States - Coast Guard
+CGZ|Colorful Guizhou Airlines
+CHB|West Air
+CHC|CITIC Offshore Helicopter
+CHD|Russia - 223rd Flight Unit State Airline
+CHG|Challenge Airlines BE
+CHH|Hainan Airlines
+CHJ|Star Jet
+CHX|Germany - Air Ambulance
+CJR|Caverton Helicopters
+CJT|Cargojet Airways
+CJX|Jiangxi Air
+CKJ|China - Air Force
+CKK|China Cargo Airlines
+CKS|Kalitta Air
+CLA|Comlux
+CLF|Centreline
+CLG|Chalair Aviation
+CLH|Lufthansa CityLine
+CLS|Clemens Aviation
+CLX|Cargolux
+CLY|Clay Lacy Aviation
+CMA|CMA CGM Air Cargo
+CMD|Calstar
+CMF|Air Care Alliance
+CMP|Copa Airlines
+CMS|CAMEX Airlines
+CNA|Canavia
+CNF|CanaryFly
+CNK|Sunwest Aviation
+CNM|Air China Inner Mongolia
+CNS|PlaneSense
+CNV|United States - Navy
+CNW|North-Western Cargo
+COL|SC Aviation
+CON|ConocoPhillips
+CPA|Cathay Pacific
+CPI|Compagnia Aeronautica Italiana
+CPN|Caspian Airlines
+CPV|Air Corporate
+CQH|Spring Airlines
+CQN|Chongqing Airlines
+CRA|Cronos Airlines
+CRC|Camair-Co
+CRE|Jet OUT
+CRG|Costa Rica Green Airways
+CRK|Hong Kong Airlines
+CRL|Corsair
+CRN|Carson Air
+CRQ|Air Creebec
+CRX|Cross Aviation
+CSB|21 Air
+CSC|Sichuan Airlines
+CSG|China Southern Cargo
+CSH|Shanghai Airlines
+CSJ|Castle Aviation
+CSN|China Southern Airlines
+CSQ|IBC Airways
+CSR|CAE
+CSS|SF Airlines
+CST|Shoreline Aviation
+CSV|Coastal Aviation
+CSW|Chair Airlines
+CSZ|Shenzhen Airlines
+CTA|Aero Charter and Transport
+CTE|Atlanta Air Charter
+CTG|Canada - Coast Guard
+CTJ|Tianjin Air Cargo
+CTK|East Midlands Helicopters
+CTL|Central Air Southwest
+CTM|France - Air Forces Command
+CTN|Croatia Airlines
+CTP|CTP Aviation
+CTV|Citilink
+CTX|Centennial Aviation
+CUA|China United Airlines
+CUB|Cubana
+CUH|Urumqi Air
+CUL|Coulson Aviation
+CVA|Air Chathams
+CVK|Cavok Air
+CVR|Chevron USA
+CVU|Grand Canyon Airlines
+CVZ|Aerocaribe Venezuela
+CWA|CanWest Air
+CWE|Cargo Wings Express
+CWG|Wing Aviation
+CWL|Cranwell FTU
+CWN|Crown Airlines
+CWY|Woodgate Aviation
+CXA|Xiamen Air
+CXE|Caicos Express Airways
+CXK|ATP Flight School
+CYF|Tus Air
+CYN|Colorful Yunnan Airlines
+CYO|ATI Jet
+CYP|Cyprus Airways
+CYT|Crystal Air
+CYZ|China Postal Airlines
+DAH|Air Algerie
+DAK|4Airways
+DAL|Delta Air Lines
+DAN|Dana Air
+DAO|Daallo Airlines
+DAP|Aerovias DAP
+DAV|Dornier Aviation Nigeria Aiep
+DBP|CAA
+DBT|DB Aviation
+DCM|Fltplan
+DCS|DC Aviation
+DCT|Airtask
+DEF|Aviation Défense Service
+DER|Deer Jet
+DES|Servicios Aéreos Especializados Destinia
+DFC|Aeropartner
+DGC|Spain - Guardia Civil
+DGJ|DigaJet
+DHC|De Havilland Canada
+DHK|DHL Air
+DIG|PassionAir
+DIR|FLYYO
+DJR|Desert Jet
+DJT|La Compagnie
+DKH|Juneyao Air
+DKT|Encore Air Cargo
+DKZ|Dala Air
+DLA|Air Dolomiti
+DLH|Lufthansa
+DLX|Dreamline Aviation
+DLY|Air Independence
+DMR|Panorama Jets
+DMS|Diamond Sky
+DNA|Dan Air
+DNC|Aerodynamics Academy
+DOC|Norsk Luftambulanse
+DOI|United States - US Department of Interior
+DOJ|United States - Department of Justice
+DOR|General Atomic AeroTech Systems
+DOS|United States - Department of State
+DOW|Best Jets International
+DQA|Maldivian
+DRC|Air Congo
+DRK|Drukair
+DRL|Omni Air Transport
+DRU|Alrosa
+DSO|Dassault Falcon Service
+DST|Star Aviation
+DSU|Delta State University Aviation
+DTA|TAAG Angola Airlines
+DTH|Domestic Airlines
+DTL|Aero Dili
+DTR|DAT
+DUB|Dubai Air Wing
+DUC|Class Aviation
+DVR|Divi Divi Air
+DVY|Legends Airways
+DWI|Arajet
+DWW|DAS Private Jets
+DXT|Dexter Air Taxi
+DZD|Yazd Airways
+DZR|Midwest Aviation
+EAF|Electra Airways
+EAL|Eastern Airlines
+EAP|Aeropyrenees
+EAT|Air Transport Europe
+EAX|EAS Barcelona
+ECA|Excellent Air
+ECJ|East Coast Jets
+ECO|EcoJet
+EDC|Air Charter Scotland
+EDG|Jet Edge
+EDL|Germany - Police
+EDR|Fly AllWays
+EDW|Edelweiss
+EEF|Estonia - Air Force
+EFC|Emirates Flight Training Academy
+EFD|E-Aviation
+EFG|Elifriulia
+EFT|Execuflight
+EFY|Clic
+EGC|Eagle Creek Aviation
+EGL|Capital Air Ambulance
+EGS|National Jets
+EGT|EGT Jet
+EGY|Egypt - Air Force
+EIN|Aer Lingus
+EIS|EIS Aircraft
+EIX|Stellaer 212
+EJA|NetJets
+EJM|Executive Jet Management
+EKT|European SAO
+ELA|Elitaliana
+ELG|Elangeni
+ELN|Elin Group
+ELV|Elvetia Aviation
+ELW|Yellow Wings Air Services
+ELX|Elan Express
+ELY|El Al
+ELZ|Elite Air
+EMB|Embraer
+EMC|247 Aviation
+EMD|EagleMed
+EMM|Emperor Aviation
+ENG|ENG Aviation
+ENK|Executive Airlink
+ENT|Enter Air
+EOA|Elilombarda
+EOK|Aero K
+EOS|Eliossola
+EPA|Donghai Airlines
+EPE|Air Eagle
+EPI|Epic Flight Academy
+ERF|E-Cargo Airlines
+ERH|Bristow US
+ERS|Real Aeroclub de Sevilla
+ERU|Embry-Riddle Aeronautical University
+ERY|Sky Quest
+ESF|Estafeta Carga Aerea
+ESR|Eastar Jet
+ESW|ASG Business Aviation
+ETA|Reynolds Jet
+ETD|Etihad Airways
+ETF|Spain - Army
+ETH|Ethiopian Airlines
+ETI|Hummingbird Aviation
+ETP|QinetiQ
+ETR|Estelar
+EUL|Euro Link
+EUP|Pan Europeenne
+EUW|European Flight Service
+EVA|EVA Air
+EVC|RCS Services
+EVE|Iberojet
+EVQ|Everett Aviation
+EVX|ATR
+EWG|Eurowings
+EWR|EWA Air
+EWZ|East Wing
+EXB|Brazil - Army
+EXC|EC Charter
+EXP|Island Air Express
+EXS|Jet2
+EXV|FitsAir
+EZE|Eastern Airways
+EZR|Z Air
+EZT|Ezy Airlines
+EZY|easyJet
+EZZ|ETF Airways
+FAC|Colombia - Air Force
+FAD|flyadeal
+FAE|Ecuador - Air Force
+FAF|France - Air Force
+FAG|Argentina - Air Force
+FAM|Mexico - Air Force
+FAP|F AIR
+FAS|Florida Air Cargo
+FBA|Fly Baghdad
+FBU|French bee
+FBY|FlyBy
+FBZ|Flybondi
+FCA|Fly-Coop Air Service
+FCE|Max Air
+FCK|Flight Calibration Services
+FDA|Fuji Dream Airlines
+FDB|flydubai
+FDJ|Freedom Air
+FDL|Farmingdale State University Aviation
+FDR|Federal Airlines
+FDS|AMREF Flying Doctors
+FDT|Freedom Airline Express
+FDX|FedEx
+FDY|Southern Airways Express
+FEX|FlightExec
+FFA|Fly4 Airlines
+FFC|Fairoaks Flight Centre
+FFD|Feuerwehr-Flugdienst Niedersachsen
+FFE|FFL Flugschule
+FFM|Firefly
+FFS|United States - Florida Forest Service
+FFT|Frontier
+FFY|Florida Flyers Flight Academy
+FGB|Air65 Aviation
+FGD|Conair
+FGO|FTL Airlines
+FGS|Elitellina
+FHR|Hoper
+FHS|FlyJaya
+FHY|Freebird Airlines
+FIA|FlyOne
+FIC|Aerosafin
+FIH|FinnHEMS
+FIN|Finnair
+FIX|Fox Aviation
+FJE|Fanjet Express
+FJI|Fiji Airways
+FJK|Fly Jet.kz
+FJL|Fly Jinnah
+FJW|Fastjet
+FKH|Fly Khiva
+FLA|Fly Angola
+FLD|FlyDedicated
+FLE|Flair Airlines
+FLG|FlyBig
+FLI|Atlantic Airways
+FLN|FlyNamibia
+FLO|Flycom
+FLZ|Flightlink
+FML|Sky Mali
+FMY|France - Army
+FNA|Norlandair
+FNF|Finland - Air Force
+FNK|IAS Itzehoer Airservice
+FNY|France - Navy
+FPK|Air Falcon
+FPL|Australia - Federal Police
+FPR|Peru - Air Force
+FQA|Quikjet Cargo Airlines
+FRA|Draken Europe
+FRC|Franconia Air Service
+FRF|Fleet Air International
+FRG|Freight Runners Express
+FRO|FROST
+FRU|France - Securite Civile
+FRV|Revv Aviation
+FSE|Alpine Flightservice
+FSF|Fly 7
+FSK|Africa Charter Airline
+FSM|FlySchool
+FSQ|Fly Sky Airlines
+FSR|Flightstar
+FSY|Private Air
+FTA|Ravn Connect
+FTH|Mountain Aviation
+FTK|United States - North Carolina Forest Service
+FTL|Flightline
+FTN|Victory Air
+FTO|Tropic Ocean Airways
+FTR|Finistair
+FTT|Flight Fast Track
+FTU|Civil Aviation Flight University of China
+FTY|Fly Tyrol
+FUU|Fly My Sky
+FVJ|ValueJet
+FVS|Falcon Aviation Services
+FWI|Air Caraibes
+FWK|Flightworks
+FXT|Flexflight
+FXZ|FlyX Aero
+FYC|Fly Cham
+FYL|Flyinggroup
+FYS|European Flyers
+FZA|Fuzhou Airlines
+GAC|GlobeAir
+GAF|Germany - Air Force
+GAG|Greybird Aviation
+GAK|Global Air Transport
+GAM|Germany - Army
+GAO|Liat Air
+GAV|Global Reach Aviation
+GBA|Barrier Air
+GBB|Lift
+GBG|GullivAir
+GCI|Italy - Coast Guard
+GCM|Comair Flight Services - CFS
+GCR|Tianjin Airlines
+GDC|Grand China Air
+GDG|GoodJET
+GDK|Goldeck-Flug
+GDM|Small Fly
+GDY|LifeFlight Australia
+GEA|Global Aviation
+GEC|Lufthansa Cargo
+GEL|Geosky
+GER|German Airways
+GES|Gestair
+GFA|Gulf Air
+GFD|GFD
+GFM|Grafair
+GFT|G.A.D Flights
+GGL|SJL Aeronautica
+GGN|Great North Airlines
+GGT|Trans Island Airways
+GGW|Duke Energy
+GHN|Air Ghana
+GIA|Garuda Indonesia
+GJM|Airhub Airlines
+GJR|GJet
+GJS|GoJet
+GJT|GetJet Airlines
+GKA|United States - Army Parachute Team
+GLF|Gulfstream Aerospace
+GLO|GOL
+GLR|Central Mountain Air
+GLT|Aero Charter
+GLX|Gelix Airlines
+GMA|Gama Aviation
+GMH|Hughes Flying Service
+GMN|Garmin
+GMS|Ghadames Air Transport
+GMT|Magnicharters
+GNJ|GainJet
+GNX|Genex
+GNY|Germany - Navy
+GOA|Fly91
+GPD|Tradewind Aviation
+GPR|GPM Aeroservicio
+GPX|GP Aviation
+GRA|Guardian Air
+GRB|Phoenix Air
+GRL|Air Greenland
+GRO|Gryphon Air
+GRV|Epsilon Aviation
+GTI|Atlas Air
+GTR|Galistair Infinite Aviation
+GTS|Transair
+GTW|American Air Charter
+GTX|GTA Air
+GUA|Guna Airlines
+GUM|Gum Air
+GUN|Grant Aviation
+GWC|Gulf Wings
+GWG|Green Africa
+GXA|GlobalX
+GZP|Gazpromavia
+HAF|Greece - Air Force
+HAI|Hai Au Aviation
+HAK|Pegasus Helicopter
+HAL|Hawaiian Airlines
+HAT|Air Horizont
+HBH|Hebei Airlines
+HBR|Hebridean Air Services
+HDB|HeliDubai
+HDR|Helitrans
+HEL|Helicol
+HER|Hera Flight
+HET|TAF Helicopters
+HEY|ZondaJet
+HEZ|Arrow Aviation
+HFA|airHaifa
+HFY|Hi Fly
+HGB|Greater Bay Airlines
+HGD|Korea Aerospace University
+HGE|Martin's Famous Pastry Shoppe
+HGO|One Air
+HHE|Heli Holland
+HHN|Hahn Air
+HIB|Helibravo
+HIM|Himalaya Airlines
+HKC|Hong Kong Air Cargo
+HKE|HK express
+HLA|Greece - Army
+HLE|United Kingdom - Air Ambulance
+HLF|Central Airlines
+HLI|Heli Securite
+HLJ|HelloJets
+HLR|Heli Air Services
+HLU|Héli-Union
+HLV|Heliservicio
+HLY|Heli Air
+HMB|CHC Helicopter
+HMF|Sweden - Swedish Maritime Administration
+HMJ|Harmony Jets
+HND|Hinterland Aviation
+HNW|Honeywell International
+HNX|Hainan Aviation Academy
+HOT|Valletta Airlines
+HOV|Hoverfly
+HPJ|Hop-A-Jet
+HPP|Exjet Aviation
+HRC|Harco Aviation
+HRD|Marshall University Aviation
+HRN|Heron Aviation
+HRT|Chartright Air
+HRZ|Croatia - Air Force
+HSF|Hanseo University Flight Education Center
+HSI|Swiss Helicopter
+HSO|Heli Service International
+HSR|Helistar
+HST|Heston Airlines
+HSV|Heliservices
+HSY|Sky Helicopteros
+HTM|HTM Helicopter Travel Munich
+HTP|Hala Air
+HTS|Helistar
+HTT|Latitude Air Ambulance
+HTY|HELITY Copter Airlines
+HUA|Hungary Airlines
+HUF|Hungary - Air Force
+HVK|Turkey - Air Force
+HVN|Vietnam Airlines
+HVY|Sky Bus
+HXA|China Express Airlines
+HYA|Alhaya Aviation
+HYD|Hydro-Québec
+HYM|HiSky
+HYP|Hyperion Aviation
+HYT|YTO Cargo Airlines
+HYY|Hayways
+HZS|Aviation Horizons
+HZY|Hainan Lily Jet
+IAE|IrAero
+IAF|Israel - Air Force
+IAG|EPAG - Groupie Air France
+IAM|Italy - Air Force
+IAN|Ibom Air
+IAW|Iraqi Airways
+IBB|Binter Canarias
+IBE|Iberia
+IBJ|Air Taxi & Charter International
+IBS|Iberia Express
+IBX|Ibex Airlines
+ICE|Icelandair
+ICF|ICS-Aero
+IDA|Indonesia Air Transport
+IEI|Italy - Army
+IFA|FAI rent-a-jet
+IFC|India - Air Force
+IFJ|IFA - Instituto de Formacao Aeronautica
+IFL|IFL Group
+IFY|I-Fly Air
+IGC|Iraq Gate Company
+IGM|Aero Coatl Mexicano
+IGO|IndiGo
+IGT|Georgian Airlines
+IGY|United States - NASA
+IHO|748 Air Services
+IJA|International Jet
+IJM|International Jet Management
+ILS|Servicios Aéreos ILSA
+ILU|Parkland College Institute of Aviation
+IMX|Zimex Aviation
+INA|Air1Air
+INI|Initium Aviation
+INP|Peru - Navy
+INR|Avincis
+IOA|IndiaOne Air
+IOS|Skybus
+IPL|Airpull Aviation Academy
+IRA|Iran Air
+IRB|Iran Airtour
+IRC|Iran Aseman Airlines
+IRH|Atlas Air
+IRM|Mahan Air
+IRT|Toos Airlines
+IRU|Chabahar Airlines
+IRZ|Saha Airlines
+ISR|Israir Airlines
+ISU|Indiana State University Flight Academy
+ITL|Italfly
+ITY|ITA Airways
+IVC|Invicta Air Cargo
+IWL|Island Wings Charter
+IWY|interCaribbean Airways
+IXR|iXAir
+IYE|Yemenia
+IZA|Izhavia
+IZG|Zagros Airlines
+JAC|Japan Air Commuter
+JAG|AlphaSky
+JAL|Japan Airlines
+JAR|Airlink
+JAS|Jet Aviation Flight Services
+JAT|JetSMART
+JAV|Jordan Aviation
+JBA|Helijet International
+JBC|JetBee
+JBD|Jet Aviation Business Jets Deutschland
+JBE|Sino Jet Beijing
+JBU|JetBlue
+JCL|Jetcall
+JCM|Secure Air Charter
+JCY|Aerius Management
+JDA|J D Aviation
+JDI|Jet Story
+JDL|JD Airlines
+JDL|JDL Airlines
+JEI|Jet Executive
+JET|Svenskt Industriflyg
+JFA|Jetfly Aviation
+JFL|Jet Fly Airline
+JIT|Jet It
+JIV|Jivair
+JJA|Jeju Air
+JKA|LeTourneau University Aviation
+JKH|Jetkontor
+JKR|Justice Air
+JLA|Aero JL
+JLB|Jhonlin Air Transport
+JLG|Jet Logistics
+JMA|Jambojet
+JME|EJM Europe
+JMJ|Sam Airways
+JMP|Businesswings
+JMS|Arc en Ciel
+JNA|Jin Air
+JNJ|JoinJet
+JNK|Jonika
+JNL|JetNetherlands
+JNS|Jet Net Services
+JNY|Journey Aviation
+JON|Jonair
+JPL|JetsPlus
+JRE|flyExclusive
+JRT|JetRight
+JSC|Jetstream Aviation Congo
+JSH|JetStream
+JSI|Jet Air Group
+JSL|SelectJet
+JSM|JS Aviation
+JST|Jetstar
+JSU|Jiangsu Jet
+JSX|JSX
+JSY|Jung Sky
+JTA|Japan Transocean Air
+JTC|Jetica
+JTD|Jettime
+JTE|National Jet Express
+JTI|ImperialJet
+JTL|Jet Linx Aviation
+JTM|East Coast Flight Services
+JTY|Jetology
+JTZ|Nicholas Air
+JUP|Jump Air
+JUS|USA Jet Airlines
+JWD|Jayawijaya Dirgantara
+JWX|Jetways Airlines
+JXA|Jet Access
+JXX|Jinxiang Airlines
+JYH|9 Air
+JZR|Jazeera Airways
+KAC|Kuwait Airways
+KAE|Kangala Air Express
+KAG|Korea Aviation College
+KAI|KaiserAir
+KAL|Korean Air
+KAP|Cape Air
+KAR|Ikar
+KAT|Aero Tak
+KAY|K5 Aviation
+KBA|Kenn Borek Air
+KBJ|Karnavati Aviation
+KBZ|Mingalar
+KCR|Kolob Canyons Air Services
+KCU|Skyline Transportation
+KEJ|Kaz Air Jet
+KEM|CemAir
+KEN|Kenmore Air
+KES|Air Antilles
+KEW|Keewatin Air
+KFA|KF Aerospace
+KFB|STAjets
+KFS|Kalitta Charters
+KGA|Xinjiang Skylink General Aviation
+KGB|Sapsan Airline
+KGK|Sky KG Airlines
+KGN|Asman Airlines
+KHF|KhabAvia
+KHH|Alexandria Airlines
+KHV|Air Cambodia
+KII|Kalitta Charters II
+KIS|Kish Air
+KIW|New Zealand - Royal New Zealand Air Force
+KLJ|KlasJet
+KLM|KLM
+KME|Cambodia Airways
+KMF|Kam Air
+KMI|K-Mile Air
+KMK|Kamaka Air
+KMM|KM Malta Airlines
+KNA|Kunming Airlines
+KNE|flynas
+KNM|GB Helicopters
+KNT|Flightpath Charter Airways
+KNW|Kenai Aviation
+KOR|Air Koryo
+KOW|Baker Aviation
+KPO|Fly Alliance
+KQA|Kenya Airways
+KRE|Aerosucre
+KRF|United Kingdom - UK Royal/VIP Flights
+KRP|Carpatair
+KRU|Karun Airlines
+KSF|Kent State University College of Aeronautics
+KSU|Kansas State University Aviation
+KSZ|Sunrise Airways
+KTB|Transaviabaltika
+KTU|Korea National University of Transportation
+KUH|Kush Aviation
+KUK|Kudlik Aviation
+KWX|Air Key West
+KXA|Jiangxi Express Aviation
+KXP|MJets Air
+KZH|ZhezAir
+KZN|Aviaservice
+KZR|Air Astana
+KZU|ULS Airlines Cargo
+LAA|Libyan Airlines
+LAF|Latvia - Air Force
+LAM|LAM
+LAN|LATAM Airlines
+LAO|Lao Airlines
+LAU|LAS Cargo
+LAV|AlbaStar
+LAZ|Liz Aviation
+LBF|Libya - Air Force
+LBQ|Quest Diagnostics
+LBR|Air Borealis
+LBT|Nouvelair
+LCO|LATAM Cargo
+LCT|TAR Mexico
+LDA|Lauda Europe
+LDG|Leading Edge Aviation
+LDX|SPARFELL
+LED|Field Aviation
+LEJ|FSH Aviation
+LER|Laser Airlines
+LET|Aerolineas Ejecutivas
+LEU|Lions Air
+LFA|L3Harris Airline Academy
+LFG|Let's Jett
+LFO|Germany - DLR Flugbetriebe
+LGF|Legacy Airways
+LGL|Luxair
+LGT|Longtail Aviation
+LHA|Air Central
+LHB|Liebherr Aerospace
+LHK|Lahak Aviation
+LHX|Lufthansa City
+LID|Alidaunia
+LIF|Air Methods
+LIL|Flylili
+LIP|Lipican Aer
+LJC|The Little Jet Company
+LJY|L.J. Aviation
+LKE|Lucky Air
+LKF|Aviation Advisor
+LKN|Nam Air
+LLK|Life Line Aviation
+LLL|Lao Skyway
+LLM|Yamal Airlines
+LLR|Alliance Air
+LLS|Servicios Aéreos Estrella
+LMG|South Africa - Air Force
+LMU|AlMasria Universal Airlines
+LNI|Lion Air
+LNK|Airlink
+LOG|Loganair
+LOL|Easy Charter
+LOT|LOT
+LPR|Polish Medical Air Rescue
+LRK|SkyJet Aviation Services
+LRQ|Luxembourg Air Rescue
+LRS|SANSA
+LRT|Liberty Jet Management
+LSI|MSC Air
+LSJ|Air Liaison
+LSK|SkyLight
+LSO|Lone Star Communications
+LTA|LIFT Academy
+LTC|Charter Jets
+LTR|Lufttransport
+LUA|Luminair
+LUC|Albinati Aeronautics
+LUK|Global Sky
+LVA|30 West Jets
+LVL|Level
+LWA|Libyan Wings
+LWG|Luxwing
+LXA|Luxaviation
+LXC|CAE Aviation
+LXJ|Flexjet
+LXW|LaneXang
+LXX|Libyan Express
+LYC|Lynden Air Cargo
+LYD|Lydd Air
+LYF|Lithuania - Air Force
+LYM|Key Lime Air
+LYX|SmartLynx Malta
+LZB|Bulgaria Air
+MAA|mas
+MAE|Mali Air
+MAI|Mauritania Airlines
+MAR|Air Mediterranean
+MAS|Malaysia Airlines
+MAU|Air Mauritius
+MAV|Manta Air
+MAX|Max Aviation
+MAY|Malta Air
+MBB|Air Manas
+MBC|AirJet
+MBK|Chrono Jet
+MBR|Brazil - Navy
+MBU|Marabu
+MCK|Aeroways
+MCM|Heli Air Monaco
+MCR|Monacair
+MDA|Mandarin Airlines
+MDC|airmedic
+MDF|Swiftair Hellas
+MDI|IAS Medical
+MDM|Medavia
+MDN|McDan Aviation
+MDS|McNeely Charter Services
+MDT|Sundt Air
+MEA|MEA
+MEH|Mehr Airways
+MEK|Med-Trans
+MEM|Meridian
+MEN|MAE Aircraft Management
+MFB|Mountain Flyers
+MFC|Canlink Aviation
+MFT|Multiflight
+MFX|My Freighter
+MGB|Cranfield Flight Training
+MGE|Asia Pacific Airlines
+MGH|Mavi Gök Airlines
+MGL|MIAT Mongolian Airlines
+MGO|Mango
+MGP|Arirang Aviation
+MGW|Mongolian Airways
+MGY|Madagascar Airlines
+MHH|Mounthill Aviation
+MHV|MHS Aviation
+MIN|MinRes Air
+MJC|Mandarin Air
+MJE|Empire Aviation
+MJF|MJet
+MJJ|MJets
+MJN|Oman - Royal Air Force
+MJR|MidAmerica Jet
+MJS|Aircharters Worldwide
+MKB|Mack Air
+MLM|Comlux Malta
+MLN|Corporate Air
+MLO|Servicios Aereos Milenio
+MLT|Maleth-Aero
+MMA|Myanmar Airways International
+MMD|Air Alsie
+MMG|ARM Aviacion
+MMI|Italy - Navy
+MML|Hunnu Air
+MMM|Meridian Air Company
+MMN|ProAirways
+MMO|Malta MedAir
+MMY|IASCO Flight Training
+MMZ|EuroAtlantic Airways
+MNB|MNG Airlines
+MNE|Air Montenegro
+MNG|Aero Mongolia
+MNM|Manasik Aviation
+MNS|Medsky Airways
+MNT|FlyMontserrat
+MOD|Aero Clube de Coimbra
+MOG|BAE Systems
+MOZ|Salzburg Jet Aviation
+MPC|MPC Air
+MPH|Martinair
+MRA|Martinaire
+MRJ|Meraj Airlines
+MRV|XENA
+MSA|Poste Air Cargo
+MSC|Air Cairo
+MSI|Motor Sich Airlines
+MSJ|SkyJet Airlines
+MSK|MAK KG Airlines
+MSM|Aeromas
+MSP|Costa Rica - Ministry of Public Security
+MSR|Egyptair
+MSS|Global Aviation
+MSX|Egyptair Cargo
+MSY|Massey University School of Aviation
+MTL|RAF-Avia
+MTO|Marathon Airlines
+MTS|Jet Rescue Air Ambulance
+MTU|Middle Tennessee State University Aerospace
+MUI|Transair
+MUS|Air Adelphi
+MVK|North Star Aviation
+MWG|AirBorneo
+MWH|Elemental Aviation
+MWI|Malawi Airlines
+MWM|Modern Logistics
+MWT|Midwest Aviation Division
+MXA|Mexicana
+MXE|Moçambique Expresso
+MXM|Maximus Airlines
+MXY|Breeze Airways
+MYD|Maya Island Air
+MYJ|My Jet
+MYP|Mann Yadanarpon Airlines
+MYU|My Indo Airlines
+MYW|MyWay Airlines
+MZB|Zebu Air
+MZI|Zorte Air
+MZT|ZYB Lily Jet
+MZY|Mermoz Academy
+NAC|Northern Air Cargo
+NAE|National Airways
+NAF|Netherlands - Royal Air Force
+NAI|Novair
+NAK|ENAC Ecole Aviation Civile
+NAL|Northway Aviation
+NBT|Norse
+NCA|Nippon Cargo Airlines
+NCB|North Cariboo Air
+NCG|Netherlands - Coast Guard
+NCJ|North Central Aviation
+NCR|National Airlines
+NDL|Chrono Aviation
+NDU|UND Aerospace
+NEA|New England Airlines
+NEW|NEAJETS
+NFA|North Flying
+NGF|Air Charity Network
+NGH|Midwest Flying Service
+NGL|Max Air
+NGN|LEAV Aviation
+NGR|Nigeria - Air Force
+NHC|NHC Northern Helicopter
+NHD|NHV
+NHX|Noordzee Helikopters Vlaanderen
+NIA|Nile Air
+NIG|Aero
+NIS|La Costena
+NIT|Middle Georgia State University School of Aviation
+NJE|NetJets Europe
+NJM|Northern Jet Management
+NJZ|Neojets
+NKP|Abakan Air
+NKS|Spirit Airlines
+NKT|North Country Aviation
+NLI|Northern Air
+NMA|Nesma Airlines
+NMG|Tian Jiao Airlines
+NMJ|Northwoods Aviation
+NOF|Fonnafly Helifly
+NOJ|NovaJet
+NOK|Nok Air
+NOS|Neos
+NOU|Nordic Unmanned
+NOW|Norway - Air Force
+NOZ|Norwegian
+NPG|Supernova Airlines
+NPT|West Atlantic
+NRL|Nolinor Aviation
+NRN|Netherlands - Navy
+NSE|SATENA
+NSH|Sterling Aviation
+NSJ|Nanshan Jet
+NSO|Aerolineas Sosa
+NSP|Samaritan's Purse
+NSY|Nanshan Flying
+NTA|Northern Thunderbird Air
+NTF|OK Aviation
+NTH|Hokkaido Air System
+NTN|National Airways Corporation
+NTR|Air Moana
+NTW|Maxair
+NUA|United Nigeria Airlines
+NUS|N-Jet
+NVD|Avion Express
+NVQ|Novoair
+NVY|United Kingdom - Royal Navy
+NWC|North-West Air Company
+NWF|Northwest Flyers
+NWL|North-Wright Airways
+NWS|Nordwind Airlines
+NWX|Nationwide Aviation
+NWY|New Way Cargo Airlines
+NXC|ConciAir
+NYB|Belgium - Navy
+NYT|Yeti Airlines
+NYX|NyxAir
+OAL|Olympic Air
+OAN|NATO
+OAO|Arkhangelsk Airlines
+OAR|One Air
+OAV|OMNI Executive Aviation
+OAW|Helvetic Airways
+OCN|Discover Airlines
+OCO|Ostend Air College
+OEY|Rimbun Air
+OFT|Buffalo River Aviation
+OGN|Originair
+OKA|Okay Airways
+OKC|Private Jets
+OLA|Overland Airways
+OLC|Solar Cargo
+OLO|Volo
+OLV|AirStar Charter
+OLY|Olympus Airways
+OMA|Oman Air
+OMD|Nomadic Aviation
+OMI|Omni Taxi Aereo
+OMS|SalamAir
+OMT|CM Airlines
+ONI|OMNI Aviation Training Center
+ONT|Canada - Ontario Ministry of Natural Resources
+OPM|Fireblade Aviation
+OPN|K&R Aviation
+OPT|Flight Options
+ORC|Oriental Air Bridge
+ORF|Oman - Royal Flight
+ORO|ClipperJet
+ORT|Ortac
+OST|Oklahoma State University Aviation
+OSU|Ohio State University Aviation
+OTA|Business Aviators
+OTC|Air Travel
+OUA|University of Oklahoma School of Aviation
+OUL|Soulbird
+OXF|CAE
+OYA|Fly OYA
+OYO|Oyonnair
+OZN|Aviator Zone Academy
+OZT|Premier Flight Center
+PAG|Perimeter Aviation
+PAL|Philippine Airlines
+PAM|Map Linhas Aereas
+PAO|Samoa Airways
+PAS|Pelita Air
+PAV|ProAir Aviation
+PBD|Pobeda
+PBR|Fast Air
+PCH|Pilatus Flugzeugwerke
+PCJ|Diamond Aviation
+PCO|Pacific Coastal Airlines
+PDG|PDG Aviation Services
+PDU|Purdue University School of Aviation
+PEA|Pan Europeenne Air Service
+PEG|Pegasus Elite Aviation
+PEI|Panamedia
+PEO|Petro Air
+PER|Petroleum Air Services
+PEV|People's
+PFZ|Proflight Zambia
+PGC|European Aircraft Private Club
+PGN|Aliyah Aviation
+PGR|Prestige Air Group
+PGT|Pegasus
+PHJ|Corporate Jet
+PHM|PHI
+PHN|Phoenix Aviation
+PHX|SkyCare
+PIA|Pakistan International Airlines
+PIP|Pilot Flight Academy
+PIZ|Air Corviglia
+PJC|Private Jet Center
+PJJ|Paradox Jets
+PJP|Princely Jets
+PJS|Jet Aviation Business Jets
+PJX|VivaJets
+PJZ|Premium Jet
+PKW|Sierra West Airlines
+PKZ|Prime Aviation
+PLC|Specialist Aviation Services
+PLF|Poland - Air Force
+PLM|Wamos Air
+PLR|Northwestern Air
+PLS|Placar Linhas Aereas
+PLT|United States - South Carolina Aeronautics Comm.
+PMS|Planemaster Services
+PNC|Prince Aviation
+PNO|Panorama Aviation
+PNP|Pineapple Air
+PNX|AIS Airlines
+PNY|Poland - Navy
+POD|Craft Charter
+POL|Sweden - Police
+PPQ|Personas y Paquetes por Aire
+PPT|Patria Pilot Training
+PRD|Presidential Aviation
+PRE|Precision Aircraft Management
+PRF|Precision Air
+PRL|Premier Airlines
+PRO|Propair
+PRS|Pars Air
+PRV|Privat
+PRX|Pradhaan Air Express
+PRY|Priority Air Charter
+PSC|Pascan Aviation
+PSK|Prescott Support
+PST|Air Panama
+PTA|Parata Air
+PTB|VoePass
+PTK|Petropavlovsk-Kamchatsky Air
+PTN|Platoon Aviation
+PTO|European Flight Academy
+PTR|Porter
+PTW|Pattaya Airways
+PUE|Plus Ultra
+PUL|Ornge Air
+PVG|Privilege Style
+PVL|PAL Airlines
+PVO|Privaira
+PVR|Priv'Air
+PVV|Fly Pro
+PWA|Priester Aviation
+PWF|Private Wings
+PWR|Quanta Aviation Services
+PXG|Aitheras Aviation Group
+PXR|PixAir Survey
+PXT|Pacific Coast Jet
+PYA|Pouya Air
+PYN|FlyWales
+PYR|Pyramids Airlines
+QAF|Qatar - Amiri Flight
+QAI|Conquest Air
+QAJ|Quick Air Jet Charter
+QAV|QA Aviation
+QCL|Air Class Cargo
+QDA|Qingdao Airlines
+QFA|Qantas
+QFF|flyaden
+QFY|Quality Fly
+QGA|Windrose Air Jetcharter
+QHD|Meregrass
+QJT|Qingdao Jiutian International Flight Academy
+QLK|QantasLink
+QNT|Qanot Sharq
+QQE|Qatar Executive
+QSM|Qeshm Airlines
+QTR|Qatar Airways
+QUE|Canada - Quebec Government Air Service
+QYT|QAir
+RAC|Icar Air
+RAG|Glencore Canada
+RAI|Raimon Airways
+RAM|Royal Air Maroc
+RAN|Rano Air
+RAP|Air Center Helicopters
+RAR|Air Rarotonga
+RAX|Royal Air Freight
+RBA|Royal Brunei Airlines
+RCA|Richland Aviation
+RCH|United States - Air Force
+RDF|Eurocopter Deutschland
+RDK|Memorial Hermann Life Flight
+RDL|Heli-Team
+REA|RED Air
+RED|International Committee of the Red Cross
+REE|Exclusive Aviation
+REG|Regional Air Services
+REH|REACH Air Medical Services
+RER|Aeroregional
+REU|Air Austral
+REV|RVL Aviation
+RFD|Aerus
+RFE|Tulpar Aircompany
+RFF|Russia - Air Force
+RFR|United Kingdom - Royal Air Force
+RFS|Rainier Flight Service
+RGA|REGA Swiss Air-Rescue
+RGM|RGA-Black Stone Airlines
+RGN|Cygnus Air
+RGY|Regency Air
+RHD|Babcock
+RHE|UNC Air Operations
+RHH|Redstar Aviation
+RHT|Busy Bee Congo
+RIF|Russia - National Guard
+RIV|APG Airlines
+RJA|Royal Jordanian
+RJB|Panellenic Airlines
+RJC|Richmor Aviation
+RJD|Rotana Jet
+RJZ|Jordan - Air Force
+RKA|Polar Airlines
+RKJ|Charter Airlines
+RKS|Phenix Jet
+RLA|Tarp Aviation
+RLB|Sunlight Air
+RLH|Ruili Airlines
+RLI|Reliant Air
+RLT|Real Tonga Airline
+RLU|Rusline
+RLX|Go2Sky
+RLY|Air Oceania
+RMB|Air Adriatic
+RMF|Malaysia - Air Force
+RMX|AirMaster
+RMY|Raya Airways
+RNA|Nepal Airlines
+RNG|Renegade Air
+RNI|Rennia Aviation
+ROF|Romania - Air Force
+ROG|Centro de Estudios Superiores de la Aviación
+ROI|Avior Airlines
+ROJ|Royal Jet
+ROK|Red Rock Flight School
+RON|Nauru Airlines
+ROP|Oman - Police
+ROR|Roraima Airways
+ROT|Tarom
+ROU|Air Canada Rouge
+RPA|Republic Airways
+RPB|Wingo
+RPN|United States - US Immigration and Customs Enforcement
+RQJ|Air Trek
+RQT|AirQuest Aviation
+RRR|United Kingdom - Royal Air Force Air Transport
+RRT|Transportes Aereos Sierra Alta
+RRV|Mombasa Air Safari
+RSB|Rubystar
+RSD|Russia - Special Flight Squadron
+RSF|Saudi Arabia - Air Force
+RSI|Air Sunshine
+RSJ|RusJet
+RSM|Royal Star Aviation
+RSP|Superior Air Charter
+RSX|Red Sea Airlines
+RSY|I-Fly
+RTG|Rely
+RTL|Air Thanlwin
+RTO|Rectimo Air Transports
+RTV|Nortavia
+RTY|Aims Community College Aviation
+RUC|Rutaca Airlines
+RUF|Air 1st Aviation
+RUN|AirACT
+RVF|New Pacific Airlines
+RVJ|Aircraft Management Group
+RVP|Sevenair
+RVQ|REVA Air Ambulance
+RVR|Ravenair
+RVV|Reeve Air Alaska
+RWD|RwandAir
+RWL|RWL German Flight Academy
+RWN|RWS
+RWZ|Red Wings
+RXA|Rex
+RXF|Shandong Dagao International Flight Academy
+RXI|Riyadh Air
+RYA|Ryan Air (USA)
+RYL|Royalair Philippines
+RYR|Ryanair
+RYS|Buzz
+RZO|Azores Airlines
+SAA|South African Airways
+SAF|Singapore - Air Force
+SAG|China Southern Airlines General Aviation
+SAH|Smart Jet
+SAO|Sahel Aviation Service
+SAS|SAS
+SAT|SATA Air Acores
+SAU|Saurya Airlines
+SAW|Sarah Airways
+SAY|Sky Gates Airlines
+SAZ|REGA Swiss Air-Ambulance
+SBE|Leviate Air Group
+SBF|SevenBar Aviation
+SBI|S7 Airlines
+SBS|Seaborne
+SBU|St Barth Commuter
+SCA|Sierra Charlie Aviation
+SCJ|Spring City Aviation
+SCM|American Jet International
+SCQ|OSM Aviation Academy
+SCR|Silver Cloud Air
+SCT|SAAB Aircraft
+SCU|Spartan College of Aeronautics and Technology
+SCW|SkyWest Charter
+SCX|Sun Country Airlines
+SDA|Sounds Air
+SDG|Star Air
+SDM|Rossiya
+SDR|Sundair
+SEB|Euroavia Airlines
+SEH|SKY express
+SEJ|SpiceJet
+SEK|Star East Airlines
+SEN|Senor Air
+SET|Solenta Aviation
+SEW|Skyward Airlines
+SEY|Air Seychelles
+SFG|Spree Flug
+SFJ|Starflyer
+SFR|FlySafair
+SFY|Skyborne Airline Academy
+SGA|SkyGuard
+SGD|SEair International
+SGN|Siam General Aviation
+SGP|NordJet Airlines
+SGX|Slate Aviation
+SHA|Shree Airlines
+SHH|SKYhigh Dominicana
+SHI|Sepehran Airlines
+SHP|SAF Helicopteres
+SHS|Shirak Avia
+SHU|Aurora
+SHW|KN Helicopters
+SIA|Singapore Airlines
+SID|Sideral Linhas Aereas
+SIF|AirSial
+SIN|Sin-Kung Airways
+SIO|Sirio
+SIS|Silver Air
+SIY|Executive Aviation Corporation
+SJA|Sawyer Aviation
+SJB|SKS Airways
+SJI|Smart Jet International
+SJJ|SpiritJets
+SJO|Spring Japan
+SJV|Super Air Jet
+SJX|STARLUX
+SJY|Sriwijaya Air
+SKK|ASKY Airlines
+SKP|Skytrans Australia
+SKQ|Labcorp
+SKU|SKY Airline
+SKV|Skyside
+SKW|SkyWest Airlines
+SKY|Skymark Airlines
+SKZ|Skyway Enterprises
+SLD|Silver Air
+SLE|NAC Charter
+SLF|Skyline Airlines
+SLG|Canada - Saskatchewan Air Ambulance Service
+SLH|Silverhawk Aviation
+SLI|Aeromexico Connect
+SLM|Surinam Airways
+SLN|Sloane Helicopters
+SLQ|SkyLink Express
+SLS|Super Legacy
+SME|Smart Aviation
+SMF|San Marino Executive Aviation
+SMG|Smartline
+SMK|Freedom Airline Express
+SMR|Somon Air
+SNC|Air Cargo Carriers
+SND|Skytraders
+SNG|LongJiang Airlines
+SNJ|Solaseed Air
+SOA|Southern Air Charter
+SOL|Solomon Airlines
+SON|ACASS Ireland
+SOP|Solinair
+SOR|SonAir
+SOY|Island Aviation
+SPA|Sierra Pacific Airlines
+SPM|Air Saint-Pierre
+SPQ|Sun PhuQuoc Airways
+SPR|PAL Aerospace
+SQF|Slovakia - Air Force
+SQH|Backcountry Aviation
+SQP|SkyUp Airlines
+SQS|Susi Air
+SRB|Serbia - Air Force
+SRC|Searca
+SRD|United Kingdom - Coast Guard
+SRI|Air Safaris
+SRN|SprintAir
+SRR|Maersk Air Cargo
+SRS|Southern Sky
+SRU|Star Peru
+SSF|Severstal Aircompany
+SSG|Slovakia - Government
+SSJ|Krasavia
+SSM|Spain - Coast Guard
+SSR|Sardinian Sky
+SST|Canada - Royal Canadian Mounted Police
+SSU|SASCA Airlines
+SSZ|Specsavers Aviation
+STB|St Barth Executive
+STQ|Star Wings
+STT|Western Aircraft
+STV|Saturn Aviation
+STW|Southwind Airlines
+STY|Altius Aviation
+SUA|Silesia Air
+SUB|Suburban Air Freight
+SUD|Sudan Airways
+SUE|Su Airlines
+SUI|Switzerland - Air Force
+SUL|ASTA Linhas Aereas
+SUM|Russia - Ministry of Emergency Situations (MChS)
+SUS|Sun-Air
+SUT|Summit Air
+SUZ|Zeusch Aviation
+SVA|Saudia
+SVD|SVG Air
+SVF|Sweden - Air Force
+SVI|Sky Vision Airlines
+SVL|Alante Air Charter
+SVR|Ural Airlines
+SVW|Global Jet Luxembourg
+SVX|Security Aviation
+SWA|Southwest Airlines
+SWC|HeliAir Sweden
+SWE|Svenskt Ambulansflyg
+SWM|Sky Angkor Airlines
+SWP|Star Work Sky
+SWR|Swiss
+SWT|Swiftair
+SWU|SkyAlps
+SWV|Svensk Luftambulans
+SWW|Swiss Private Jet
+SXE|Air Sierra Leone
+SXM|SXM Airways
+SXN|SaxonAir
+SXS|SunExpress
+SYB|Skyservice Business Aviation
+SYG|Ascend Airways
+SYJ|Slate Falls Airways
+SYL|Yakutia Airlines
+SYR|Syrian Air
+SYS|Shawbury FTU
+SYZ|Zil Air
+SZL|Eswatini Air
+SZN|Air Senegal
+TAA|Aeroservicios de la Costa
+TAF|TopFlight Aero-Services
+TAH|Air Anka
+TAP|TAP Air Portugal
+TAR|Tunisair
+TBA|Tibet Airlines
+TBC|Tbilisi Airways
+TBJ|TAG Aviation Asia
+TBN|Taban Airlines
+TBZ|ATA Airlines
+TCB|Transporte Aereo de Colombia
+TCF|Florida Tech College of Aeronautics
+TCI|Amber Aviation
+TCN|Jet Excellence
+TCV|Cabo Verde Airlines
+TDR|Trade Air
+TDY|SeaPort Airlines
+TEK|Aero-Tech Services
+TES|Taespejo Portugal
+TEZ|Tez Jet Airlines
+TFF|Talon Air
+TFX|Team Global Express
+TGA|Taiga Air
+TGI|Air Tengri
+TGN|Trigana Air
+TGO|Canada - Department of Transport
+TGU|TagAirlines
+TGW|Scoot
+TGY|Trans Guyana Airways
+TGZ|Georgian Airways
+THA|Thai Airways
+THB|BBN Airlines Thailand
+THT|Air Tahiti Nui
+THU|Thunder Airlines
+THY|Turkish Airlines
+TIE|Time Air
+TIN|Air Tindi
+TIV|Thrive
+TIW|Transcarga International Airways
+TJD|Aliserio
+TJJ|Blessings Aviation Charter
+TJS|Tyrolean Jet Services
+TJT|Twin Jet
+TKJ|AJet
+TKK|Aero Ways
+TKN|Fly Kish
+TLK|Starlink Aviation
+TLM|Thai Lion Air
+TLR|Air Libya
+TMB|Volato
+TMC|Travel Management Company
+TMG|Asia Cargo Airlines
+TMH|TVS
+TMJ|Tamga Jet
+TMW|Trans Maldivian Airways
+TNR|Tanana Air Service
+TNU|TransNusa
+TNX|Tréner Flight Academy
+TOA|Air Tetiaroa
+TOK|PNG Air
+TOR|FLYGTA Airlines
+TOS|Tropic Air
+TOW|AirTanker
+TOY|Toyo Aviation
+TPA|avianca Cargo
+TPC|Air Caledonie
+TPG|Transportes Aéreos Pegaso
+TQQ|Tarco Air
+TRA|Transavia
+TRF|Thrust Flight
+TRH|Turukhan Airlines
+TRL|Starlite Aviation
+TRP|United States - Maryland State Police
+TSC|Air Transat
+TSG|Trans Air Congo
+TSW|Transwing
+TTE|AvCenter
+TTF|Russia - 224th Flight Unit State Airline
+TTJ|TatraJet
+TTL|Total Linhas Aereas
+TTR|Alaman Air
+TTW|Tigerair Taiwan
+TUA|Turkmenistan Airlines
+TUG|Turkmenistan - Government
+TUI|TUI fly
+TUL|Tulpar Air
+TUN|Tunisia - Air Force
+TUP|Aviastar-TU
+TUR|Aeroturpial
+TUX|Tunisair Express
+TVR|Terra Avia
+TVS|Smartwings
+TVV|Travira Air
+TWB|T'way Air
+TWC|Canadian Airways Congo
+TWG|Air-Taxi Europe
+TWI|Tailwind Airlines
+TWY|Solairus Aviation
+TXC|TAE Avia
+TXG|7Air Cargo
+TXH|Bell Helicopter
+TXJ|Brilliant Jet
+TXP|Asian Express Airlines
+TYA|NordStar
+TYG|Beijing Tianyi General Aviation
+TYW|Tyrol Air Ambulance
+TZP|Zipair
+UAA|UAS/AEF Leuchars
+UAD|UAS/AEF Colerne
+UAE|Emirates
+UAF|United Arab Emirates - Air Force
+UAG|Union Aviation
+UAH|AEF Cranwell
+UAI|NIUAS/13 AEF
+UAJ|UAS/AEF Glasgow
+UAL|United Airlines
+UAM|UAS/AEF Woodvale
+UAO|UAS/AEF Benson
+UAQ|UAS/AEF Leeming
+UAU|UAS/AEF Boscombe Down
+UAW|UAS/AEF St Athan
+UAX|UAS/AEF Church Fenton
+UAY|UAS/AEF Cosford
+UBA|Myanmar National Airlines
+UBD|UR Airlines
+UBG|US-Bangla Airlines
+UCA|CommuteAir
+UCG|UniWorld Air Cargo
+UCM|University of Central Missouri Aviation
+UEA|Chengdu Airlines
+UEE|United Eagle
+UFX|Uni-Fly
+UGD|Uganda Airlines
+UIA|UNI Air
+UJC|Ultimate Jet
+UKL|Ukraine Air Alliance
+UKP|United Kingdom - National Police Air Service
+ULA|Four Corners Aviation
+ULC|Albinati Aviation
+ULR|Offshore Helicopter Services
+UMZ|UmzaXpress
+UNA|Business Aviation Asia
+UNC|Uni-Fly
+UNI|Unicair
+UNO|United Nations
+UNQ|Unique Air
+UNY|Lunds University School of Aviation
+UPS|UPS
+URA|RS Avia
+URF|Surf Air
+URG|Air Urga
+URO|European Cargo
+USA|Silkavia
+USC|AirNet
+USY|USC
+UTA|UTair
+UTN|SkyLine Express
+UTS|Ukraine - State Air Traffic Service
+UTY|Alliance Airlines
+UVL|Universal Air
+UVT|UVT Aero
+UWD|Skyward Aviation
+UZA|Constanta Airline
+UZB|Uzbekistan Airways
+UZS|Air Samarkand
+UZU|SpaceBee Airlines
+UZZ|Stratos
+VAA|Van Air Europe
+VAG|Vietravel Airlines
+VAL|Voyageur Airways
+VAR|United Aviate Academy
+VAS|ATRAN
+VAW|Fly2Sky
+VBB|ALK Airlines
+VBW|Air Burkina
+VCG|Catreus
+VCV|Conviasa
+VDA|Volga-Dnepr Airlines
+VES|Vieques Air Link
+VET|Venture Aviation Group
+VFC|VASCO
+VGG|Aviation Services Management
+VID|Via Air
+VIO|AVIATOR.S5
+VIR|Virgin Atlantic
+VIV|Viva
+VJA|Vista America
+VJC|VietJet Air
+VJT|VistaJet
+VKG|Sunclass Airlines
+VLB|Air Volta
+VLG|Vueling
+VLJ|VallJet
+VLY|United States - Tennessee Valley Authority
+VLZ|Volare Aviation
+VND|Avionord
+VNE|Venezolana
+VNT|Ventura
+VOE|Volotea
+VOI|Volaris
+VOK|Centennial Jets
+VOR|Flight Calibration Services
+VOZ|Virgin Australia
+VPC|Panaviatic
+VQI|Villa Air
+VRE|Air Côte d'Ivoire
+VRH|Varesh Airlines
+VSR|Aviostart
+VSV|SCAT
+VTA|Air Tahiti
+VTE|Contour Aviation
+VTM|Aeronaves TSM
+VTS|Everts Air Alaska
+VTU|Turpial Airlines
+VVT|Aviatsa
+VVV|Valair
+VWA|Venture West Aviation
+VXP|Avelo Airlines
+VXS|Voluxis
+VYR|Executive Aviation Services
+VYU|Fly Vaayu
+WAA|Westair Aviation
+WAE|Western Air Express
+WAF|Air Flamenco
+WAL|World Atlantic Airlines
+WAV|Warbelows Air Ventures
+WCC|West Coast Charters
+WCD|Kyungwoon University Aviation
+WCG|Warsaw Cargo
+WCM|World Cargo Airlines
+WCP|Aviator College
+WDY|Chicago Jet Group
+WEJ|WEJET
+WEW|Rise Air
+WEY|AWA
+WFC|Swift Copters
+WFL|World2Fly
+WGN|Western Global Airlines
+WHS|Wiking Helikopter Service
+WHT|White
+WIA|Winair
+WIF|Wideroe
+WIG|Wiggins Airways
+WIL|Aero Air
+WIN|Awesome Cargo
+WIS|PACC Air
+WIT|Wittering FTU
+WJA|WestJet
+WKT|DEA Aviation
+WLF|Hubei Sky-Blue International Aviation Academy
+WLL|Weltall Avia
+WLN|West Link Airlines
+WMA|Makers Air
+WML|Chantilly Air
+WMN|Trident Aircraft
+WMU|Western Michigan University College of Aviation
+WNG|US Aviation Academy
+WON|Wings Air
+WPR|Auckland Rescue Helicopter
+WRC|Windrose Airlines
+WRF|Wright Air Service
+WSA|Solaris Aero
+WSG|Wasaya Airways
+WSN|Advanced Air
+WSP|VeriJet
+WST|Western Air
+WUA|Asian Express General Aviation Wuxi
+WUP|Wheels Up
+WWI|Worldwide Jet Charter
+WWN|Nova West Aviation
+WZZ|Wizz Air
+XAK|Airkenya Express
+XAV|Aviaprom Enterprises
+XAX|AirAsia X
+XCN|United States - US Forest Service
+XED|Xead Aviation
+XEJ|XE Jet
+XEN|Zenflight
+XFL|Executive Fliteways
+XGN|NextGen Flight Solutions
+XGO|AirGO Private Airline
+XKY|Skyway Airlines
+XLE|NG Eagle
+XLJ|XCEL JET
+XLK|Safarilink Aviation
+XLL|Air Excel
+XLR|Texel Air
+XRC|Express Air Cargo
+XRO|Exxaero
+XSM|AirSmart
+XSN|AirSF
+XSR|Airshare
+XTH|Xinjiang General Aviation
+XTX|AIR TXT
+XUM|sum air
+YEL|Summit Aviation
+YZR|Suparna Airlines
+ZAV|Zetavia
+ZOM|Zooom
