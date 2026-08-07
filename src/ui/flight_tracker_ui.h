@@ -55,7 +55,7 @@ void setRadarRadius(float radius_km);
  * For FreeRTOS cross-task updates wrap in lv_lock / lv_unlock.
  */
 void flight_tracker_update(const char *icao_address, const char *flight, const char *aircraft_code, const char *origin, const char *destination, float latitude, float longitude, float distance_km, int bearing_deg, int altitude_ft,
-                           int vertical_speed, int ground_speed, int heading_deg, const char *airline);
+                           bool on_ground, int vertical_speed, int ground_speed, int heading_deg, const char *airline);
 void update_planes_on_radar(latlon_t *planes, int count);
 void update_airport_runways(const airport_runway_overlay_t *airports, int count);
 void update_time(const char *time_str);

@@ -56,6 +56,7 @@ typedef struct
     int vertical_speed;
     int ground_speed;
     int heading_deg;
+    bool on_ground;                  // alt_baro == "ground" from airplanes.live
 } flight_msg_t;
 
 typedef struct
@@ -313,7 +314,7 @@ void http_fetch_task(void *param)
                     flight_msg.icao_address[sizeof(flight_msg.icao_address) - 1] = '\0';
 
                     /* Build message - copy strings to avoid pointers to freed memory */
-                    strncpy(flight_msg.flight, f.flight.c_str(), sizeof(flight_msg.flight) - 1);
+                    strncpy(flight_msg.flight, f.iata_callsign.c_str(), sizeof(flight_msg.flight) - 1);
                     flight_msg.flight[sizeof(flight_msg.flight) - 1] = '\0';
 
                     strncpy(flight_msg.aircraft_code, f.aircraft_code.c_str(), sizeof(flight_msg.aircraft_code) - 1);
@@ -339,6 +340,7 @@ void http_fetch_task(void *param)
                     flight_msg.vertical_speed = f.vertical_speed;
                     flight_msg.ground_speed = f.ground_speed;
                     flight_msg.heading_deg = f.heading;
+                    flight_msg.on_ground = f.on_ground;
 
                     wrapper_msg.flights[wrapper_msg.count++] = flight_msg;
                 }
@@ -421,19 +423,27 @@ void ui_update_task(void *param)
 
                 log_i("UI Task: Received flight data, updating UI...");
 
-                // resolve airline name — prefer adsbdb, fall back to LittleFS lookup
+                // resolve airline name — prefer adsbdb, fall back to LittleFS lookup.
+                // Re-evaluate every fetch so a stale name doesn't stick when adsbdb
+                // returns "unknown callsign" for the tracked flight.
+                const bool adsb_has_airline = (msg.airline_name[0] != '\0');
                 if (strcmp(previous_tracked_flight.c_str(), msg.flight) != 0)
                 {
-                    if (msg.airline_name[0] != '\0')
+                    if (adsb_has_airline)
                     {
                         strncpy(airline_name, msg.airline_name, NAME_LEN);
                         airline_name[NAME_LEN] = '\0';
                         log_i("Airline name from adsbdb: %s", airline_name);
                     }
+                    else if (lookupAirline(airlines, msg.airline, airline_name))
+                    {
+                        log_i("Resolved airline name (lookup): %s", airline_name);
+                    }
                     else
                     {
-                        lookupAirline(airlines, msg.airline, airline_name);
-                        log_i("Resolved airline name (lookup): %s", airline_name);
+                        strncpy(airline_name, "N/A", NAME_LEN);
+                        airline_name[NAME_LEN] = '\0';
+                        log_i("No airline data for %s, showing N/A", msg.flight);
                     }
                     previous_tracked_flight = msg.flight; // Update tracked flight to avoid redundant lookups
                     log_i("prepare logo req for airline : %s", msg.airline);
@@ -444,6 +454,21 @@ void ui_update_task(void *param)
                     if(xQueueOverwrite(g_airline_logo_req_queue, &req) != pdTRUE){
                         log_e("Logo queue send FAILED - queue full?");
                     }
+                }
+                else if (adsb_has_airline && strcmp(airline_name, msg.airline_name) != 0)
+                {
+                    // adsbdb resumed resolving this callsign — restore the real name
+                    strncpy(airline_name, msg.airline_name, NAME_LEN);
+                    airline_name[NAME_LEN] = '\0';
+                    log_i("Airline name from adsbdb (recovered): %s", airline_name);
+                }
+                else if (!adsb_has_airline && airline_name[0] != '\0' && strcmp(airline_name, "N/A") != 0)
+                {
+                    // adsbdb no longer resolves this callsign ("unknown callsign") —
+                    // don't let the previous flight's airline name stick in the UI
+                    strncpy(airline_name, "N/A", NAME_LEN);
+                    airline_name[NAME_LEN] = '\0';
+                    log_i("adsbdb: no airline data for %s, showing N/A", msg.flight);
                 }
 
                 /* Update main flight display */
@@ -458,6 +483,7 @@ void ui_update_task(void *param)
                     msg.distance_km,
                     msg.bearing_deg,
                     msg.altitude_ft,
+                    msg.on_ground,
                     msg.vertical_speed,
                     msg.ground_speed,
                     msg.heading_deg,
@@ -477,6 +503,7 @@ void ui_update_task(void *param)
                     0.0,
                     0.0,    
                     0.0,
+                    false,
                     0.0,
                     0.0,
                     "----");

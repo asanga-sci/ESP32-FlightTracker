@@ -61,13 +61,13 @@ float dist_km(float lat1, float lon1, float lat2, float lon2)
  */
 bool enrich_flight_from_adsbdb(flight_info &flight)
 {
-    if (flight.call_sign.isEmpty())
+    if (flight.callsign.isEmpty())
     {
         log_w("adsbdb: no callsign to look up");
         return false;
     }
 
-    const String url = "https://api.adsbdb.com/v0/callsign/" + flight.call_sign;
+    const String url = "https://api.adsbdb.com/v0/callsign/" + flight.callsign;
 
     String response;
     String error_message;
@@ -88,28 +88,38 @@ bool enrich_flight_from_adsbdb(flight_info &flight)
     const JsonObject route = doc["response"]["flightroute"];
     if (route.isNull())
     {
-        log_w("adsbdb: no route data for %s", flight.call_sign.c_str());
+        log_w("adsbdb: no route data for %s", flight.callsign.c_str());
         return false;
     }
 
     flight.icao_airline = route["airline"]["icao"] | "";
     flight.airline_name = route["airline"]["name"] | "";
 
-    // Municipality is the readable city name — fall back to airport name/code
-    flight.origin_airport = route["origin"]["municipality"] | "";
+    // Replace the raw ICAO callsign with the IATA callsign from adsbdb
+    const String iata_callsign = route["callsign_iata"] | "";
+    if (!iata_callsign.isEmpty())
+        flight.iata_callsign = iata_callsign;
+
+    // IATA code is preferred for the compact route row; fall back to
+    // ICAO code, then municipality, then airport name
+    flight.origin_airport = route["origin"]["iata_code"] | "";
+    if (flight.origin_airport.isEmpty())
+        flight.origin_airport = route["origin"]["icao_code"] | "";
+    if (flight.origin_airport.isEmpty())
+        flight.origin_airport = route["origin"]["municipality"] | "";
     if (flight.origin_airport.isEmpty())
         flight.origin_airport = route["origin"]["name"] | "";
-    if (flight.origin_airport.isEmpty())
-        flight.origin_airport = route["origin"]["iata_code"] | "";
 
-    flight.destination_airport = route["destination"]["municipality"] | "";
+    flight.destination_airport = route["destination"]["iata_code"] | "";
+    if (flight.destination_airport.isEmpty())
+        flight.destination_airport = route["destination"]["icao_code"] | "";
+    if (flight.destination_airport.isEmpty())
+        flight.destination_airport = route["destination"]["municipality"] | "";
     if (flight.destination_airport.isEmpty())
         flight.destination_airport = route["destination"]["name"] | "";
-    if (flight.destination_airport.isEmpty())
-        flight.destination_airport = route["destination"]["iata_code"] | "";
 
     log_i("adsbdb: %s: %s -> %s (airline %s)",
-          flight.call_sign.c_str(),
+          flight.iata_callsign.c_str(),
           flight.origin_airport.c_str(),
           flight.destination_airport.c_str(),
           flight.airline_name.c_str());
@@ -121,7 +131,6 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
 {
     (void)range_longitude;
     (void)air;
-    (void)ground;
     (void)gliders;
     (void)vehicles;
 
@@ -177,7 +186,7 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
     const time_t now_secs = time(nullptr);
     for (const JsonObject obj : aircraft)
     {
-        flight_info flight;
+        flight_info flight = {};
 
         flight.icao_address = obj["hex"] | "";
         flight.latitude = obj["lat"] | 0.0f;
@@ -189,14 +198,13 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
         flight.registration = obj["r"] | "";
 
         // alt_baro is barometric altitude in feet, or the string "ground"
-        const JsonVariant alt_baro = obj["alt_baro"];
-        if (alt_baro.is<const char *>())
+        if (obj["alt_baro"] == "ground")
         {
             flight.on_ground = true;
         }
         else
         {
-            flight.altitude = alt_baro.as<int>();
+            flight.altitude = obj["alt_baro"] | 0;
         }
 
         flight.vertical_speed = (int)(obj["baro_rate"] | 0.0f);
@@ -205,8 +213,15 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
 
         String callsign = obj["flight"] | "";
         callsign.trim();
-        flight.flight = callsign;
-        flight.call_sign = callsign;
+        flight.callsign = callsign;
+        flight.iata_callsign = callsign;
+
+        // Actually on the ground: the transponder reports surface position
+        // (alt_baro == "ground") AND the aircraft is moving slowly. Aircraft
+        // on final approach can briefly decode to 0 ft / "ground" while still
+        // airborne and fast — combining with ground speed keeps them visible.
+        if (!ground && flight.on_ground && flight.ground_speed < 50)
+            continue;
 
         flights.push_back(flight);
     }

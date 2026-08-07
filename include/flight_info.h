@@ -24,12 +24,12 @@ struct flight_info
     String aircraft_code;            // ICAO type code (e.g. "B739")
     String registration;             // tail number (e.g. "HS-LVK")
     time_t timestamp;
-    String origin_airport;           // municipality from adsbdb (e.g. "Bangkok")
-    String destination_airport;      // municipality from adsbdb (e.g. "Khon Kaen")
-    String flight;                   // flight number / callsign (e.g. "TLM646")
+    String origin_airport;           // IATA code from adsbdb (e.g. "DMK"); falls back to ICAO/municipality
+    String destination_airport;      // IATA code from adsbdb (e.g. "KKC"); falls back to ICAO/municipality
     bool on_ground;
     int vertical_speed;              // ft/min
-    String call_sign;
+    String callsign;                 // raw callsign from airplanes.live (e.g. "TLM646")
+    String iata_callsign;            // IATA callsign from adsbdb (e.g. "SL646"); falls back to raw callsign
     String icao_airline;             // airline ICAO code from adsbdb (e.g. "TLM")
     String airline_name;             // airline name from adsbdb (e.g. "Thai Lion Air")
 
