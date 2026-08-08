@@ -1842,6 +1842,7 @@ TUN|Tunisia - Air Force
 TUP|Aviastar-TU
 TUR|Aeroturpial
 TUX|Tunisair Express
+TVJ|Thai Vietjet Air
 TVR|Terra Avia
 TVS|Smartwings
 TVV|Travira Air
@@ -3900,6 +3901,7 @@ TUN|Tunisia - Air Force
 TUP|Aviastar-TU
 TUR|Aeroturpial
 TUX|Tunisair Express
+TVJ|Thai Vietjet Air
 TVR|Terra Avia
 TVS|Smartwings
 TVV|Travira Air

@@ -1,23 +1,24 @@
 # ESP32 Flight Tracker
 
-A real-time flight tracking station for **ESP32 boards with a 2.8" 240x320 ILI9341 TFT**. This project fetches live ADS-B data from FlightRadar24 and visualizes aircraft on a radar-style interface.
+A real-time flight tracking station for **ESP32 boards with a 2.8" 240x320 ILI9341 TFT**. This project fetches live ADS-B data from the **airplanes.live** community feed and visualizes aircraft on a radar-style interface, with optional route/airline enrichment and airline logos.
 
 Two hardware variants are supported:
 
 | Variant | Board | Env | Config |
 | :--- | :--- | :--- | :--- |
+| **CBD** (Cheap Black Display) — **default env** | ESP32-S3 ES3C28P / Freenove FNK0104A-B | `esp32-s3-es3c28p` | `include/User_Setup_S3.h` |
 | **CYD** (Cheap Yellow Display) | ESP32-2432S028R | `esp32-2432S028R` | `include/User_Setup.h` |
-| **CBD** (Cheap Black Display) | ESP32-S3 ES3C28P / Freenove FNK0104A-B | `esp32-s3-es3c28p` | `include/User_Setup_S3.h` |
 
 ## 🚀 Features
 
 *   **Real-time Tracking:** Fetches live flight data including ICAO address, flight number, aircraft type, altitude, speed, and heading.
+*   **Open Data Sources:** Live ADS-B positions from **airplanes.live** and aircraft/airline metadata from **adsbdb.com** — no proprietary API keys required. An optional **AirLabs** fallback resolves routes when adsbdb reports an unknown callsign.
 *   **Optimized UI:** Built with **LVGL 9.1**, featuring a radar display and detailed flight information panels optimized for the 2.8" TFT.
 *   **Dual-Core Architecture:** 
     *   **Core 0:** Dedicated to UI rendering and resistive touch handling.
     *   **Core 1:** Manages WiFi, HTTP requests, JSON parsing, and image decoding.
-*   **Web Configuration:** Integrated WiFi Manager and settings portal to configure your GPS coordinates and tracking radius without reflashing.
-*   **Airline Logos:** Dynamically fetches and caches airline logos using the LogoStream API.
+*   **Web Configuration:** Integrated WiFi Manager and settings portal to configure your GPS coordinates, tracking radius, and optional API keys without reflashing.
+*   **Airline Logos:** Dynamically fetches, decodes (LodePNG) and caches airline logos using the LogoStream API (optional) — with retry on transient failures.
 *   **Local Database:** Resolves airline ICAO codes to full names using a database stored in `LittleFS`.
 
 ## 🛠️ Hardware
@@ -38,11 +39,13 @@ This project is built using **PlatformIO**.
 
 ### Build & Flash
 
+The **CBD** variant (`esp32-s3-es3c28p`) is the default environment, so a bare `pio run` targets it:
+
 ```bash
-pio run -e esp32-2432S028R          # compile the CYD variant
-pio run -e esp32-s3-es3c28p         # compile the CBD variant
-pio run -t upload                   # build + flash the active variant
-pio run -t uploadfs                 # flash LittleFS image (airlines.txt, etc.)
+pio run                          # compile the default env (CBD / esp32-s3-es3c28p)
+pio run -e esp32-2432S028R       # compile the CYD variant
+pio run -t upload                # build + flash the active variant
+pio run -t uploadfs              # flash LittleFS image (airlines.txt, etc.)
 ```
 
 Notes:
@@ -58,13 +61,16 @@ Notes:
 
 On first boot, the device will enter **Setup Mode**:
 
-1.  Connect to the WiFi network: `FlightRadar-Setup`.
+1.  Connect to the WiFi network: `FlightTracker-Setup`.
 2.  Navigate to `192.168.4.1` in your browser.
 3.  Configure:
     *   **WiFi SSID & Password.**
     *   **Coordinates:** Your Latitude and Longitude.
     *   **Radius:** Tracking range in Kilometers.
-    *   **API Key:** Your LogoStream key for airline branding.
+    *   **Enable airline logos** — required to use the LogoStream API key field (the key input is greyed out until the checkbox is ticked).
+    *   **Enable AirLabs route fallback** — required to use the AirLabs API key field; adds route/airline data when adsbdb can't resolve a callsign.
+
+Once connected, open `http://<device-ip>/settings` to change these later. Saving reboots the device.
 
 ## 🏗️ Technical Details
 
@@ -76,9 +82,20 @@ On first boot, the device will enter **Setup Mode**:
 
 ## 📜 Data Sources & Credits
 
-*   Flight data provided via the FlightRadar24 public feed.
-*   Airline logos provided by LogoStream.
-*   Distance and bearing calculated using the Haversine formula.
+This project is only possible thanks to the community that keeps these data sources free and open:
+
+**Flight data**
+*   **[airplanes.live](https://airplanes.live)** — open ADS-B aggregator providing live aircraft positions, headings, altitudes and speeds (previously FlightRadar24; the retired FR24 feed is kept in `legacy/` for reference).
+*   **[adsbdb.com](https://adsbdb.com)** — open database that resolves aircraft and airline/route metadata from callsigns.
+
+**Optional enrichment & branding**
+*   **[AirLabs](https://airlabs.co)** — optional route/airline fallback API used when adsbdb reports an *unknown callsign*. ⚠️ **Not supported on the CYD (`esp32-2432S028R`):** the additional HTTPS/TLS session requires more free RAM than the CYD has available, so enable it only on the CBD (`esp32-s3-es3c28p`, 8 MB PSRAM) variant.
+*   **[LogoStream](https://logostream.dev)** — optional airline logo API; logos are decoded with **LodePNG** and cached in RAM with retry-on-failure.
+
+**Libraries**
+*   **LVGL** (UI framework), **TFT_eSPI** (ILI9341 driver), **ArduinoJson** (JSON parsing), **LodePNG** (PNG decoding), **Preferences** (NVS configuration storage).
+
+Distance and bearing are calculated using the Haversine formula.
 
 ---
 *Disclaimer: This project is for educational purposes. Ensure you comply with the terms of service of the data providers.*

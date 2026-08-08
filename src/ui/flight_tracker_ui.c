@@ -91,14 +91,15 @@ typedef struct
 {
     char icao_address[7];
     char flight[10];
-    char origin[4];
-    char destination[4];
+    char origin[32];        /* municipality from adsbdb (e.g. "Bangkok") */
+    char destination[32];   /* municipality from adsbdb (e.g. "Khon Kaen") */
     char aircraft_code[8];
     float latitude;
     float longitude;
     float distance_km;
     int bearing_deg;
     int altitude_ft;
+    bool on_ground;
     int vs_fpm; /* vertical speed ft/min */
     int heading_deg;
     int sweep_deg;
@@ -118,6 +119,7 @@ static flight_data_t g_flight = {
     .distance_km = 0,
     .bearing_deg = 0,
     .altitude_ft = 0,
+    .on_ground = false,
     .vs_fpm = 0,
     .heading_deg = 0,
     .sweep_deg = 0,
@@ -141,6 +143,7 @@ static lv_image_dsc_t s_plane_img;
 static lv_obj_t *g_canvas;
 static lv_obj_t *g_lbl_flight;
 static lv_obj_t *g_lbl_origin;
+static lv_obj_t *g_lbl_route_arrow;
 static lv_obj_t *g_lbl_destination;
 static lv_obj_t *g_lbl_aircraft_code;
 static lv_obj_t *g_lbl_airline;
@@ -572,6 +575,64 @@ static lv_obj_t *make_label(lv_obj_t *parent, const char *txt,
     return l;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+ *  Origin → destination row (tight layout + marquee for long names)
+ *  Text longer than 12 chars scrolls left (SCROLL_CIRCULAR); short text
+ *  keeps its natural width so the arrow sits right after the text.
+ * ═══════════════════════════════════════════════════════════════════════*/
+#define ROUTE_ROW_X         40
+#define ROUTE_ROW_Y         72
+#define ROUTE_ROW_MAX_W     196   /* ROUTE_ROW_X .. right edge minus margin */
+#define ROUTE_ROW_GAP       4
+#define ROUTE_ROW_ORIGIN_MAX_W 76
+#define ROUTE_ROW_ARROW_Y   (ROUTE_ROW_Y - 7)
+
+static lv_coord_t route_text_width(const char *text)
+{
+    lv_point_t sz;
+    lv_text_get_size(&sz, text, &lv_font_montserrat_10, 0, 0, LV_COORD_MAX,
+                     LV_TEXT_FLAG_NONE);
+    return sz.x;
+}
+
+static void update_route_label(lv_obj_t *lbl, const char *text, lv_coord_t scroll_w)
+{
+    /* Skip if text unchanged so an active marquee keeps scrolling */
+    if (strcmp(lv_label_get_text(lbl), text) == 0)
+        return;
+
+    lv_label_set_text(lbl, text);
+    if (strlen(text) > 12)
+    {
+        lv_label_set_long_mode(lbl, LV_LABEL_LONG_SCROLL_CIRCULAR);
+        lv_obj_set_width(lbl, scroll_w);
+    }
+    else
+    {
+        lv_label_set_long_mode(lbl, LV_LABEL_LONG_CLIP);
+        lv_coord_t w = route_text_width(text);
+        lv_obj_set_width(lbl, (w > scroll_w) ? scroll_w : w);
+    }
+}
+
+static void update_route_row(const char *origin, const char *destination)
+{
+    lv_coord_t x = ROUTE_ROW_X;
+
+    update_route_label(g_lbl_origin, origin, ROUTE_ROW_ORIGIN_MAX_W);
+    lv_obj_set_pos(g_lbl_origin, x, ROUTE_ROW_Y);
+    x += lv_obj_get_width(g_lbl_origin) + ROUTE_ROW_GAP;
+
+    lv_obj_set_pos(g_lbl_route_arrow, x, ROUTE_ROW_ARROW_Y);
+    x += lv_obj_get_width(g_lbl_route_arrow) + ROUTE_ROW_GAP;
+
+    const lv_coord_t dest_max_w = ROUTE_ROW_X + ROUTE_ROW_MAX_W - x;
+    update_route_label(g_lbl_destination, destination, dest_max_w);
+    if (lv_obj_get_width(g_lbl_destination) > dest_max_w)
+        lv_obj_set_width(g_lbl_destination, dest_max_w);
+    lv_obj_set_pos(g_lbl_destination, x, ROUTE_ROW_Y);
+}
+
 // Returns pointer to direction string (8-point compass)
 const char *heading_to_direction(float heading)
 {
@@ -623,12 +684,16 @@ static void ui_timer_cb(lv_timer_t *t)
 
         lv_label_set_text(g_lbl_flight, g_flight.flight);
         lv_label_set_text(g_lbl_aircraft_code, g_flight.aircraft_code);
-        lv_label_set_text(g_lbl_origin, g_flight.origin);
-        lv_label_set_text(g_lbl_destination, g_flight.destination);
+        update_route_row(g_flight.origin, g_flight.destination);
         lv_label_set_text(g_lbl_airline, g_flight.airline);
 
-        snprintf(buf, sizeof(buf), "%d ft", g_flight.altitude_ft);
-        lv_label_set_text(g_lbl_alt, buf);
+        if (g_flight.on_ground)
+            lv_label_set_text(g_lbl_alt, "on ground");
+        else
+        {
+            snprintf(buf, sizeof(buf), "%d ft", g_flight.altitude_ft);
+            lv_label_set_text(g_lbl_alt, buf);
+        }
 
         snprintf(buf, sizeof(buf), "%d kts", g_flight.ground_speed);
         lv_label_set_text(g_lbl_speed, buf);
@@ -767,23 +832,20 @@ void flight_tracker_ui_init(void)
     g_lbl_aircraft_code = make_label(scr, g_flight.aircraft_code, &lv_font_montserrat_12, CLR_WHITE,
                                      LV_ALIGN_TOP_LEFT, 40, 58);
 
-    // origin
-    g_lbl_origin = make_label(scr, g_flight.origin, &lv_font_montserrat_12, CLR_WHITE,
-                              LV_ALIGN_TOP_LEFT, 40, 70);
-
-    // arrow
-    make_label(scr, "\ue941", &material_icons, CLR_WHITE,
-               LV_ALIGN_TOP_LEFT, 70, 66);
-
-    // destination
-    g_lbl_destination = make_label(scr, g_flight.destination, &lv_font_montserrat_12, CLR_WHITE,
-                                   LV_ALIGN_TOP_LEFT, 100, 70);
+    // origin → destination — tight row, marquee if either name is long
+    g_lbl_origin = make_label(scr, g_flight.origin, &lv_font_montserrat_10, CLR_WHITE,
+                              LV_ALIGN_TOP_LEFT, 40, 72);
+    g_lbl_route_arrow = make_label(scr, "\ue941", &material_icons, CLR_WHITE,
+                                   LV_ALIGN_TOP_LEFT, 0, 0);
+    g_lbl_destination = make_label(scr, g_flight.destination, &lv_font_montserrat_10, CLR_WHITE,
+                                   LV_ALIGN_TOP_LEFT, 0, 0);
+    update_route_row(g_flight.origin, g_flight.destination);
 
     make_label(scr, "AIRLINE", &lv_font_montserrat_10, CLR_GRAY,
-               LV_ALIGN_TOP_RIGHT, -4, 34);
+               LV_ALIGN_TOP_RIGHT, -4, 28);
 
     g_lbl_airline = make_label(scr, g_flight.airline, &lv_font_montserrat_14, CLR_GREEN,
-                               LV_ALIGN_TOP_RIGHT, -4, 50);
+                               LV_ALIGN_TOP_RIGHT, -4, 40);
     lv_obj_set_content_width(g_lbl_airline, 100);
     lv_label_set_long_mode(g_lbl_airline, LV_LABEL_LONG_WRAP);
     lv_obj_set_style_text_align(g_lbl_airline, LV_TEXT_ALIGN_RIGHT, 0);
@@ -884,7 +946,7 @@ void flight_tracker_ui_init(void)
     lv_obj_align(ftr, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_clear_flag(ftr, LV_OBJ_FLAG_SCROLLABLE);
 
-    make_label(ftr, LV_SYMBOL_GPS " flightradar24", &lv_font_montserrat_10, CLR_GREEN,
+    make_label(ftr, LV_SYMBOL_GPS " airplanes.live", &lv_font_montserrat_10, CLR_GREEN,
                LV_ALIGN_LEFT_MID, 4, 0);
 
     g_lbl_last_upd = make_label(ftr, "last update: 0s ago",
@@ -918,7 +980,7 @@ void setRadarRadius(float radius_km)
  *  API: inject real ADS-B data from your decoder (call from main loop)
  * ═══════════════════════════════════════════════════════════════════════*/
 void flight_tracker_update(const char *icao_address, const char *flight, const char *aircraft_code, const char *origin, const char *destination, float latitude, float longitude, float distance_km, int bearing_deg, int altitude_ft,
-                           int vertical_speed, int ground_speed, int heading_deg, const char *airline)
+                           bool on_ground, int vertical_speed, int ground_speed, int heading_deg, const char *airline)
 {
     // CRITICAL: Copy strings into buffers to avoid dangling pointers
     // The input pointers may point to temporary data that will be freed
@@ -945,6 +1007,7 @@ void flight_tracker_update(const char *icao_address, const char *flight, const c
     g_flight.distance_km = distance_km;
     g_flight.bearing_deg = bearing_deg;
     g_flight.altitude_ft = altitude_ft;
+    g_flight.on_ground = on_ground;
     g_flight.vs_fpm = vertical_speed;
     g_flight.ground_speed = ground_speed;
     g_flight.heading_deg = heading_deg;

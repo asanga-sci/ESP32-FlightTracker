@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <new>
 #include "ui/flight_tracker_ui.h"
 #include "flight_info.h"
 #include "airport_info.h"
@@ -43,10 +44,10 @@ typedef struct
     char icao_address[7];       // ICAO 24-bit address as hex string (e.g. "4CA853")
     char flight[10];
     char aircraft_code[8];
-    char origin[4];
-    char destination[4];
+    char origin[32];            // municipality from adsbdb (e.g. "Bangkok")
+    char destination[32];       // municipality from adsbdb (e.g. "Khon Kaen")
     char airline[4];
-    char airline_name[50]; // Resolved airline name from ICAO code
+    char airline_name[50]; // Resolved airline name from adsbdb
     float latitude;
     float longitude;
     float distance_km;
@@ -55,6 +56,7 @@ typedef struct
     int vertical_speed;
     int ground_speed;
     int heading_deg;
+    bool on_ground;                  // alt_baro == "ground" from airplanes.live
 } flight_msg_t;
 
 typedef struct
@@ -250,27 +252,34 @@ void http_fetch_task(void *param)
     int base_fetch_interval_ms = 10000; /* Start with a 10s base poll interval */
     int fetch_interval_ms = base_fetch_interval_ms;
     uint32_t last_fetch = millis();
+    uint32_t last_http_hb = 0;
     while (true)
     {
         uint32_t now = millis();
+        if (now - last_http_hb >= 2000)
+        {
+            last_http_hb = now;
+            log_i("[HTTP] alive @%u ms, free heap=%u, HTTP stack HWM=%u",
+                  (unsigned)now, (unsigned)ESP.getFreeHeap(),
+                  (unsigned)uxTaskGetStackHighWaterMark(NULL));
+        }
         if (now - last_fetch >= fetch_interval_ms)
         {
             last_fetch = now;
             log_i("[Flight Fetch Task]: Fetching flight data...");
-            flights_wrapper_msg_t wrapper_msg;
+            static flights_wrapper_msg_t wrapper_msg;
             String error_message;
             std::vector<flight_info> local_flights;
 
-            if(ESP.getFreeHeap()< sizeof(flight_info) *30){
-                log_i("[Flight Fetch Task]: Not enough memory reserving for 20");
-                local_flights.reserve(20);
-            }else{
-                local_flights.reserve(30);
-            }
+            /* No explicit reserve: get_flights grows via push_back, and a large
+               upfront alloc was the OOM point. Heap guards live in get_flights(). */
+            log_i("[Flight Fetch Task]: sizeof(flight_info)=%u, free=%u, largest=%u",
+                  (unsigned)sizeof(flight_info), (unsigned)ESP.getFreeHeap(),
+                  (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
 
             // Fetch into temporary list (no mutex needed here)
-            // 1.0° range ≈ 100km diameter ≈ 50km radius for full radar coverage
-            get_flights(cfg.lat, cfg.lon, (cfg.radiusKm * 2)/100.0, (cfg.radiusKm * 2)/100.0, true, false, true, true, local_flights, error_message);
+            // range_latitude now carries the search radius in km
+            get_flights(cfg.lat, cfg.lon, cfg.radiusKm, cfg.radiusKm, true, false, true, true, local_flights, error_message);
 
             const bool have_flight_data = !local_flights.empty();
             int target_interval_ms = base_fetch_interval_ms;
@@ -291,6 +300,12 @@ void http_fetch_task(void *param)
                 // Send to UI queue (non-blocking)
                 for (const flight_info &f : local_flights)
                 {
+                    if (wrapper_msg.count >= (int)(sizeof(wrapper_msg.flights) / sizeof(wrapper_msg.flights[0])))
+                    {
+                        log_w("Flight queue full, dropping %u remaining aircraft", local_flights.size() - wrapper_msg.count);
+                        break;
+                    }
+
                     /* Calculate distance and bearing */
                     double dist = calc_dist_km(cfg.lat, cfg.lon, f.latitude, f.longitude);
                     int bearing = calc_bearing_deg(cfg.lat, cfg.lon, f.latitude, f.longitude);
@@ -299,20 +314,23 @@ void http_fetch_task(void *param)
                     flight_msg.icao_address[sizeof(flight_msg.icao_address) - 1] = '\0';
 
                     /* Build message - copy strings to avoid pointers to freed memory */
-                    strncpy(flight_msg.flight, f.flight.c_str(), sizeof(flight_msg.flight) - 1);
+                    strncpy(flight_msg.flight, f.iata_callsign.c_str(), sizeof(flight_msg.flight) - 1);
                     flight_msg.flight[sizeof(flight_msg.flight) - 1] = '\0';
 
                     strncpy(flight_msg.aircraft_code, f.aircraft_code.c_str(), sizeof(flight_msg.aircraft_code) - 1);
                     flight_msg.aircraft_code[sizeof(flight_msg.aircraft_code) - 1] = '\0';
 
-                    strncpy(flight_msg.origin, f.iata_origin_airport.c_str(), sizeof(flight_msg.origin) - 1);
+                    strncpy(flight_msg.origin, f.origin_airport.c_str(), sizeof(flight_msg.origin) - 1);
                     flight_msg.origin[sizeof(flight_msg.origin) - 1] = '\0';
 
-                    strncpy(flight_msg.destination, f.iata_destination_airport.c_str(), sizeof(flight_msg.destination) - 1);
+                    strncpy(flight_msg.destination, f.destination_airport.c_str(), sizeof(flight_msg.destination) - 1);
                     flight_msg.destination[sizeof(flight_msg.destination) - 1] = '\0';
 
                     strncpy(flight_msg.airline, f.icao_airline.c_str(), sizeof(flight_msg.airline) - 1);
                     flight_msg.airline[sizeof(flight_msg.airline) - 1] = '\0';
+
+                    strncpy(flight_msg.airline_name, f.airline_name.c_str(), sizeof(flight_msg.airline_name) - 1);
+                    flight_msg.airline_name[sizeof(flight_msg.airline_name) - 1] = '\0';
 
                     flight_msg.latitude = f.latitude;
                     flight_msg.longitude = f.longitude;
@@ -322,6 +340,7 @@ void http_fetch_task(void *param)
                     flight_msg.vertical_speed = f.vertical_speed;
                     flight_msg.ground_speed = f.ground_speed;
                     flight_msg.heading_deg = f.heading;
+                    flight_msg.on_ground = f.on_ground;
 
                     wrapper_msg.flights[wrapper_msg.count++] = flight_msg;
                 }
@@ -368,6 +387,7 @@ void ui_update_task(void *param)
     flight_tracker_ui_init();
 
     uint32_t last_update = 0;
+    uint32_t last_ui_hb = 0;
     String previous_tracked_flight;
     char airline_name[NAME_LEN + 1] = {0};
 
@@ -389,7 +409,7 @@ void ui_update_task(void *param)
         }
 
         /* Check for new flight data from HTTP task */
-        flights_wrapper_msg_t wrapper_msg;
+        static flights_wrapper_msg_t wrapper_msg;
         std::vector<latlon_t> planes_in_radar;
         if (xQueueReceive(g_flight_queue, &wrapper_msg, 0) == pdTRUE)
         {
@@ -403,19 +423,62 @@ void ui_update_task(void *param)
 
                 log_i("UI Task: Received flight data, updating UI...");
 
-                // resolve airline name from ICAO code
+                // resolve airline name — prefer adsbdb, fall back to LittleFS lookup.
+                // Re-evaluate every fetch so a stale name doesn't stick when adsbdb
+                // returns "unknown callsign" for the tracked flight.
+                const bool adsb_has_airline = (msg.airline_name[0] != '\0');
                 if (strcmp(previous_tracked_flight.c_str(), msg.flight) != 0)
                 {
-                    lookupAirline(airlines, msg.airline, airline_name);
-                    log_i("Resolved airline name: %s", airline_name);
+                    if (adsb_has_airline)
+                    {
+                        strncpy(airline_name, msg.airline_name, NAME_LEN);
+                        airline_name[NAME_LEN] = '\0';
+                        log_i("Airline name from adsbdb: %s", airline_name);
+                    }
+                    else if (lookupAirline(airlines, msg.airline, airline_name))
+                    {
+                        log_i("Resolved airline name (lookup): %s", airline_name);
+                    }
+                    else
+                    {
+                        strncpy(airline_name, "N/A", NAME_LEN);
+                        airline_name[NAME_LEN] = '\0';
+                        log_i("No airline data for %s, showing N/A", msg.flight);
+                    }
                     previous_tracked_flight = msg.flight; // Update tracked flight to avoid redundant lookups
-                    log_i("prepare logo req for airline : %s", msg.airline);
-                    airline_logo_req_t req;
-                    strncpy(req.airline, msg.airline, sizeof(msg.airline) - 1);
-                    req.airline[sizeof(msg.airline) - 1] = '\0';
-                    log_i("debug: airline %s",req.airline);
-                    if(xQueueOverwrite(g_airline_logo_req_queue, &req) != pdTRUE){
-                        log_e("Logo queue send FAILED - queue full?");
+                    if (webConfigGet().logoSupport)
+                    {
+                        log_i("prepare logo req for airline : %s", msg.airline);
+                        airline_logo_req_t req;
+                        strncpy(req.airline, msg.airline, sizeof(msg.airline) - 1);
+                        req.airline[sizeof(msg.airline) - 1] = '\0';
+                        log_i("debug: airline %s",req.airline);
+                        if(xQueueOverwrite(g_airline_logo_req_queue, &req) != pdTRUE){
+                            log_e("Logo queue send FAILED - queue full?");
+                        }
+                    }
+                }
+                else if (adsb_has_airline && strcmp(airline_name, msg.airline_name) != 0)
+                {
+                    // adsbdb resumed resolving this callsign — restore the real name
+                    strncpy(airline_name, msg.airline_name, NAME_LEN);
+                    airline_name[NAME_LEN] = '\0';
+                    log_i("Airline name from adsbdb (recovered): %s", airline_name);
+                }
+                else if (!adsb_has_airline && msg.airline[0] != '\0')
+                {
+                    // adsbdb no longer resolves this callsign ("unknown callsign").
+                    // The AirLabs fallback may still have supplied the airline ICAO
+                    // code — retry the LittleFS lookup before giving up.
+                    if (strcmp(airline_name, "N/A") != 0 && lookupAirline(airlines, msg.airline, airline_name))
+                    {
+                        log_i("Resolved airline name (lookup fallback): %s", airline_name);
+                    }
+                    else
+                    {
+                        strncpy(airline_name, "N/A", NAME_LEN);
+                        airline_name[NAME_LEN] = '\0';
+                        log_i("adsbdb: no airline data for %s, showing N/A", msg.flight);
                     }
                 }
 
@@ -431,6 +494,7 @@ void ui_update_task(void *param)
                     msg.distance_km,
                     msg.bearing_deg,
                     msg.altitude_ft,
+                    msg.on_ground,
                     msg.vertical_speed,
                     msg.ground_speed,
                     msg.heading_deg,
@@ -450,6 +514,7 @@ void ui_update_task(void *param)
                     0.0,
                     0.0,    
                     0.0,
+                    false,
                     0.0,
                     0.0,
                     "----");
@@ -477,7 +542,11 @@ void ui_update_task(void *param)
         }
 
         /* Update UI (50 ms = 20 fps) */
+        uint32_t t0_lv = millis();
         lv_timer_handler();
+        uint32_t dt_lv = millis() - t0_lv;
+        if (dt_lv > 200)
+            log_w("lv_timer_handler took %u ms", (unsigned)dt_lv);
 
         /* Update time every second */
         if (millis() - last_update >= 1000)
@@ -489,6 +558,23 @@ void ui_update_task(void *param)
             char time_str[16];
             strftime(time_str, sizeof(time_str), "%H:%M", timeinfo);
             update_time(time_str);
+        }
+
+        uint32_t now_ui = millis();
+        if (now_ui - last_ui_hb >= 2000)
+        {
+            last_ui_hb = now_ui;
+            log_i("[UI] alive @%u ms, free heap=%u, largest=%u, UI stack HWM=%u",
+                  (unsigned)now_ui, (unsigned)ESP.getFreeHeap(),
+                  (unsigned)ESP.getMaxAllocHeap(),
+                  (unsigned)uxTaskGetStackHighWaterMark(NULL));
+            if ((now_ui / 4000) % 2 == 0)
+            {
+                if (heap_caps_check_integrity_all(true))
+                    log_i("[UI] heap integrity OK");
+                else
+                    log_e("[UI] HEAP CORRUPTED!");
+            }
         }
 
         vTaskDelay(50 / portTICK_PERIOD_MS);
@@ -546,6 +632,9 @@ void airport_runway_fetch_task()
     log_i("Airport Runway Task: complete, %d airports stored", g_airport_runway_payload.count);
 }
 
+#define LOGO_FETCH_RETRIES   3
+#define LOGO_RETRY_DELAY_MS  2000
+
 void fetch_logo_task(void *param)
 {
     (void)param;
@@ -554,84 +643,120 @@ void fetch_logo_task(void *param)
 
     std::vector<uint8_t> png_buffer;
     png_buffer.reserve(4096);
-    
+
     while (1)
     {
         airline_logo_req_t req;
         if (xQueueReceive(g_airline_logo_req_queue, &req, 1) == pdTRUE)
         {
             log_i("Logo request for: %s", req.airline);
-            
-            /* ── SINGLE API CALL: get_logo handles PNG caching internally ── */
-            unsigned int w, h;
-            String error_msg;
-            png_buffer.clear();
-            size_t png_size = get_logo(req.airline, png_buffer, error_msg);
-            
-            if (png_size == 0) {
-                log_e("Logo fetch failed: %s", error_msg.c_str());
-                decoded_airline_logo_t clear_msg = { .w = 0, .h = 0 };
-                strncpy(clear_msg.airline, req.airline, sizeof(clear_msg.airline) - 1);
-                xQueueOverwrite(g_airline_logo_response_queue, &clear_msg);
-                continue;
-                continue;
-            }
-            log_i("PNG received: %s (%u bytes)", req.airline, png_size);
 
-            /* ── DECODE PNG LOCALLY ── */
-            uint8_t *next_logo_buf = get_next_logo_buffer();
-            uint8_t *decoded_pixels = NULL;
-            
-            unsigned int res = lodepng_decode32(&decoded_pixels, &w, &h, png_buffer.data(), png_size);
-            if(res > 0){
-                log_e("lodePNG error: %s", lodepng_error_text(res));
-                if (decoded_pixels) free(decoded_pixels);
-                decoded_airline_logo_t clear_msg = { .w = 0, .h = 0 };
-                strncpy(clear_msg.airline, req.airline, sizeof(clear_msg.airline) - 1);
-                xQueueOverwrite(g_airline_logo_response_queue, &clear_msg);
-                continue;
-            }
+            /* ── FETCH + DECODE, retrying transient failures ──
+               A single failed fetch used to leave the fallback plane icon
+               forever (the request only fires once per tracked flight). */
+            bool ok = false;
+            bool dropped_for_newer = false;
+            for (int attempt = 1; attempt <= LOGO_FETCH_RETRIES && !ok; attempt++)
+            {
+                /* A newer request arrived while we were retrying — let the
+                   main loop serve it instead of stalling on a stale airline. */
+                if (attempt > 1)
+                {
+                    airline_logo_req_t pending;
+                    if (xQueuePeek(g_airline_logo_req_queue, &pending, 0) == pdTRUE)
+                    {
+                        log_i("Logo task: newer request queued (%s), dropping stale %s",
+                              pending.airline, req.airline);
+                        dropped_for_newer = true;
+                        break;
+                    }
+                }
 
-            /* Check bounds */
-            uint32_t required_bytes = w * h * 4;
-            if (required_bytes > 5000) {
-                log_e("Logo too large: %ux%u = %u bytes", w, h, required_bytes);
+                String error_msg;
+                png_buffer.clear();
+                size_t png_size = get_logo(req.airline, png_buffer, error_msg);
+
+                if (png_size == 0)
+                {
+                    log_w("Logo fetch failed (attempt %d/%d): %s",
+                          attempt, LOGO_FETCH_RETRIES, error_msg.c_str());
+                    if (attempt < LOGO_FETCH_RETRIES)
+                        vTaskDelay(pdMS_TO_TICKS(LOGO_RETRY_DELAY_MS));
+                    continue;
+                }
+                log_i("PNG received: %s (%u bytes)", req.airline, png_size);
+
+                /* ── DECODE PNG LOCALLY ── */
+                uint8_t *next_logo_buf = get_next_logo_buffer();
+                uint8_t *decoded_pixels = NULL;
+                unsigned int w, h;
+
+                const unsigned int res = lodepng_decode32(&decoded_pixels, &w, &h, png_buffer.data(), png_size);
+                if (res > 0)
+                {
+                    log_e("lodePNG error (attempt %d/%d): %s",
+                          attempt, LOGO_FETCH_RETRIES, lodepng_error_text(res));
+                    if (decoded_pixels) free(decoded_pixels);
+                    png_cache_remove(req.airline); /* don't cache corrupt/undecodable PNGs */
+                    if (attempt < LOGO_FETCH_RETRIES)
+                        vTaskDelay(pdMS_TO_TICKS(LOGO_RETRY_DELAY_MS));
+                    continue;
+                }
+
+                /* Check bounds */
+                const uint32_t required_bytes = w * h * 4;
+                if (required_bytes > 5000)
+                {
+                    log_e("Logo too large: %ux%u = %u bytes", w, h, required_bytes);
+                    free(decoded_pixels);
+                    png_cache_remove(req.airline);
+                    if (attempt < LOGO_FETCH_RETRIES)
+                        vTaskDelay(pdMS_TO_TICKS(LOGO_RETRY_DELAY_MS));
+                    continue;
+                }
+
+                /* Convert color format: RGBA → BGRA */
+                for (uint32_t i = 0; i < (uint32_t)w * h; i++)
+                {
+                    uint8_t r = decoded_pixels[i * 4 + 0];
+                    uint8_t g = decoded_pixels[i * 4 + 1];
+                    uint8_t b = decoded_pixels[i * 4 + 2];
+                    uint8_t a = decoded_pixels[i * 4 + 3];
+
+                    next_logo_buf[i * 4 + 0] = b;
+                    next_logo_buf[i * 4 + 1] = g;
+                    next_logo_buf[i * 4 + 2] = r;
+                    next_logo_buf[i * 4 + 3] = a;
+                }
+
                 free(decoded_pixels);
+
+                /* Queue signal to UI task (double-buffer swap + display) */
+                decoded_airline_logo_t msg = {
+                    .pixel_data = (uint8_t*)0xDEADBEEF,  /* Sentinel */
+                    .w = w,
+                    .h = h,
+                };
+                strncpy(msg.airline, req.airline, sizeof(msg.airline) - 1);
+                msg.airline[sizeof(msg.airline) - 1] = '\0';
+
+                xQueueOverwrite(g_airline_logo_response_queue, &msg);
+                log_i("Logo decoded & queued: %s (%ux%u)", req.airline, w, h);
+                ok = true;
+            }
+
+            if (!ok && !dropped_for_newer)
+            {
+                log_e("Logo request failed for %s after %d attempts — showing fallback",
+                      req.airline, LOGO_FETCH_RETRIES);
                 decoded_airline_logo_t clear_msg = { .w = 0, .h = 0 };
                 strncpy(clear_msg.airline, req.airline, sizeof(clear_msg.airline) - 1);
                 xQueueOverwrite(g_airline_logo_response_queue, &clear_msg);
-                continue;
             }
 
-            /* Convert color format: RGBA → BGRA */
-            for (uint32_t i = 0; i < w * h; i++) {
-                uint8_t r = decoded_pixels[i * 4 + 0];
-                uint8_t g = decoded_pixels[i * 4 + 1];
-                uint8_t b = decoded_pixels[i * 4 + 2];
-                uint8_t a = decoded_pixels[i * 4 + 3];
-
-                next_logo_buf[i * 4 + 0] = b;
-                next_logo_buf[i * 4 + 1] = g;
-                next_logo_buf[i * 4 + 2] = r;
-                next_logo_buf[i * 4 + 3] = a;
-            }
-            
-            free(decoded_pixels);
-            
-            /* Queue signal to UI task (double-buffer swap + display) */
-            decoded_airline_logo_t msg = {
-                .pixel_data = (uint8_t*)0xDEADBEEF,  /* Sentinel */
-                .w = w,
-                .h = h,
-            };
-            strncpy(msg.airline, req.airline, sizeof(msg.airline) - 1);
-            msg.airline[sizeof(msg.airline) - 1] = '\0';
-
-            xQueueOverwrite(g_airline_logo_response_queue, &msg);
-            log_i("Logo decoded & queued: %s (%ux%u)", req.airline, w, h);
             log_i("Fetch Logo task HWM: %u words", uxTaskGetStackHighWaterMark(NULL));
         }
-        
+
         vTaskDelay(50 / portTICK_PERIOD_MS);
     }
 }
@@ -707,7 +832,7 @@ void setup()
     xTaskCreatePinnedToCore(
         http_fetch_task, /* Task function */
         "HTTP_Task",     /* Task name */
-        12288,           /* Stack size (bytes) - HTTP needs more */
+        16384,           /* Stack size (bytes) - TLS handshake ~8KB + frames; the 9KB flights_wrapper_msg_t is static, so 32KB was overkill */
         NULL,            /* Parameters */
         5,               /* Priority */
         NULL,            /* Task handle */

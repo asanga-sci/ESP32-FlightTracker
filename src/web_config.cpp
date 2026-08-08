@@ -19,6 +19,8 @@ static constexpr const char* KEY_LON     = "lon";
 static constexpr const char* KEY_RADIUS  = "radius";
 static constexpr const char* LOGO_SUPPORT  = "logoSupport";
 static constexpr const char* LOGOSTREAM_KEY  = "logostreamKey";
+static constexpr const char* AIRLABS_FALLBACK = "airlabsFallback";
+static constexpr const char* AIRLABS_KEY  = "airlabsKey";
 
 // ─── AP defaults ──────────────────────────────────────────────────────────────
 static constexpr const char* AP_SSID = "FlightTracker-Setup";
@@ -132,7 +134,8 @@ static const char PAGE_SETUP[] PROGMEM = R"raw(
 <div class="f">
   <label>
     <input type="checkbox"
-           name="logoSupport">
+           name="logoSupport"
+           onchange="toggleKey(this,'logostreamKey')">
     Enable airline logos
   </label>
 </div>
@@ -141,17 +144,45 @@ static const char PAGE_SETUP[] PROGMEM = R"raw(
   <label>LogoStream API Key</label>
   <input type="text"
          name="logostreamApiKey"
+         id="logostreamKey"
          placeholder="Optional API key"
-         maxlength="127">
+         maxlength="127"
+         disabled>
+</div>
+
+<p class="sec">Data Sources</p>
+
+<div class="f">
+  <label>
+    <input type="checkbox"
+           name="airlabsFallback"
+           onchange="toggleKey(this,'airlabsKey')">
+    Enable AirLabs route fallback
+  </label>
+</div>
+
+<div class="f">
+  <label>AirLabs API Key</label>
+  <input type="text"
+         name="airlabsApiKey"
+         id="airlabsKey"
+         placeholder="Optional — route fallback"
+         maxlength="50"
+         disabled>
 </div>
 
 <button type="submit" class="bs">
   💾 Save & Connect
 </button>
+<script>
+function toggleKey(cb,id){var e=document.getElementById(id);if(e)e.disabled=!cb.checked;}
+</script>
 </form>)raw";
 
 // Settings page template — printf tokens in order:
-//   ssid, ip, saved_banner, ssid, lat, lon, radius, osUser, frEp, refresh
+//   ssid, ip, saved_banner, ssid, lat, lon, radius,
+//   logoChecked, logoKeyDisabled, logostreamApiKey,
+//   airlabsChecked, airlabsKeyDisabled, airlabsApiKey
 static const char PAGE_SETTINGS_TPL[] PROGMEM = R"raw(
 <div class="icon">⚙️</div>
 <h1>Flight Tracker Settings</h1>
@@ -179,7 +210,8 @@ static const char PAGE_SETTINGS_TPL[] PROGMEM = R"raw(
     <label>
       <input type="checkbox"
             name="logoSupport"
-            %s>
+            %s
+            onchange="toggleKey(this,'logostreamKey')">
       Enable airline logos
     </label>
   </div>
@@ -188,11 +220,37 @@ static const char PAGE_SETTINGS_TPL[] PROGMEM = R"raw(
     <label>LogoStream API Key</label>
     <input type="text"
           name="logostreamApiKey"
-          value="%s">
+          id="logostreamKey"
+          value="%s"
+          %s>
+  </div>
+
+  <p class="sec">Data Sources</p>
+
+  <div class="f">
+    <label>
+      <input type="checkbox"
+            name="airlabsFallback"
+            %s
+            onchange="toggleKey(this,'airlabsKey')">
+      Enable AirLabs route fallback
+    </label>
+  </div>
+
+  <div class="f">
+    <label>AirLabs API Key <span style="font-weight:400;color:#475569">(optional — route fallback)</span></label>
+    <input type="text"
+          name="airlabsApiKey"
+          id="airlabsKey"
+          value="%s"
+          %s>
   </div>
 
   <button type="submit" class="bs">💾 Save &amp; Reboot</button>
 </form>
+<script>
+function toggleKey(cb,id){var e=document.getElementById(id);if(e)e.disabled=!cb.checked;}
+</script>
 <form method="POST" action="/reset"
       onsubmit="return confirm('Erase all settings and restart in setup mode?')">
   <button type="submit" class="br">🗑️ Factory Reset</button>
@@ -218,6 +276,8 @@ static bool nvsLoad(FlightConfig& c) {
     c.radiusKm  = s_prefs.getFloat(KEY_RADIUS, 150.0f);
     c.logoSupport = s_prefs.getBool(LOGO_SUPPORT, false);
     s_prefs.getString(LOGOSTREAM_KEY, c.logostreamApiKey, sizeof(c.logostreamApiKey));
+    c.airlabsFallback = s_prefs.getBool(AIRLABS_FALLBACK, false);
+    s_prefs.getString(AIRLABS_KEY, c.airlabsApiKey, sizeof(c.airlabsApiKey));
     s_prefs.end();
     return true;
 }
@@ -231,6 +291,8 @@ static void nvsSave(const FlightConfig& c) {
     s_prefs.putFloat(KEY_RADIUS,  c.radiusKm);
     s_prefs.putBool(LOGO_SUPPORT, c.logoSupport);
     s_prefs.putString(LOGOSTREAM_KEY, c.logostreamApiKey);
+    s_prefs.putBool(AIRLABS_FALLBACK, c.airlabsFallback);
+    s_prefs.putString(AIRLABS_KEY, c.airlabsApiKey);
     s_prefs.putBool(KEY_VALID,    true);
     s_prefs.end();
 }
@@ -255,7 +317,15 @@ static void parseForm(FlightConfig& dst, bool isEdit) {
     if (dst.radiusKm < 10) dst.radiusKm = 10;
 
     dst.logoSupport = formArg("logoSupport") == "on";
-    strncpy(dst.logostreamApiKey, formArg("logostreamApiKey").c_str(), sizeof(dst.logostreamApiKey) - 1);
+    dst.airlabsFallback = formArg("airlabsFallback") == "on";
+
+    // Disabled inputs are not submitted by the browser. When a feature is
+    // turned off, keep the previously-saved key so re-enabling it restores
+    // the value; on a fresh setup (isEdit=false) leave it empty.
+    if (dst.logoSupport || !isEdit)
+        strncpy(dst.logostreamApiKey, formArg("logostreamApiKey").c_str(), sizeof(dst.logostreamApiKey) - 1);
+    if (dst.airlabsFallback || !isEdit)
+        strncpy(dst.airlabsApiKey, formArg("airlabsApiKey").c_str(), sizeof(dst.airlabsApiKey) - 1);
 }
 
 // ─── Response helpers ─────────────────────────────────────────────────────────
@@ -297,7 +367,7 @@ static void onSettingsGet() {
     snap = s_cfg;
     xSemaphoreGive(s_cfgMutex);
 
-    char body[3200];
+    char body[4096];
     snprintf(body, sizeof(body), PAGE_SETTINGS_TPL,
         snap.ssid,
         WiFi.localIP().toString().c_str(),
@@ -305,8 +375,11 @@ static void onSettingsGet() {
         snap.ssid,
         snap.lat, snap.lon, snap.radiusKm,
         snap.logoSupport ? "checked" : "",
+        snap.logoSupport ? "" : "disabled",
         snap.logostreamApiKey,
-        (int)snap.refreshSec);
+        snap.airlabsFallback ? "checked" : "",
+        snap.airlabsFallback ? "" : "disabled",
+        snap.airlabsApiKey);
 
     s_server.setContentLength(CONTENT_LENGTH_UNKNOWN);
     s_server.send(200, "text/html", "");
@@ -451,7 +524,7 @@ EventGroupHandle_t webConfigInit(BaseType_t coreID, WebConfigAPReadyCb apReadyCb
     xTaskCreatePinnedToCore(
         configTask,
         "webConfig",
-        4096,
+        8192,
         nullptr,
         8,
         &s_configTaskHandle,
