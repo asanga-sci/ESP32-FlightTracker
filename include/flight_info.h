@@ -50,3 +50,4 @@ struct flight_info
 // enriched with route/airline data from adsbdb.com.
 extern bool get_flights(float latitude, float longitude, float range_latitude, float range_longitude, bool air, bool ground, bool gliders, bool vehicles, std::vector<flight_info> &flights, String &error_message);
 extern size_t get_logo(const char *icao_airline, std::vector<uint8_t> &buffer, String &error_message);
+extern void png_cache_remove(const char *icao_airline);
