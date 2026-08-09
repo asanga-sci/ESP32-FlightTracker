@@ -57,6 +57,22 @@ Notes:
 1.  Place your `airlines.txt` in the `data` folder.
 2.  Use `pio run -t uploadfs` to flash the `LittleFS` partition.
 
+### Capturing a UI Screenshot
+
+The firmware accepts `ss` over the USB/UART serial port. The included helper
+requests a screenshot and saves it in the repository's `images` folder. It
+supports PNG and BMP output:
+
+```text
+pip install pyserial
+python scripts/screenshot.py COM7
+python scripts/screenshot.py COM7 --format bmp
+```
+
+Replace `COM7` with the port assigned to the board. Close PlatformIO's serial
+monitor before running the helper. A 240x320 screenshot may take several
+seconds to transfer at the firmware's 115200 baud rate.
+
 ## ⚙️ Configuration
 
 On first boot, the device will enter **Setup Mode**:

@@ -1,6 +1,10 @@
 {
     "chat.tools.terminal.autoApprove": {
         "pio": true,
-        "e:": true
+        "e:": true,
+        "/^python scripts\\\\screenshot\\.py COM4 --timeout 60$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
     }
 }

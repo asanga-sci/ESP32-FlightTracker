@@ -35,6 +35,8 @@ const char *ntpServer = "nl.pool.ntp.org";
 const long gmtOffset_sec = 25200; // Adjust for your timezone
 const int daylightOffset_sec = 0;
 
+volatile bool screenshot_requested = false;
+
 /**
  * Message from core 1 (HTTP) to core 0 (UI)
  * Lightweight structure - ONLY essential data, no pointers
@@ -113,6 +115,79 @@ void my_flush_cb(lv_display_t *disp, const lv_area_t *area, uint8_t *px_map)
 static uint32_t my_tick_get_cb(void)
 {
     return millis();
+}
+
+static void take_screenshot()
+{
+    // The screenshot shares UART0 with ESP_LOG. At 115200 baud, transmitting
+    // 153600 bytes takes several seconds, so any log line emitted during the
+    // transfer would corrupt the binary payload and shift the end marker.
+    Serial.flush();
+    esp_log_level_set("*", ESP_LOG_NONE);
+
+    Serial.println("BEGIN_SCREENSHOT");
+
+    // LVGL needs a few alignment bytes in addition to the visible RGB565
+    // payload. A buffer sized only width * height * 2 can make snapshot
+    // reshape fail before any metadata is sent.
+    size_t snapshot_size = LV_DRAW_BUF_SIZE(240, 320, LV_COLOR_FORMAT_RGB565);
+
+    uint8_t *snapshot_buf =
+        (uint8_t *)heap_caps_malloc(
+            snapshot_size,
+            MALLOC_CAP_SPIRAM);
+
+    if (!snapshot_buf)
+    {
+        Serial.println("PSRAM allocation failed");
+        Serial.flush();
+        esp_log_level_set("*", ESP_LOG_INFO);
+        return;
+    }
+
+    lv_draw_buf_t draw_buf;
+
+    const lv_result_t init_result = lv_draw_buf_init(
+        &draw_buf,
+        240,
+        320,
+        LV_COLOR_FORMAT_RGB565,
+        LV_STRIDE_AUTO,
+        snapshot_buf,
+        snapshot_size);
+
+    const lv_result_t snapshot_result =
+        init_result == LV_RESULT_OK
+            ? lv_snapshot_take_to_draw_buf(lv_screen_active(), LV_COLOR_FORMAT_RGB565, &draw_buf)
+            : LV_RESULT_INVALID;
+
+    if (init_result != LV_RESULT_OK || snapshot_result != LV_RESULT_OK || !draw_buf.data)
+    {
+        Serial.println("SNAPSHOT_FAILED");
+        Serial.flush();
+        heap_caps_free(snapshot_buf);
+        esp_log_level_set("*", ESP_LOG_INFO);
+        return;
+    }
+
+    uint32_t width = draw_buf.header.w;
+    uint32_t height = draw_buf.header.h;
+    uint32_t data_size = draw_buf.data_size;
+
+    Serial.printf("SCREENSHOT_INFO %u %u %u\n",
+                  width, height, data_size);
+
+    // Send raw RGB565 data
+    Serial.write((uint8_t *)draw_buf.data, data_size);
+    Serial.flush();
+
+    Serial.println("END_SCREENSHOT");
+    Serial.flush();
+
+    lv_draw_buf_destroy(&draw_buf);
+
+    esp_log_level_set("*", ESP_LOG_INFO);
+    Serial.printf("[SS] screenshot sent: %u bytes\n", data_size);
 }
 
 void display_setup_screen(const char* ssid, const char* password, const char* ip)
@@ -577,6 +652,13 @@ void ui_update_task(void *param)
             }
         }
 
+        if (screenshot_requested)
+        {
+            screenshot_requested = false;
+
+            take_screenshot();
+        }
+
         vTaskDelay(50 / portTICK_PERIOD_MS);
     }
 
@@ -780,6 +862,41 @@ static void resetBtnTask(void*) {
     }
 }
 
+//-----------------------ss task-----------------------------
+static void screenshot_serial_task(void *parameter)
+{
+    char buffer[16];
+
+    while (true)
+    {
+        if (Serial.available())
+        {
+            size_t len = Serial.readBytesUntil(
+                '\n',
+                buffer,
+                sizeof(buffer) - 1
+            );
+
+            buffer[len] = '\0';
+
+            // Remove CR
+            if (len > 0 && buffer[len - 1] == '\r')
+            {
+                buffer[len - 1] = '\0';
+            }
+
+            if (strcmp(buffer, "ss") == 0)
+            {
+                Serial.println("SS_REQUESTED");
+
+                screenshot_requested = true;
+            }
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
+
 void setup()
 {
     Serial.begin(115200);
@@ -873,6 +990,15 @@ void setup()
         nullptr, 
         1, 
         nullptr, 
+        0);
+
+    xTaskCreatePinnedToCore(
+        screenshot_serial_task,
+        "SS Serial",
+        2048,
+        nullptr,
+        1,
+        nullptr,
         0);
 
     log_i("Setup: Dual-core tasks created!");

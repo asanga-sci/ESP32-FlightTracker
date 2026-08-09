@@ -739,7 +739,7 @@ static lv_obj_t *make_stat_cell_with_icon(lv_obj_t *parent,
                                           lv_align_t align, int x, int y)
 {
     lv_obj_t *cell = lv_obj_create(parent);
-    lv_obj_set_size(cell, 115, 30);
+    lv_obj_set_size(cell, 115, 28);
     lv_obj_set_style_bg_opa(cell, LV_OPA_TRANSP, 0);
     lv_obj_set_style_border_width(cell, 0, 0);
     lv_obj_set_style_pad_all(cell, 2, 0);
