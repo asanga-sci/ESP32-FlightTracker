@@ -1,5 +1,7 @@
 # ESP32 Flight Tracker
 
+![Screenshot](images/screenshot_1.png)
+
 A real-time flight tracking station for **ESP32 boards with a 2.8" 240x320 ILI9341 TFT**. This project fetches live ADS-B data from the **airplanes.live** community feed and visualizes aircraft on a radar-style interface, with optional route/airline enrichment and airline logos.
 
 Two hardware variants are supported:
