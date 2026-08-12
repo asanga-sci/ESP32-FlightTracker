@@ -91,8 +91,8 @@ typedef struct
 {
     char icao_address[7];
     char flight[10];
-    char origin[32];        /* municipality from adsbdb (e.g. "Bangkok") */
-    char destination[32];   /* municipality from adsbdb (e.g. "Khon Kaen") */
+    char origin[32];        /* IATA code from adsb.lol routeset (e.g. "BKK") */
+    char destination[32];   /* IATA code from adsb.lol routeset (e.g. "CEI") */
     char aircraft_code[8];
     float latitude;
     float longitude;
@@ -946,7 +946,7 @@ void flight_tracker_ui_init(void)
     lv_obj_align(ftr, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_clear_flag(ftr, LV_OBJ_FLAG_SCROLLABLE);
 
-    make_label(ftr, LV_SYMBOL_GPS " airplanes.live", &lv_font_montserrat_10, CLR_GREEN,
+    make_label(ftr, LV_SYMBOL_GPS " adsb.lol", &lv_font_montserrat_10, CLR_GREEN,
                LV_ALIGN_LEFT_MID, 4, 0);
 
     g_lbl_last_upd = make_label(ftr, "last update: 0s ago",

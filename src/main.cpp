@@ -44,10 +44,10 @@ typedef struct
     char icao_address[7];       // ICAO 24-bit address as hex string (e.g. "4CA853")
     char flight[10];
     char aircraft_code[8];
-    char origin[32];            // municipality from adsbdb (e.g. "Bangkok")
-    char destination[32];       // municipality from adsbdb (e.g. "Khon Kaen")
+    char origin[32];            // IATA airport code from adsb.lol routeset (e.g. "BKK")
+    char destination[32];       // IATA airport code from adsb.lol routeset (e.g. "CEI")
     char airline[4];
-    char airline_name[50]; // Resolved airline name from adsbdb
+    char airline_name[50]; // Resolved airline name — unused with adsb.lol (LittleFS lookup fills it)
     float latitude;
     float longitude;
     float distance_km;
@@ -56,7 +56,7 @@ typedef struct
     int vertical_speed;
     int ground_speed;
     int heading_deg;
-    bool on_ground;                  // alt_baro == "ground" from airplanes.live
+    bool on_ground;                  // alt_baro == "ground" from adsb.lol
 } flight_msg_t;
 
 typedef struct
@@ -423,9 +423,9 @@ void ui_update_task(void *param)
 
                 log_i("UI Task: Received flight data, updating UI...");
 
-                // resolve airline name — prefer adsbdb, fall back to LittleFS lookup.
-                // Re-evaluate every fetch so a stale name doesn't stick when adsbdb
-                // returns "unknown callsign" for the tracked flight.
+                // resolve airline name — prefer adsb.lol, fall back to LittleFS lookup.
+                // Re-evaluate every fetch so a stale name doesn't stick when adsb.lol
+                // returns no airline data for the tracked flight.
                 const bool adsb_has_airline = (msg.airline_name[0] != '\0');
                 if (strcmp(previous_tracked_flight.c_str(), msg.flight) != 0)
                 {
@@ -433,7 +433,7 @@ void ui_update_task(void *param)
                     {
                         strncpy(airline_name, msg.airline_name, NAME_LEN);
                         airline_name[NAME_LEN] = '\0';
-                        log_i("Airline name from adsbdb: %s", airline_name);
+                        log_i("Airline name from adsb.lol: %s", airline_name);
                     }
                     else if (lookupAirline(airlines, msg.airline, airline_name))
                     {
@@ -460,16 +460,16 @@ void ui_update_task(void *param)
                 }
                 else if (adsb_has_airline && strcmp(airline_name, msg.airline_name) != 0)
                 {
-                    // adsbdb resumed resolving this callsign — restore the real name
+                    // adsb.lol resumed resolving this callsign — restore the real name
                     strncpy(airline_name, msg.airline_name, NAME_LEN);
                     airline_name[NAME_LEN] = '\0';
-                    log_i("Airline name from adsbdb (recovered): %s", airline_name);
+                    log_i("Airline name from adsb.lol (recovered): %s", airline_name);
                 }
                 else if (!adsb_has_airline && msg.airline[0] != '\0')
                 {
-                    // adsbdb no longer resolves this callsign ("unknown callsign").
-                    // The AirLabs fallback may still have supplied the airline ICAO
-                    // code — retry the LittleFS lookup before giving up.
+                    // adsb.lol no longer resolves this callsign. The AirLabs fallback
+                    // may still have supplied the airline ICAO code — retry the
+                    // LittleFS lookup before giving up.
                     if (strcmp(airline_name, "N/A") != 0 && lookupAirline(airlines, msg.airline, airline_name))
                     {
                         log_i("Resolved airline name (lookup fallback): %s", airline_name);
@@ -478,7 +478,7 @@ void ui_update_task(void *param)
                     {
                         strncpy(airline_name, "N/A", NAME_LEN);
                         airline_name[NAME_LEN] = '\0';
-                        log_i("adsbdb: no airline data for %s, showing N/A", msg.flight);
+                        log_i("adsb.lol: no airline data for %s, showing N/A", msg.flight);
                     }
                 }
 

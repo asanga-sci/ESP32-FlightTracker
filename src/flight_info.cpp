@@ -44,6 +44,45 @@ bool https_get(const String &url, String &response, String &error_message)
     return true;
 }
 
+/**
+ * @brief Simple HTTPS POST helper (cert validation disabled — matches
+ *        the GET helper above).
+ *
+ * adsb.lol's /api/0/routeset endpoint is fronted by a WAF that rejects
+ * requests without a browser-like Referer/User-Agent (returns an empty
+ * 201 instead of the JSON routeset), so we spoof both.
+ */
+bool https_post(const String &url, const String &body, String &response, String &error_message)
+{
+    WiFiClientSecure wifi_client;
+    wifi_client.setInsecure();
+
+    HTTPClient client;
+    log_i("POST: %s", url.c_str());
+    if (!client.begin(wifi_client, url))
+    {
+        error_message = "Failed to start HTTPS client";
+        log_e("%s", error_message.c_str());
+        return false;
+    }
+
+    client.addHeader("Content-Type", "application/json");
+    client.addHeader("Referer", "https://adsb.lol/");
+    client.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
+    const int http_code = client.POST(body);
+    if (http_code != HTTP_CODE_OK)
+    {
+        client.end();
+        log_e("HTTPS error code: %d for %s", http_code, url.c_str());
+        error_message = "HTTP request failed (" + String(http_code) + ")";
+        return false;
+    }
+
+    response = client.getString();
+    client.end();
+    return true;
+}
+
 float dist_km(float lat1, float lon1, float lat2, float lon2)
 {
     const float lat1_r = lat1 * (float)M_PI / 180.0f;
@@ -56,24 +95,30 @@ float dist_km(float lat1, float lon1, float lat2, float lon2)
 }
 
 /**
- * @brief Enrich one flight with route + airline data from adsbdb.com.
- * @return true if the route was resolved.
+ * @brief Enrich one flight with route + airline data from adsb.lol's
+ *        /api/0/routeset endpoint (VRS standing data).
+ * @return true if the route was resolved and is plausible.
  */
-bool enrich_flight_from_adsbdb(flight_info &flight)
+bool enrich_flight_from_adsblol(flight_info &flight)
 {
     if (flight.callsign.isEmpty())
     {
-        log_w("adsbdb: no callsign to look up");
+        log_w("adsb.lol: no callsign to look up");
         return false;
     }
 
-    const String url = "https://api.adsbdb.com/v0/callsign/" + flight.callsign;
+    // POST the closest flight's position so adsb.lol can compute whether
+    // the route is plausible for the aircraft's current location.
+    const String url = "https://api.adsb.lol/api/0/routeset";
+    const String body = "{\"planes\":[{\"callsign\":\"" + flight.callsign +
+                        "\",\"lat\":" + String(flight.latitude, 5) +
+                        ",\"lng\":" + String(flight.longitude, 5) + "}]}";
 
     String response;
     String error_message;
-    if (!https_get(url, response, error_message))
+    if (!https_post(url, body, response, error_message))
     {
-        log_e("adsbdb: %s", error_message.c_str());
+        log_e("adsb.lol routeset: %s", error_message.c_str());
         return false;
     }
 
@@ -81,49 +126,93 @@ bool enrich_flight_from_adsbdb(flight_info &flight)
     const DeserializationError parse_error = deserializeJson(doc, response);
     if (parse_error != DeserializationError::Ok)
     {
-        log_e("adsbdb: parse error: %s", parse_error.c_str());
+        log_e("adsb.lol routeset: parse error: %s", parse_error.c_str());
         return false;
     }
 
-    const JsonObject route = doc["response"]["flightroute"];
-    if (route.isNull())
+    const JsonArray routes = doc.as<JsonArray>();
+    if (routes.isNull() || routes.size() == 0)
     {
-        log_w("adsbdb: no route data for %s", flight.callsign.c_str());
+        log_w("adsb.lol routeset: empty response for %s", flight.callsign.c_str());
         return false;
     }
 
-    flight.icao_airline = route["airline"]["icao"] | "";
-    flight.airline_name = route["airline"]["name"] | "";
+    const JsonObject route = routes[0];
 
-    // Replace the raw ICAO callsign with the IATA callsign from adsbdb
-    const String iata_callsign = route["callsign_iata"] | "";
-    if (!iata_callsign.isEmpty())
-        flight.iata_callsign = iata_callsign;
+    const String airport_codes = route["airport_codes"] | "unknown";
+    if (airport_codes.isEmpty() || airport_codes == "unknown")
+    {
+        log_w("adsb.lol routeset: no route data for %s", flight.callsign.c_str());
+        return false;
+    }
 
-    // IATA code is preferred for the compact route row; fall back to
-    // ICAO code, then municipality, then airport name
-    flight.origin_airport = route["origin"]["iata_code"] | "";
-    if (flight.origin_airport.isEmpty())
-        flight.origin_airport = route["origin"]["icao_code"] | "";
-    if (flight.origin_airport.isEmpty())
-        flight.origin_airport = route["origin"]["municipality"] | "";
-    if (flight.origin_airport.isEmpty())
-        flight.origin_airport = route["origin"]["name"] | "";
+    // A non-plausible match is usually a callsign collision or misassociated
+    // data — better to show "N/A" than a wrong route.
+    const bool plausible = route["plausible"] | true;
+    if (!plausible)
+    {
+        log_w("adsb.lol routeset: %s route %s is not plausible, skipping",
+              flight.callsign.c_str(), airport_codes.c_str());
+        return false;
+    }
 
-    flight.destination_airport = route["destination"]["iata_code"] | "";
-    if (flight.destination_airport.isEmpty())
-        flight.destination_airport = route["destination"]["icao_code"] | "";
-    if (flight.destination_airport.isEmpty())
-        flight.destination_airport = route["destination"]["municipality"] | "";
-    if (flight.destination_airport.isEmpty())
-        flight.destination_airport = route["destination"]["name"] | "";
+    const String airline_code = route["airline_code"] | "unknown";
+    if (!airline_code.isEmpty() && airline_code != "unknown")
+        flight.icao_airline = airline_code;
 
-    log_i("adsbdb: %s: %s -> %s (airline %s)",
+    // _airport_codes_iata lists origin-destination with IATA codes where the
+    // airport has one, otherwise the ICAO code (e.g. "BKK-CEI").
+    String codes = route["_airport_codes_iata"] | "";
+    if (codes.isEmpty() || codes == "unknown")
+        codes = airport_codes;
+
+    const int dash = codes.indexOf('-');
+    const int space = dash < 0 ? codes.indexOf(' ') : -1;
+    if (dash > 0)
+    {
+        flight.origin_airport = codes.substring(0, dash);
+        flight.destination_airport = codes.substring(dash + 1);
+    }
+    else if (space > 0)
+    {
+        flight.origin_airport = codes.substring(0, space);
+        flight.destination_airport = codes.substring(space + 1);
+    }
+
+    // Fall back to airport name/municipality when a code is missing
+    if (flight.origin_airport.isEmpty() || flight.destination_airport.isEmpty())
+    {
+        const JsonArray airports = route["_airports"];
+        if (!airports.isNull())
+        {
+            for (const JsonObject ap : airports)
+            {
+                if (flight.origin_airport.isEmpty())
+                {
+                    flight.origin_airport = ap["iata"] | "";
+                    if (flight.origin_airport.isEmpty())
+                        flight.origin_airport = ap["icao"] | "";
+                    if (flight.origin_airport.isEmpty())
+                        flight.origin_airport = ap["location"] | "";
+                }
+                else if (flight.destination_airport.isEmpty())
+                {
+                    flight.destination_airport = ap["iata"] | "";
+                    if (flight.destination_airport.isEmpty())
+                        flight.destination_airport = ap["icao"] | "";
+                    if (flight.destination_airport.isEmpty())
+                        flight.destination_airport = ap["location"] | "";
+                }
+            }
+        }
+    }
+
+    log_i("adsb.lol: %s: %s -> %s (airline %s)",
           flight.iata_callsign.c_str(),
           flight.origin_airport.c_str(),
           flight.destination_airport.c_str(),
-          flight.airline_name.c_str());
-    return true;
+          flight.icao_airline.c_str());
+    return !flight.origin_airport.isEmpty() || !flight.destination_airport.isEmpty();
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -251,7 +340,7 @@ static void airlabs_apply_route(flight_info &flight, const AirlabsRouteEntry &ro
 
 /**
  * @brief Fallback enrichment using the AirLabs routes API.
- *        Used when adsbdb reports "unknown callsign" (HTTP 404 / null route).
+ *        Used when adsb.lol reports an unknown/non-plausible route.
  * @return true if the route was resolved (from cache or network).
  */
 bool enrich_flight_from_airlabs(flight_info &flight)
@@ -358,9 +447,15 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
     flights.clear();
     error_message = "";
 
-    // ── 1. airplanes.live: all aircraft within a circle ────────────────
-    const String url = "https://api.airplanes.live/v2/point/" + String(latitude, 5) +
-                       "/" + String(longitude, 5) + "/" + String(radius_km);
+    // ── 1. adsb.lol: all aircraft within a circle ───────────────────────
+    // adsb.lol's v2/point radius is in nautical miles (max 250 NM).
+    int radius_nm = (int)(radius_km / 1.852f + 0.5f);
+    if (radius_nm < 1)
+        radius_nm = 1;
+    if (radius_nm > 250)
+        radius_nm = 250;
+    const String url = "https://api.adsb.lol/v2/point/" + String(latitude, 5) +
+                       "/" + String(longitude, 5) + "/" + String(radius_nm);
 
     /* TLS handshake + payload download needs ~40 KB of contiguous heap.
        Bail out instead of OOM-aborting the task. */
@@ -382,10 +477,10 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
 
     JsonDocument doc;
     const DeserializationError parse_error = deserializeJson(doc, response);
-    response = ""; /* free the raw payload before adsbdb enrichment */
+    response = ""; /* free the raw payload before adsb.lol enrichment */
     if (parse_error != DeserializationError::Ok)
     {
-        log_e("airplanes.live: parse error: %s", parse_error.c_str());
+        log_e("adsb.lol: parse error: %s", parse_error.c_str());
         error_message = parse_error.c_str();
         return false;
     }
@@ -393,7 +488,7 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
     const JsonArray aircraft = doc["ac"];
     if (aircraft.isNull())
     {
-        error_message = "airplanes.live: unexpected payload";
+        error_message = "adsb.lol: unexpected payload";
         log_e("%s", error_message.c_str());
         return false;
     }
@@ -441,7 +536,7 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
         flights.push_back(flight);
     }
 
-    log_i("airplanes.live: %u aircraft in radius %d km (Heap=%u)", flights.size(), radius_km, ESP.getFreeHeap());
+    log_i("adsb.lol: %u aircraft in radius %d nm (Heap=%u)", flights.size(), radius_nm, ESP.getFreeHeap());
 
     if (flights.empty())
     {
@@ -458,9 +553,10 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
                   return da < db;
               });
 
-    // ── 3. adsbdb: resolve route/airline data for the closest aircraft ─
-    // If adsbdb reports an unknown callsign, fall back to AirLabs routes.
-    if (!enrich_flight_from_adsbdb(flights.front()))
+    // ── 3. adsb.lol: resolve route/airline data for the closest aircraft ─
+    // If adsb.lol reports an unknown/non-plausible route, fall back to
+    // AirLabs routes (when configured).
+    if (!enrich_flight_from_adsblol(flights.front()))
     {
         enrich_flight_from_airlabs(flights.front());
     }

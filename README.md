@@ -2,7 +2,7 @@
 
 ![Screenshot](images/screenshot_1.png)
 
-A real-time flight tracking station for **ESP32 boards with a 2.8" 240x320 ILI9341 TFT**. This project fetches live ADS-B data from the **airplanes.live** community feed and visualizes aircraft on a radar-style interface, with optional route/airline enrichment and airline logos.
+A real-time flight tracking station for **ESP32 boards with a 2.8" 240x320 ILI9341 TFT**. This project fetches live ADS-B data from the **adsb.lol** community feed and visualizes aircraft on a radar-style interface, with optional route/airline enrichment and airline logos.
 
 Two hardware variants are supported:
 
@@ -14,7 +14,7 @@ Two hardware variants are supported:
 ## 🚀 Features
 
 *   **Real-time Tracking:** Fetches live flight data including ICAO address, flight number, aircraft type, altitude, speed, and heading.
-*   **Open Data Sources:** Live ADS-B positions from **airplanes.live** and aircraft/airline metadata from **adsbdb.com** — no proprietary API keys required. An optional **AirLabs** fallback resolves routes when adsbdb reports an unknown callsign.
+*   **Open Data Sources:** Live ADS-B positions from **adsb.lol** (`/v2/point`) and route/airline data from adsb.lol's `/api/0/routeset` endpoint — no proprietary API keys required. An optional **AirLabs** fallback resolves routes when adsb.lol reports an unknown or non-plausible route.
 *   **Optimized UI:** Built with **LVGL 9.1**, featuring a radar display and detailed flight information panels optimized for the 2.8" TFT.
 *   **Dual-Core Architecture:** 
     *   **Core 0:** Dedicated to UI rendering and resistive touch handling.
@@ -70,7 +70,7 @@ On first boot, the device will enter **Setup Mode**:
     *   **Coordinates:** Your Latitude and Longitude.
     *   **Radius:** Tracking range in Kilometers.
     *   **Enable airline logos** — required to use the LogoStream API key field (the key input is greyed out until the checkbox is ticked).
-    *   **Enable AirLabs route fallback** — required to use the AirLabs API key field; adds route/airline data when adsbdb can't resolve a callsign.
+    *   **Enable AirLabs route fallback** — required to use the AirLabs API key field; adds route/airline data when adsb.lol can't resolve a route.
 
 Once connected, open `http://<device-ip>/settings` to change these later. Saving reboots the device.
 
@@ -87,11 +87,10 @@ Once connected, open `http://<device-ip>/settings` to change these later. Saving
 This project is only possible thanks to the community that keeps these data sources free and open:
 
 **Flight data**
-*   **[airplanes.live](https://airplanes.live)** — open ADS-B aggregator providing live aircraft positions, headings, altitudes and speeds (previously FlightRadar24; the retired FR24 feed is kept in `legacy/` for reference).
-*   **[adsbdb.com](https://adsbdb.com)** — open database that resolves aircraft and airline/route metadata from callsigns.
+*   **[adsb.lol](https://adsb.lol)** — open ADS-B aggregator providing live aircraft positions, headings, altitudes and speeds via its `/v2/point` API, plus route/airline data via the `/api/0/routeset` endpoint (VRS standing data). (Previously FlightRadar24 and airplanes.live; the retired FR24 feed is kept in `legacy/` for reference).
 
 **Optional enrichment & branding**
-*   **[AirLabs](https://airlabs.co)** — optional route/airline fallback API used when adsbdb reports an *unknown callsign*. ⚠️ **Not supported on the CYD (`esp32-2432S028R`):** the additional HTTPS/TLS session requires more free RAM than the CYD has available, so enable it only on the CBD (`esp32-s3-es3c28p`, 8 MB PSRAM) variant.
+*   **[AirLabs](https://airlabs.co)** — optional route/airline fallback API used when adsb.lol reports an *unknown or non-plausible route*. ⚠️ **Not supported on the CYD (`esp32-2432S028R`):** the additional HTTPS/TLS session requires more free RAM than the CYD has available, so enable it only on the CBD (`esp32-s3-es3c28p`, 8 MB PSRAM) variant.
 *   **[LogoStream](https://logostream.dev)** — optional airline logo API; logos are decoded with **LodePNG** and cached in RAM with retry-on-failure.
 
 **Libraries**
