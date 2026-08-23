@@ -26,9 +26,8 @@ struct FlightConfig {
     bool logoSupport;
     char logostreamApiKey[50];
 
-    // AirLabs fallback for route/airline data (optional)
-    bool airlabsFallback;
-    char airlabsApiKey[50];
+    // ADSB.lol fallback for route/airline data (optional)
+    bool adsbLolFallback;
 
     // Poll interval
     uint16_t refreshSec;   // ≥ 10

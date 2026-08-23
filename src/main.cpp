@@ -468,7 +468,7 @@ void ui_update_task(void *param)
                 else if (!adsb_has_airline && msg.airline[0] != '\0')
                 {
                     // adsbdb no longer resolves this callsign ("unknown callsign").
-                    // The AirLabs fallback may still have supplied the airline ICAO
+                    // The ADSB.lol fallback may still have supplied the airline ICAO
                     // code — retry the LittleFS lookup before giving up.
                     if (strcmp(airline_name, "N/A") != 0 && lookupAirline(airlines, msg.airline, airline_name))
                     {

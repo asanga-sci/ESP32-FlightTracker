@@ -14,7 +14,7 @@ Two hardware variants are supported:
 ## 🚀 Features
 
 *   **Real-time Tracking:** Fetches live flight data including ICAO address, flight number, aircraft type, altitude, speed, and heading.
-*   **Open Data Sources:** Live ADS-B positions from **airplanes.live** and aircraft/airline metadata from **adsbdb.com** — no proprietary API keys required. An optional **AirLabs** fallback resolves routes when adsbdb reports an unknown callsign.
+*   **Open Data Sources:** Live ADS-B positions from **airplanes.live** and aircraft/airline metadata from **adsbdb.com** — no proprietary API keys required. An optional **ADSB.lol** fallback resolves routes when adsbdb reports an unknown callsign.
 *   **Optimized UI:** Built with **LVGL 9.1**, featuring a radar display and detailed flight information panels optimized for the 2.8" TFT.
 *   **Dual-Core Architecture:** 
     *   **Core 0:** Dedicated to UI rendering and resistive touch handling.
@@ -70,7 +70,7 @@ On first boot, the device will enter **Setup Mode**:
     *   **Coordinates:** Your Latitude and Longitude.
     *   **Radius:** Tracking range in Kilometers.
     *   **Enable airline logos** — required to use the LogoStream API key field (the key input is greyed out until the checkbox is ticked).
-    *   **Enable AirLabs route fallback** — required to use the AirLabs API key field; adds route/airline data when adsbdb can't resolve a callsign.
+    *   **Enable ADSB.lol route fallback** — required to use the ADSB.lol API key field; adds route/airline data when adsbdb can't resolve a callsign.
 
 Once connected, open `http://<device-ip>/settings` to change these later. Saving reboots the device.
 
@@ -91,7 +91,7 @@ This project is only possible thanks to the community that keeps these data sour
 *   **[adsbdb.com](https://adsbdb.com)** — open database that resolves aircraft and airline/route metadata from callsigns.
 
 **Optional enrichment & branding**
-*   **[AirLabs](https://airlabs.co)** — optional route/airline fallback API used when adsbdb reports an *unknown callsign*. ⚠️ **Not supported on the CYD (`esp32-2432S028R`):** the additional HTTPS/TLS session requires more free RAM than the CYD has available, so enable it only on the CBD (`esp32-s3-es3c28p`, 8 MB PSRAM) variant.
+*   **[ADSB.lol](https://api.adsb.lol/docs#/)** — optional route/airline fallback API used when adsbdb reports an *unknown callsign*. ⚠️ **Not supported on the CYD (`esp32-2432S028R`):** the additional HTTPS/TLS session requires more free RAM than the CYD has available, so enable it only on the CBD (`esp32-s3-es3c28p`, 8 MB PSRAM) variant.
 *   **[LogoStream](https://logostream.dev)** — optional airline logo API; logos are decoded with **LodePNG** and cached in RAM with retry-on-failure.
 
 **Libraries**

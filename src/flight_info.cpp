@@ -44,6 +44,35 @@ bool https_get(const String &url, String &response, String &error_message)
     return true;
 }
 
+bool https_post_json(const String &url, const String &json_body, String &response, String &error_message)
+{
+    WiFiClientSecure wifi_client;
+    wifi_client.setInsecure();
+
+    HTTPClient client;
+    log_i("POST: %s :: %s", url.c_str(), json_body.c_str());
+    if (!client.begin(wifi_client, url))
+    {
+        error_message = "Failed to start HTTPS POST client";
+        log_e("%s", error_message.c_str());
+        return false;
+    }
+
+    client.addHeader("Content-Type", "application/json");
+    const int http_code = client.POST((uint8_t *)json_body.c_str(), json_body.length());
+    if (http_code != HTTP_CODE_OK)
+    {
+        client.end();
+        log_e("HTTPS POST error code: %d for %s", http_code, url.c_str());
+        error_message = "HTTP POST failed (" + String(http_code) + ")";
+        return false;
+    }
+
+    response = client.getString();
+    client.end();
+    return true;
+}
+
 float dist_km(float lat1, float lon1, float lat2, float lon2)
 {
     const float lat1_r = lat1 * (float)M_PI / 180.0f;
@@ -127,13 +156,13 @@ bool enrich_flight_from_adsbdb(flight_info &flight)
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   AIRLABS ROUTE CACHE (flight_icao → route data, reduces API calls).
+   ADSB.LOL ROUTE CACHE (flight_icao → route data, reduces API calls).
    Heap-allocated on first use — BSS is already at the DRAM limit, so the
    ~2.4 KB table must NOT be a static array.
    ═══════════════════════════════════════════════════════════════════════*/
-#define AIRLABS_ROUTE_CACHE_MAX 50
+#define ADSB_LOL_ROUTE_CACHE_MAX 50
 
-struct AirlabsRouteEntry
+struct AdsbLolRouteEntry
 {
     char callsign[10];      /* flight_icao, e.g. "TVJ134" */
     char airline_icao[4];   /* e.g. "TVJ" */
@@ -146,93 +175,93 @@ struct AirlabsRouteEntry
     uint32_t last_used;     /* LRU timestamp */
 };
 
-static AirlabsRouteEntry *s_airlabs_route_cache = nullptr;
-static int s_airlabs_route_cache_count = 0;
-static uint32_t s_airlabs_route_tick = 0;
+static AdsbLolRouteEntry *s_adsb_lol_route_cache = nullptr;
+static int s_adsb_lol_route_cache_count = 0;
+static uint32_t s_adsb_lol_route_tick = 0;
 
-static bool airlabs_route_cache_ensure()
+static bool adsb_lol_route_cache_ensure()
 {
-    if (s_airlabs_route_cache != nullptr)
+    if (s_adsb_lol_route_cache != nullptr)
         return true;
 
-    s_airlabs_route_cache = (AirlabsRouteEntry *)calloc(AIRLABS_ROUTE_CACHE_MAX, sizeof(AirlabsRouteEntry));
-    if (s_airlabs_route_cache == nullptr)
+    s_adsb_lol_route_cache = (AdsbLolRouteEntry *)calloc(ADSB_LOL_ROUTE_CACHE_MAX, sizeof(AdsbLolRouteEntry));
+    if (s_adsb_lol_route_cache == nullptr)
     {
-        log_e("airlabs route cache: calloc failed (%u bytes)",
-              (unsigned)(AIRLABS_ROUTE_CACHE_MAX * sizeof(AirlabsRouteEntry)));
+        log_e("adsb.lol route cache: calloc failed (%u bytes)",
+              (unsigned)(ADSB_LOL_ROUTE_CACHE_MAX * sizeof(AdsbLolRouteEntry)));
         return false;
     }
-    log_i("airlabs route cache: allocated %d entries (Heap=%u)",
-          AIRLABS_ROUTE_CACHE_MAX, ESP.getFreeHeap());
+    log_i("adsb.lol route cache: allocated %d entries (Heap=%u)",
+          ADSB_LOL_ROUTE_CACHE_MAX, ESP.getFreeHeap());
     return true;
 }
 
-static bool airlabs_route_cache_lookup(const char *callsign, AirlabsRouteEntry &out)
+static bool adsb_lol_route_cache_lookup(const char *callsign, AdsbLolRouteEntry &out)
 {
-    if (s_airlabs_route_cache == nullptr)
+    if (s_adsb_lol_route_cache == nullptr)
         return false;
 
-    for (int i = 0; i < s_airlabs_route_cache_count; i++)
+    for (int i = 0; i < s_adsb_lol_route_cache_count; i++)
     {
-        if (strcmp(s_airlabs_route_cache[i].callsign, callsign) == 0)
+        if (strcmp(s_adsb_lol_route_cache[i].callsign, callsign) == 0)
         {
-            s_airlabs_route_cache[i].last_used = s_airlabs_route_tick++;
-            out = s_airlabs_route_cache[i];
-            log_i("airlabs route cache HIT: %s", callsign);
+            s_adsb_lol_route_cache[i].last_used = s_adsb_lol_route_tick++;
+            out = s_adsb_lol_route_cache[i];
+            log_i("adsb.lol route cache HIT: %s", callsign);
             return true;
         }
     }
     return false;
 }
 
-static void airlabs_route_cache_add(const AirlabsRouteEntry &entry)
+static void adsb_lol_route_cache_add(const AdsbLolRouteEntry &entry)
 {
-    if (s_airlabs_route_cache == nullptr)
+    if (s_adsb_lol_route_cache == nullptr)
         return;
 
     /* Refresh an existing entry, if present */
-    for (int i = 0; i < s_airlabs_route_cache_count; i++)
+    for (int i = 0; i < s_adsb_lol_route_cache_count; i++)
     {
-        if (strcmp(s_airlabs_route_cache[i].callsign, entry.callsign) == 0)
+        if (strcmp(s_adsb_lol_route_cache[i].callsign, entry.callsign) == 0)
         {
-            s_airlabs_route_cache[i] = entry;
-            s_airlabs_route_cache[i].last_used = s_airlabs_route_tick++;
+            s_adsb_lol_route_cache[i] = entry;
+            s_adsb_lol_route_cache[i].last_used = s_adsb_lol_route_tick++;
             return;
         }
     }
 
-    AirlabsRouteEntry *slot = nullptr;
-    if (s_airlabs_route_cache_count < AIRLABS_ROUTE_CACHE_MAX)
+    AdsbLolRouteEntry *slot = nullptr;
+    if (s_adsb_lol_route_cache_count < ADSB_LOL_ROUTE_CACHE_MAX)
     {
-        slot = &s_airlabs_route_cache[s_airlabs_route_cache_count++];
+        slot = &s_adsb_lol_route_cache[s_adsb_lol_route_cache_count++];
     }
     else
     {
         /* Evict the least-recently-used entry */
         int lru_idx = 0;
-        uint32_t oldest = s_airlabs_route_cache[0].last_used;
-        for (int i = 1; i < AIRLABS_ROUTE_CACHE_MAX; i++)
+        uint32_t oldest = s_adsb_lol_route_cache[0].last_used;
+        for (int i = 1; i < ADSB_LOL_ROUTE_CACHE_MAX; i++)
         {
-            if (s_airlabs_route_cache[i].last_used < oldest)
+            if (s_adsb_lol_route_cache[i].last_used < oldest)
             {
-                oldest = s_airlabs_route_cache[i].last_used;
+                oldest = s_adsb_lol_route_cache[i].last_used;
                 lru_idx = i;
             }
         }
-        slot = &s_airlabs_route_cache[lru_idx];
-        log_i("airlabs route cache: evicted %s", slot->callsign);
+        slot = &s_adsb_lol_route_cache[lru_idx];
+        log_i("adsb.lol route cache: evicted %s", slot->callsign);
     }
 
     *slot = entry;
-    slot->last_used = s_airlabs_route_tick++;
-    log_i("airlabs route cache ADD: %s (entries=%d/%d)", entry.callsign,
-          s_airlabs_route_cache_count, AIRLABS_ROUTE_CACHE_MAX);
+    slot->last_used = s_adsb_lol_route_tick++;
+    log_i("adsb.lol route cache ADD: %s (entries=%d/%d)", entry.callsign,
+          s_adsb_lol_route_cache_count, ADSB_LOL_ROUTE_CACHE_MAX);
 }
 
 /**
- * @brief Apply a cached/fresh AirLabs route to a flight.
+ * @brief Apply a cached/fresh ADSB.lol route to a flight.
  */
-static void airlabs_apply_route(flight_info &flight, const AirlabsRouteEntry &route)
+static void adsb_lol_apply_route(flight_info &flight, const AdsbLolRouteEntry &route)
 {
     flight.icao_airline = route.airline_icao;
 
@@ -249,38 +278,75 @@ static void airlabs_apply_route(flight_info &flight, const AirlabsRouteEntry &ro
         flight.destination_airport = route.arr_icao;
 }
 
-/**
- * @brief Fallback enrichment using the AirLabs routes API.
- *        Used when adsbdb reports "unknown callsign" (HTTP 404 / null route).
- * @return true if the route was resolved (from cache or network).
- */
-bool enrich_flight_from_airlabs(flight_info &flight)
+static bool adsb_lol_extract_route(const JsonVariant &node, AdsbLolRouteEntry &entry)
 {
-    if (flight.callsign.isEmpty())
+    if (node.isNull())
+        return false;
+
+    JsonVariant current = node;
+    if (current.is<JsonArray>())
     {
-        log_w("airlabs: no callsign to look up");
+        for (JsonVariant item : current.as<JsonArray>())
+        {
+            if (adsb_lol_extract_route(item, entry))
+                return true;
+        }
         return false;
     }
 
-    FlightConfig cfg = webConfigGet();
-    if (!cfg.airlabsFallback)
+    if (!current.is<JsonObject>())
+        return false;
+
+    const JsonObject obj = current.as<JsonObject>();
+    const String airline_icao = obj["airline_icao"] | "";
+    const String airline_iata = obj["airline_iata"] | "";
+    const String flight_iata = obj["flight_iata"] | "";
+    const String dep_iata = obj["dep_iata"] | "";
+    const String dep_icao = obj["dep_icao"] | "";
+    const String arr_iata = obj["arr_iata"] | "";
+    const String arr_icao = obj["arr_icao"] | "";
+
+    if (airline_icao.isEmpty() && airline_iata.isEmpty() && flight_iata.isEmpty() &&
+        dep_iata.isEmpty() && dep_icao.isEmpty() && arr_iata.isEmpty() && arr_icao.isEmpty())
     {
-        log_i("airlabs: fallback disabled, skipping %s", flight.callsign.c_str());
+        for (JsonPair kv : obj)
+        {
+            if (adsb_lol_extract_route(kv.value(), entry))
+                return true;
+        }
         return false;
     }
-    if (cfg.airlabsApiKey[0] == '\0')
+
+    memset(&entry, 0, sizeof(entry));
+    strncpy(entry.airline_icao, airline_icao.c_str(), sizeof(entry.airline_icao) - 1);
+    strncpy(entry.airline_iata, airline_iata.c_str(), sizeof(entry.airline_iata) - 1);
+    strncpy(entry.flight_iata, flight_iata.c_str(), sizeof(entry.flight_iata) - 1);
+    strncpy(entry.dep_iata, dep_iata.c_str(), sizeof(entry.dep_iata) - 1);
+    strncpy(entry.dep_icao, dep_icao.c_str(), sizeof(entry.dep_icao) - 1);
+    strncpy(entry.arr_iata, arr_iata.c_str(), sizeof(entry.arr_iata) - 1);
+    strncpy(entry.arr_icao, arr_icao.c_str(), sizeof(entry.arr_icao) - 1);
+    return true;
+}
+
+/**
+ * @brief Fallback enrichment using the ADSB.lol routeset API.
+ *        Used when adsbdb reports "unknown callsign" (HTTP 404 / null route).
+ * @return true if the route was resolved (from cache or network).
+ */
+bool enrich_flight_from_adsb_lol(flight_info &flight)
+{
+    if (flight.callsign.isEmpty())
     {
-        log_i("airlabs: no API key configured, skipping fallback for %s",
-              flight.callsign.c_str());
+        log_w("adsb.lol: no callsign to look up");
         return false;
     }
 
     /* ── Check route cache first ── */
-    AirlabsRouteEntry cached;
-    if (airlabs_route_cache_lookup(flight.callsign.c_str(), cached))
+    AdsbLolRouteEntry cached;
+    if (adsb_lol_route_cache_lookup(flight.callsign.c_str(), cached))
     {
-        airlabs_apply_route(flight, cached);
-        log_i("airlabs (cached): %s: %s -> %s (airline %s)",
+        adsb_lol_apply_route(flight, cached);
+        log_i("adsb.lol (cached): %s: %s -> %s (airline %s)",
               flight.iata_callsign.c_str(),
               flight.origin_airport.c_str(),
               flight.destination_airport.c_str(),
@@ -288,18 +354,19 @@ bool enrich_flight_from_airlabs(flight_info &flight)
         return true;
     }
 
-    if (!airlabs_route_cache_ensure())
+    if (!adsb_lol_route_cache_ensure())
         return false;
 
-    const String url = "https://airlabs.co/api/v9/routes?api_key=" + String(cfg.airlabsApiKey) +
-                       "&flight_icao=" + flight.callsign +
-                       "&_fields=airline_iata,airline_icao,flight_iata,flight_number,dep_iata,dep_icao,arr_iata,arr_icao";
+    const String body = String("{\"planes\":[{\"callsign\":\"") + flight.callsign +
+                        String("\",\"lat\":") + String(flight.latitude, 5) +
+                        String(",\"lng\":") + String(flight.longitude, 5) +
+                        String("}]} ");
 
     String response;
     String error_message;
-    if (!https_get(url, response, error_message))
+    if (!https_post_json("https://api.adsb.lol/api/0/routeset", body, response, error_message))
     {
-        log_e("airlabs: %s", error_message.c_str());
+        log_e("adsb.lol: %s", error_message.c_str());
         return false;
     }
 
@@ -307,33 +374,31 @@ bool enrich_flight_from_airlabs(flight_info &flight)
     const DeserializationError parse_error = deserializeJson(doc, response);
     if (parse_error != DeserializationError::Ok)
     {
-        log_e("airlabs: parse error: %s", parse_error.c_str());
+        log_e("adsb.lol: parse error: %s", parse_error.c_str());
         return false;
     }
 
-    const JsonArray routes = doc["response"];
-    if (routes.isNull() || routes.size() == 0)
-    {
-        log_w("airlabs: no route for %s", flight.callsign.c_str());
-        return false;
-    }
-
-    const JsonObject route = routes[0];
-
-    AirlabsRouteEntry entry = {};
+    AdsbLolRouteEntry entry = {};
     strncpy(entry.callsign, flight.callsign.c_str(), sizeof(entry.callsign) - 1);
-    strncpy(entry.airline_icao, route["airline_icao"] | "", sizeof(entry.airline_icao) - 1);
-    strncpy(entry.airline_iata, route["airline_iata"] | "", sizeof(entry.airline_iata) - 1);
-    strncpy(entry.flight_iata, route["flight_iata"] | "", sizeof(entry.flight_iata) - 1);
-    strncpy(entry.dep_iata, route["dep_iata"] | "", sizeof(entry.dep_iata) - 1);
-    strncpy(entry.dep_icao, route["dep_icao"] | "", sizeof(entry.dep_icao) - 1);
-    strncpy(entry.arr_iata, route["arr_iata"] | "", sizeof(entry.arr_iata) - 1);
-    strncpy(entry.arr_icao, route["arr_icao"] | "", sizeof(entry.arr_icao) - 1);
 
-    airlabs_apply_route(flight, entry);
-    airlabs_route_cache_add(entry);
+    JsonVariant route_candidate = doc["route"];
+    if (route_candidate.isNull())
+        route_candidate = doc["routes"];
+    if (route_candidate.isNull())
+        route_candidate = doc["response"];
+    if (route_candidate.isNull())
+        route_candidate = doc;
 
-    log_i("airlabs: %s: %s -> %s (airline %s)",
+    if (!adsb_lol_extract_route(route_candidate, entry))
+    {
+        log_w("adsb.lol: no route for %s in payload", flight.callsign.c_str());
+        return false;
+    }
+
+    adsb_lol_apply_route(flight, entry);
+    adsb_lol_route_cache_add(entry);
+
+    log_i("adsb.lol: %s: %s -> %s (airline %s)",
           flight.iata_callsign.c_str(),
           flight.origin_airport.c_str(),
           flight.destination_airport.c_str(),
@@ -459,10 +524,10 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
               });
 
     // ── 3. adsbdb: resolve route/airline data for the closest aircraft ─
-    // If adsbdb reports an unknown callsign, fall back to AirLabs routes.
+    // If adsbdb reports an unknown callsign, fall back to adsb.lol routeset.
     if (!enrich_flight_from_adsbdb(flights.front()))
     {
-        enrich_flight_from_airlabs(flights.front());
+        enrich_flight_from_adsb_lol(flights.front());
     }
 
     log_i(
