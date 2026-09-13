@@ -9,6 +9,8 @@
 
 namespace
 {
+constexpr const char *kApiUserAgent = "ESP32-FlightTracker (contact:gurusingha.92@gmail.com)";
+
 bool extract_json_string(const char *json, const char *key, char *value, size_t value_capacity)
 {
     char needle[64];
@@ -184,6 +186,7 @@ bool fetch_airport_runways(const String &icao, airport_runway_info &airport, Str
         log_e("%s", error_message.c_str());
         return false;
     }
+    client.setUserAgent(kApiUserAgent);
 
     int httpCode = client.GET();
     if (httpCode != HTTP_CODE_OK)
@@ -293,6 +296,7 @@ bool get_nearby_airports_and_runways(float latitude, float longitude, float dist
         log_e("%s", error_message.c_str());
         return false;
     }
+    client.setUserAgent(kApiUserAgent);
 
     if (cfg.logostreamApiKey[0] != '\0')
     {

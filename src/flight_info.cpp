@@ -12,6 +12,8 @@
 
 namespace
 {
+constexpr const char *kApiUserAgent = "ESP32-FlightTracker (contact:gurusingha.92@gmail.com)";
+
 /**
  * @brief Simple HTTPS GET helper (cert validation disabled — matches
  *        the existing airport_info.cpp pattern).
@@ -29,6 +31,7 @@ bool https_get(const String &url, String &response, String &error_message)
         log_e("%s", error_message.c_str());
         return false;
     }
+    client.setUserAgent(kApiUserAgent);
 
     const int http_code = client.GET();
     if (http_code != HTTP_CODE_OK)
@@ -66,9 +69,9 @@ bool https_post(const String &url, const String &body, String &response, String 
         return false;
     }
 
+    client.setUserAgent(kApiUserAgent);
     client.addHeader("Content-Type", "application/json");
     client.addHeader("Referer", "https://adsb.lol/");
-    client.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
     const int http_code = client.POST(body);
     if (http_code != HTTP_CODE_OK)
     {
@@ -713,6 +716,7 @@ size_t get_logo(const char *icao_airline, std::vector<uint8_t> &buffer, String &
         log_e("%s", error_message.c_str());
         return 0;
     }
+    client.setUserAgent(kApiUserAgent);
 
     const auto httpResultCode = client.GET();
     if (httpResultCode != HTTP_CODE_OK)
