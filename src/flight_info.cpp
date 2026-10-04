@@ -705,7 +705,7 @@ size_t get_logo(const char *icao_airline, std::vector<uint8_t> &buffer, String &
     }
 
     /* ── CACHE MISS: Fetch PNG from API ── */
-    const String logo_url = "http://airlines-api.logostream.dev/airlines/icao/" + String(icao_airline) + "?key=" + String(cfg.logostreamApiKey) + "&variant=icon-transparent&format=png&size=35";
+    const String logo_url = "https://airlines-api.logostream.dev/airlines/icao/" + String(icao_airline) + "?key=" + String(cfg.logostreamApiKey) + "&variant=icon-transparent&format=png&size=35";
     log_i("PNG cache MISS: fetching %s from API (Heap=%u)", icao_airline, ESP.getFreeHeap());
 
     HTTPClient client;
@@ -717,6 +717,7 @@ size_t get_logo(const char *icao_airline, std::vector<uint8_t> &buffer, String &
         return 0;
     }
     client.setUserAgent(kApiUserAgent);
+    client.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
 
     const auto httpResultCode = client.GET();
     if (httpResultCode != HTTP_CODE_OK)

@@ -283,7 +283,7 @@ bool get_nearby_airports_and_runways(float latitude, float longitude, float dist
 
     FlightConfig cfg = webConfigGet();
 
-    String nearby_url = String("http://aviation-api.logostream.dev/v1/nearby?lat=") + String(latitude, 6) +
+    String nearby_url = String("https://aviation-api.logostream.dev/v1/nearby?lat=") + String(latitude, 6) +
                         "&lng=" + String(longitude, 6) +
                         "&distance=" + String(distance_km, 0);
 
@@ -297,6 +297,7 @@ bool get_nearby_airports_and_runways(float latitude, float longitude, float dist
         return false;
     }
     client.setUserAgent(kApiUserAgent);
+    client.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
 
     if (cfg.logostreamApiKey[0] != '\0')
     {
@@ -308,7 +309,7 @@ bool get_nearby_airports_and_runways(float latitude, float longitude, float dist
     {
         client.end();
         log_e("Nearby airport HTTP error code: %d", httpCode);
-        error_message = "Nearby airport request failed";
+        error_message = "Nearby airport request failed — check Logostream API key and HTTPS access";
         return false;
     }
 
