@@ -110,6 +110,19 @@ bool enrich_flight_from_adsblol(flight_info &flight)
         return false;
     }
 
+    // Airline ICAO is normally the first three letters of the callsign
+    // (e.g. "AIQ320" -> "AIQ"). adsb.lol's routeset omits `airline_code`
+    // entirely when it cannot resolve a route, so derive it from the callsign
+    // as a fallback — otherwise the airline name lookup has nothing to match
+    // and the UI shows "N/A".
+    if (flight.icao_airline.isEmpty() && flight.callsign.length() >= 3)
+    {
+        const String prefix = flight.callsign.substring(0, 3);
+        const char *p = prefix.c_str();
+        if (isAlpha(p[0]) && isAlpha(p[1]) && isAlpha(p[2]))
+            flight.icao_airline = prefix;
+    }
+
     // POST the closest flight's position so adsb.lol can compute whether
     // the route is plausible for the aircraft's current location.
     const String url = "https://api.adsb.lol/api/0/routeset";
@@ -150,13 +163,14 @@ bool enrich_flight_from_adsblol(flight_info &flight)
     }
 
     // A non-plausible match is usually a callsign collision or misassociated
-    // data — better to show "N/A" than a wrong route.
+    // data, but the airports are still often correct. Keep the route and let
+    // the UI flag it with a "*" instead of discarding it.
     const bool plausible = route["plausible"] | true;
+    flight.route_plausible = plausible;
     if (!plausible)
     {
-        log_w("adsb.lol routeset: %s route %s is not plausible, skipping",
+        log_w("adsb.lol routeset: %s route %s is not plausible (keeping, flagged)",
               flight.callsign.c_str(), airport_codes.c_str());
-        return false;
     }
 
     const String airline_code = route["airline_code"] | "unknown";
@@ -326,7 +340,8 @@ static void airlabs_route_cache_add(const AirlabsRouteEntry &entry)
  */
 static void airlabs_apply_route(flight_info &flight, const AirlabsRouteEntry &route)
 {
-    flight.icao_airline = route.airline_icao;
+    if (route.airline_icao[0] != '\0')
+        flight.icao_airline = route.airline_icao;
 
     if (route.flight_iata[0] != '\0')
         flight.iata_callsign = route.flight_iata;

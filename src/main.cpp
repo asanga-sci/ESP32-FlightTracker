@@ -57,6 +57,7 @@ typedef struct
     int ground_speed;
     int heading_deg;
     bool on_ground;                  // alt_baro == "ground" from adsb.lol
+    bool route_plausible;            // adsb.lol says route matches aircraft position
 } flight_msg_t;
 
 typedef struct
@@ -341,6 +342,7 @@ void http_fetch_task(void *param)
                     flight_msg.ground_speed = f.ground_speed;
                     flight_msg.heading_deg = f.heading;
                     flight_msg.on_ground = f.on_ground;
+                    flight_msg.route_plausible = f.route_plausible;
 
                     wrapper_msg.flights[wrapper_msg.count++] = flight_msg;
                 }
@@ -489,6 +491,7 @@ void ui_update_task(void *param)
                     msg.aircraft_code[0] ? msg.aircraft_code : "N/A",
                     msg.origin[0] ? msg.origin : "N/A",
                     msg.destination[0] ? msg.destination : "N/A",
+                    msg.route_plausible,
                     msg.latitude,
                     msg.longitude,
                     msg.distance_km,
@@ -508,6 +511,7 @@ void ui_update_task(void *param)
                     "----",
                     "----",
                     "----",
+                    false,
                     0.0,
                     0.0,
                     0.0,

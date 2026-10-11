@@ -27,6 +27,7 @@ struct flight_info
     time_t timestamp;
     String origin_airport;           // IATA code from adsb.lol routeset (e.g. "DMK"); falls back to ICAO/municipality
     String destination_airport;      // IATA code from adsb.lol routeset (e.g. "KKC"); falls back to ICAO/municipality
+    bool route_plausible;            // adsb.lol says the route matches the aircraft's position
     bool on_ground;
     int vertical_speed;              // ft/min
     String callsign;                 // raw callsign from adsb.lol (e.g. "TLM646")
