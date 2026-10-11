@@ -9,6 +9,8 @@
 
 namespace
 {
+constexpr const char *kApiUserAgent = "ESP32-FlightTracker (contact:gurusingha.92@gmail.com)";
+
 bool extract_json_string(const char *json, const char *key, char *value, size_t value_capacity)
 {
     char needle[64];
@@ -184,6 +186,7 @@ bool fetch_airport_runways(const String &icao, airport_runway_info &airport, Str
         log_e("%s", error_message.c_str());
         return false;
     }
+    client.setUserAgent(kApiUserAgent);
 
     int httpCode = client.GET();
     if (httpCode != HTTP_CODE_OK)
@@ -280,7 +283,7 @@ bool get_nearby_airports_and_runways(float latitude, float longitude, float dist
 
     FlightConfig cfg = webConfigGet();
 
-    String nearby_url = String("http://aviation-api.logostream.dev/v1/nearby?lat=") + String(latitude, 6) +
+    String nearby_url = String("https://aviation-api.logostream.dev/v1/nearby?lat=") + String(latitude, 6) +
                         "&lng=" + String(longitude, 6) +
                         "&distance=" + String(distance_km, 0);
 
@@ -293,6 +296,8 @@ bool get_nearby_airports_and_runways(float latitude, float longitude, float dist
         log_e("%s", error_message.c_str());
         return false;
     }
+    client.setUserAgent(kApiUserAgent);
+    client.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
 
     if (cfg.logostreamApiKey[0] != '\0')
     {
@@ -304,7 +309,7 @@ bool get_nearby_airports_and_runways(float latitude, float longitude, float dist
     {
         client.end();
         log_e("Nearby airport HTTP error code: %d", httpCode);
-        error_message = "Nearby airport request failed";
+        error_message = "Nearby airport request failed — check Logostream API key and HTTPS access";
         return false;
     }
 

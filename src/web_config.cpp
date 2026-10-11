@@ -19,7 +19,8 @@ static constexpr const char* KEY_LON     = "lon";
 static constexpr const char* KEY_RADIUS  = "radius";
 static constexpr const char* LOGO_SUPPORT  = "logoSupport";
 static constexpr const char* LOGOSTREAM_KEY  = "logostreamKey";
-static constexpr const char* ADSB_LOL_FALLBACK = "adsbLolFallback";
+static constexpr const char* AIRLABS_FALLBACK = "airlabsFallback";
+static constexpr const char* AIRLABS_KEY  = "airlabsKey";
 
 // ─── AP defaults ──────────────────────────────────────────────────────────────
 static constexpr const char* AP_SSID = "FlightTracker-Setup";
@@ -154,9 +155,20 @@ static const char PAGE_SETUP[] PROGMEM = R"raw(
 <div class="f">
   <label>
     <input type="checkbox"
-           name="adsbLolFallback">
-    Enable ADSB.lol route fallback
+           name="airlabsFallback"
+           onchange="toggleKey(this,'airlabsKey')">
+    Enable AirLabs route fallback
   </label>
+</div>
+
+<div class="f">
+  <label>AirLabs API Key</label>
+  <input type="text"
+         name="airlabsApiKey"
+         id="airlabsKey"
+         placeholder="Optional — route fallback"
+         maxlength="50"
+         disabled>
 </div>
 
 <button type="submit" class="bs">
@@ -170,7 +182,7 @@ function toggleKey(cb,id){var e=document.getElementById(id);if(e)e.disabled=!cb.
 // Settings page template — printf tokens in order:
 //   ssid, ip, saved_banner, ssid, lat, lon, radius,
 //   logoChecked, logoKeyDisabled, logostreamApiKey,
-//   adsbLolChecked
+//   airlabsChecked, airlabsKeyDisabled, airlabsApiKey
 static const char PAGE_SETTINGS_TPL[] PROGMEM = R"raw(
 <div class="icon">⚙️</div>
 <h1>Flight Tracker Settings</h1>
@@ -218,10 +230,20 @@ static const char PAGE_SETTINGS_TPL[] PROGMEM = R"raw(
   <div class="f">
     <label>
       <input type="checkbox"
-            name="adsbLolFallback"
-            %s>
-      Enable ADSB.lol route fallback
+            name="airlabsFallback"
+            %s
+            onchange="toggleKey(this,'airlabsKey')">
+      Enable AirLabs route fallback
     </label>
+  </div>
+
+  <div class="f">
+    <label>AirLabs API Key <span style="font-weight:400;color:#475569">(optional — route fallback)</span></label>
+    <input type="text"
+          name="airlabsApiKey"
+          id="airlabsKey"
+          value="%s"
+          %s>
   </div>
 
   <button type="submit" class="bs">💾 Save &amp; Reboot</button>
@@ -254,7 +276,8 @@ static bool nvsLoad(FlightConfig& c) {
     c.radiusKm  = s_prefs.getFloat(KEY_RADIUS, 150.0f);
     c.logoSupport = s_prefs.getBool(LOGO_SUPPORT, false);
     s_prefs.getString(LOGOSTREAM_KEY, c.logostreamApiKey, sizeof(c.logostreamApiKey));
-    c.adsbLolFallback = s_prefs.getBool(ADSB_LOL_FALLBACK, false);
+    c.airlabsFallback = s_prefs.getBool(AIRLABS_FALLBACK, false);
+    s_prefs.getString(AIRLABS_KEY, c.airlabsApiKey, sizeof(c.airlabsApiKey));
     s_prefs.end();
     return true;
 }
@@ -268,7 +291,8 @@ static void nvsSave(const FlightConfig& c) {
     s_prefs.putFloat(KEY_RADIUS,  c.radiusKm);
     s_prefs.putBool(LOGO_SUPPORT, c.logoSupport);
     s_prefs.putString(LOGOSTREAM_KEY, c.logostreamApiKey);
-    s_prefs.putBool(ADSB_LOL_FALLBACK, c.adsbLolFallback);
+    s_prefs.putBool(AIRLABS_FALLBACK, c.airlabsFallback);
+    s_prefs.putString(AIRLABS_KEY, c.airlabsApiKey);
     s_prefs.putBool(KEY_VALID,    true);
     s_prefs.end();
 }
@@ -293,13 +317,15 @@ static void parseForm(FlightConfig& dst, bool isEdit) {
     if (dst.radiusKm < 10) dst.radiusKm = 10;
 
     dst.logoSupport = formArg("logoSupport") == "on";
-    dst.adsbLolFallback = formArg("adsbLolFallback") == "on";
+    dst.airlabsFallback = formArg("airlabsFallback") == "on";
 
     // Disabled inputs are not submitted by the browser. When a feature is
     // turned off, keep the previously-saved key so re-enabling it restores
     // the value; on a fresh setup (isEdit=false) leave it empty.
     if (dst.logoSupport || !isEdit)
         strncpy(dst.logostreamApiKey, formArg("logostreamApiKey").c_str(), sizeof(dst.logostreamApiKey) - 1);
+    if (dst.airlabsFallback || !isEdit)
+        strncpy(dst.airlabsApiKey, formArg("airlabsApiKey").c_str(), sizeof(dst.airlabsApiKey) - 1);
 }
 
 // ─── Response helpers ─────────────────────────────────────────────────────────
@@ -351,7 +377,9 @@ static void onSettingsGet() {
         snap.logoSupport ? "checked" : "",
         snap.logoSupport ? "" : "disabled",
         snap.logostreamApiKey,
-        snap.adsbLolFallback ? "checked" : "");
+        snap.airlabsFallback ? "checked" : "",
+        snap.airlabsFallback ? "" : "disabled",
+        snap.airlabsApiKey);
 
     s_server.setContentLength(CONTENT_LENGTH_UNKNOWN);
     s_server.send(200, "text/html", "");

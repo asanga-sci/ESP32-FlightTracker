@@ -91,8 +91,9 @@ typedef struct
 {
     char icao_address[7];
     char flight[10];
-    char origin[32];        /* municipality from adsbdb (e.g. "Bangkok") */
-    char destination[32];   /* municipality from adsbdb (e.g. "Khon Kaen") */
+    char origin[32];        /* IATA code from adsb.lol routeset (e.g. "BKK") */
+    char destination[32];   /* IATA code from adsb.lol routeset (e.g. "CEI") */
+    bool route_plausible;   /* adsb.lol says route matches aircraft position */
     char aircraft_code[8];
     float latitude;
     float longitude;
@@ -112,6 +113,7 @@ static flight_data_t g_flight = {
     .flight = "----",
     .origin = "---",
     .destination = "---",
+    .route_plausible = false,
     .aircraft_code = "---",
     .airline = "---",
     .latitude = 0,
@@ -626,8 +628,15 @@ static void update_route_row(const char *origin, const char *destination)
     lv_obj_set_pos(g_lbl_route_arrow, x, ROUTE_ROW_ARROW_Y);
     x += lv_obj_get_width(g_lbl_route_arrow) + ROUTE_ROW_GAP;
 
+    /* adsb.lol-confirmed routes get a trailing asterisk marker. */
+    char dest_buf[40];
+    if (!g_flight.route_plausible)
+        snprintf(dest_buf, sizeof(dest_buf), "%s *", destination);
+    else
+        snprintf(dest_buf, sizeof(dest_buf), "%s", destination);
+
     const lv_coord_t dest_max_w = ROUTE_ROW_X + ROUTE_ROW_MAX_W - x;
-    update_route_label(g_lbl_destination, destination, dest_max_w);
+    update_route_label(g_lbl_destination, dest_buf, dest_max_w);
     if (lv_obj_get_width(g_lbl_destination) > dest_max_w)
         lv_obj_set_width(g_lbl_destination, dest_max_w);
     lv_obj_set_pos(g_lbl_destination, x, ROUTE_ROW_Y);
@@ -844,7 +853,7 @@ void flight_tracker_ui_init(void)
     make_label(scr, "AIRLINE", &lv_font_montserrat_10, CLR_GRAY,
                LV_ALIGN_TOP_RIGHT, -4, 28);
 
-    g_lbl_airline = make_label(scr, g_flight.airline, &lv_font_montserrat_14, CLR_GREEN,
+    g_lbl_airline = make_label(scr, g_flight.airline, &lv_font_montserrat_12, CLR_GREEN,
                                LV_ALIGN_TOP_RIGHT, -4, 40);
     lv_obj_set_content_width(g_lbl_airline, 100);
     lv_label_set_long_mode(g_lbl_airline, LV_LABEL_LONG_WRAP);
@@ -946,7 +955,7 @@ void flight_tracker_ui_init(void)
     lv_obj_align(ftr, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_clear_flag(ftr, LV_OBJ_FLAG_SCROLLABLE);
 
-    make_label(ftr, LV_SYMBOL_GPS " airplanes.live", &lv_font_montserrat_10, CLR_GREEN,
+    make_label(ftr, LV_SYMBOL_GPS " adsb.lol", &lv_font_montserrat_10, CLR_GREEN,
                LV_ALIGN_LEFT_MID, 4, 0);
 
     g_lbl_last_upd = make_label(ftr, "last update: 0s ago",
@@ -979,7 +988,7 @@ void setRadarRadius(float radius_km)
 /* ═══════════════════════════════════════════════════════════════════════
  *  API: inject real ADS-B data from your decoder (call from main loop)
  * ═══════════════════════════════════════════════════════════════════════*/
-void flight_tracker_update(const char *icao_address, const char *flight, const char *aircraft_code, const char *origin, const char *destination, float latitude, float longitude, float distance_km, int bearing_deg, int altitude_ft,
+void flight_tracker_update(const char *icao_address, const char *flight, const char *aircraft_code, const char *origin, const char *destination, bool route_plausible, float latitude, float longitude, float distance_km, int bearing_deg, int altitude_ft,
                            bool on_ground, int vertical_speed, int ground_speed, int heading_deg, const char *airline)
 {
     // CRITICAL: Copy strings into buffers to avoid dangling pointers
@@ -998,6 +1007,8 @@ void flight_tracker_update(const char *icao_address, const char *flight, const c
 
     strncpy(g_flight.destination, destination ? destination : "---", sizeof(g_flight.destination) - 1);
     g_flight.destination[sizeof(g_flight.destination) - 1] = '\0';
+
+    g_flight.route_plausible = route_plausible;
 
     strncpy(g_flight.airline, airline ? airline : "---", sizeof(g_flight.airline) - 1);
     g_flight.airline[sizeof(g_flight.airline) - 1] = '\0';

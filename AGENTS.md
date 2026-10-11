@@ -22,7 +22,7 @@ No test suite exists. The `test/` directory is empty.
 | Task | Core | Priority | Stack | Purpose |
 |---|---|---|---|---|
 | `UI_Task` | 0 | 4 | 16 KB | LVGL timer handler, screen updates, flight data rendering |
-| `HTTP_Task` | 1 | 5 | 16 KB | Fetches aircraft from airplanes.live, enriches via adsbdb.com every 10 s (TLS handshake needs ~8 KB stack + ~30-40 KB heap; 16 KB is safe now that the 9 KB wrapper msg is static) |
+| `HTTP_Task` | 1 | 5 | 16 KB | Fetches aircraft from adsb.lol (`/v2/point`), enriches the closest one via `/api/0/routeset` (POST) every 10 s (TLS handshake needs ~8 KB stack + ~30-40 KB heap; 16 KB is safe now that the 9 KB wrapper msg is static) |
 | `Fetch_Logo_Task` | 1 | 2 | 8 KB | Fetches + decodes airline logo PNGs (optional, per config) |
 | `resetBtn` | 0 | 1 | 2 KB | Watches BOOT button for 3 s hold → factory reset |
 
@@ -35,7 +35,7 @@ No test suite exists. The `test/` directory is empty.
 | File | Role |
 |---|---|
 | `src/main.cpp` | Application entry, task definitions, Haversine math, inter-task queues |
-| `src/flight_info.cpp` | airplanes.live position fetch, adsbdb.com route/airline enrichment, PNG logo fetch + in-memory LRU cache |
+| `src/flight_info.cpp` | adsb.lol position fetch, `/api/0/routeset` route/airline enrichment, PNG logo fetch + in-memory LRU cache |
 | `legacy/flight_info_fr24.*` | Retired FlightRadar24 data source (kept for reference, not compiled) |
 | `src/web_config.cpp` | NVS config load/save, WiFi AP+STA, captive portal + settings page |
 | `src/ui/flight_tracker_ui.c` | LVGL 9.x UI — radar screen, flight info panel, logo display (C file, extern "C") |
@@ -47,7 +47,7 @@ No test suite exists. The `test/` directory is empty.
 
 ### Data flow
 
-1. `HTTP_Task` calls `get_flights()` → fetches aircraft from the airplanes.live point API, sorts by distance, enriches the closest aircraft with route/airline data from adsbdb.com → packs into `flights_wrapper_msg_t` → pushes to `g_flight_queue` (overwrite semantics).
+1. `HTTP_Task` calls `get_flights()` → fetches aircraft from the adsb.lol `/v2/point` API (radius in NM), sorts by distance, enriches the closest aircraft with route/airline data from adsb.lol's `/api/0/routeset` (POST, requires `Referer: https://adsb.lol/` header) → packs into `flights_wrapper_msg_t` → pushes to `g_flight_queue` (overwrite semantics).
 2. `UI_Task` reads `g_flight_queue` → sorts by distance → updates LVGL widgets via `flight_tracker_update()`.
 3. Logo requests go through `g_airline_logo_req_queue` → `Fetch_Logo_Task` fetches PNG, decodes with LodePNG, converts RGBA→BGRA, signals UI via `g_airline_logo_response_queue`.
 4. All inter-task communication uses FreeRTOS queues (single-slot, overwrite-on-full).
