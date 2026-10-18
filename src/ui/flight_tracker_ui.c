@@ -855,7 +855,7 @@ void flight_tracker_ui_init(void)
 
     g_lbl_airline = make_label(scr, g_flight.airline, &lv_font_montserrat_12, CLR_GREEN,
                                LV_ALIGN_TOP_RIGHT, -4, 40);
-    lv_obj_set_content_width(g_lbl_airline, 100);
+    lv_obj_set_content_width(g_lbl_airline, 80);
     lv_label_set_long_mode(g_lbl_airline, LV_LABEL_LONG_WRAP);
     lv_obj_set_style_text_align(g_lbl_airline, LV_TEXT_ALIGN_RIGHT, 0);
 
