@@ -51,5 +51,7 @@ struct flight_info
 // Planes are sorted by distance (closest first); the closest aircraft is
 // enriched with route/airline data from adsb.lol's /api/0/routeset endpoint.
 extern bool get_flights(float latitude, float longitude, float range_latitude, float range_longitude, bool air, bool ground, bool gliders, bool vehicles, std::vector<flight_info> &flights, String &error_message);
+extern int get_last_adsb_http_code(void);
+extern void set_last_adsb_http_code(int http_code);
 extern size_t get_logo(const char *icao_airline, std::vector<uint8_t> &buffer, String &error_message);
 extern void png_cache_remove(const char *icao_airline);

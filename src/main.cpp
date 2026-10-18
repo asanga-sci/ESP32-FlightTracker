@@ -280,11 +280,13 @@ void http_fetch_task(void *param)
 
             // Fetch into temporary list (no mutex needed here)
             // range_latitude now carries the search radius in km
-            get_flights(cfg.lat, cfg.lon, cfg.radiusKm, cfg.radiusKm, true, false, true, true, local_flights, error_message);
+            const bool fetch_ok = get_flights(cfg.lat, cfg.lon, cfg.radiusKm, cfg.radiusKm, true, false, true, true, local_flights, error_message);
+            const int last_http_code = get_last_adsb_http_code();
+            flight_tracker_set_service_status(last_http_code);
 
             const bool have_flight_data = !local_flights.empty();
             int target_interval_ms = base_fetch_interval_ms;
-            if (!error_message.isEmpty())
+            if (!fetch_ok || !error_message.isEmpty())
             {
                 target_interval_ms = 15000;
                 log_e("[Flight Fetch Task]: Error fetching flights: %s", error_message.c_str());

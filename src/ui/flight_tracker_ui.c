@@ -155,8 +155,12 @@ static lv_obj_t *g_lbl_heading;
 static lv_obj_t *g_lbl_vs;
 static lv_obj_t *g_lbl_time;
 static lv_obj_t *g_lbl_last_upd;
+static lv_obj_t *g_service_overlay = NULL;
+static lv_obj_t *g_service_title = NULL;
+static lv_obj_t *g_service_code = NULL;
 static lv_obj_t *plane_logo;
 static lv_obj_t *airline_logo;
+static int g_service_http_code = 0;
 
 /* canvas pixel buffer — allocated from heap to save BSS space */
 static uint8_t *g_canvas_buf = NULL;
@@ -491,6 +495,37 @@ static void display_airline_logo(const lv_img_dsc_t *logo_dsc)
     lv_obj_invalidate(airline_logo);
 }
 
+void flight_tracker_set_service_status(int http_code)
+{
+    g_service_http_code = http_code;
+
+    if (g_service_code != NULL)
+    {
+        char buf[32];
+        if (http_code > 0)
+            snprintf(buf, sizeof(buf), "HTTP code %d", http_code);
+        else
+            snprintf(buf, sizeof(buf), "HTTP code N/A");
+        lv_label_set_text(g_service_code, buf);
+    }
+}
+
+static void set_service_overlay_visible(bool visible)
+{
+    if (g_service_overlay == NULL)
+        return;
+
+    if (visible)
+    {
+        lv_obj_clear_flag(g_service_overlay, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_move_foreground(g_service_overlay);
+    }
+    else
+    {
+        lv_obj_add_flag(g_service_overlay, LV_OBJ_FLAG_HIDDEN);
+    }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════
  *  DOUBLE-BUFFER LOGO FUNCTIONS
  *  get_next_logo_buffer() — returns pointer to buffer for next decode
@@ -719,6 +754,11 @@ static void ui_timer_cb(lv_timer_t *t)
         uint32_t elapsed_secs = (elapsed_ms + 500) / 1000; /* Round to nearest second */
         snprintf(buf, sizeof(buf), "last update: %lus ago", (unsigned long)elapsed_secs);
         lv_label_set_text(g_lbl_last_upd, buf);
+
+        if (elapsed_secs >= 60U)
+            set_service_overlay_visible(true);
+        else
+            set_service_overlay_visible(false);
     }
 }
 
@@ -962,6 +1002,25 @@ void flight_tracker_ui_init(void)
                                 &lv_font_montserrat_10, CLR_GRAY,
                                 LV_ALIGN_RIGHT_MID, -4, 0);
 
+    g_service_overlay = lv_obj_create(scr);
+    lv_obj_set_size(g_service_overlay, 180, 86);
+    lv_obj_set_style_bg_color(g_service_overlay, lv_color_hex(0x0A1628), 0);
+    lv_obj_set_style_bg_opa(g_service_overlay, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_color(g_service_overlay, lv_color_hex(0xFF6666), 0);
+    lv_obj_set_style_border_width(g_service_overlay, 1, 0);
+    lv_obj_set_style_radius(g_service_overlay, 12, 0);
+    lv_obj_set_style_pad_all(g_service_overlay, 0, 0);
+    lv_obj_align(g_service_overlay, LV_ALIGN_CENTER, 0, -8);
+    lv_obj_add_flag(g_service_overlay, LV_OBJ_FLAG_HIDDEN);
+
+    g_service_title = make_label(g_service_overlay, "service unavailable",
+                                 &lv_font_montserrat_14, CLR_WHITE,
+                                 LV_ALIGN_TOP_MID, 0, 18);
+    g_service_code = make_label(g_service_overlay, "HTTP code N/A",
+                               &lv_font_montserrat_10, lv_color_hex(0xFFB3B3),
+                               LV_ALIGN_BOTTOM_MID, 0, -18);
+    flight_tracker_set_service_status(0);
+
     // display logo
     display_airline_logo(NULL);
 
@@ -1023,6 +1082,7 @@ void flight_tracker_update(const char *icao_address, const char *flight, const c
     g_flight.ground_speed = ground_speed;
     g_flight.heading_deg = heading_deg;
     last_update_timestamp_ms = millis(); /* Capture actual time of update */
+    set_service_overlay_visible(false);
 }
 
 void update_planes_on_radar(latlon_t *planes, int count)

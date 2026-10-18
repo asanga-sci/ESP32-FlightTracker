@@ -60,6 +60,7 @@ void update_planes_on_radar(latlon_t *planes, int count);
 void update_airport_runways(const airport_runway_overlay_t *airports, int count);
 void update_time(const char *time_str);
 void update_logo(const lv_image_dsc_t *logo_dsc);
+void flight_tracker_set_service_status(int http_code);
 
 /* ═══════════════════════════════════════════════════════════════════════
  *  DOUBLE-BUFFER LOGO API (thread-safe, prevents memory corruption)

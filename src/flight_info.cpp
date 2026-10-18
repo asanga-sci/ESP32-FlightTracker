@@ -13,6 +13,19 @@
 namespace
 {
 constexpr const char *kApiUserAgent = "ESP32-FlightTracker (contact:gurusingha.92@gmail.com)";
+}
+
+int g_last_adsb_http_code = 0;
+
+int get_last_adsb_http_code(void)
+{
+    return g_last_adsb_http_code;
+}
+
+void set_last_adsb_http_code(int http_code)
+{
+    g_last_adsb_http_code = http_code;
+}
 
 /**
  * @brief Simple HTTPS GET helper (cert validation disabled — matches
@@ -34,6 +47,7 @@ bool https_get(const String &url, String &response, String &error_message)
     client.setUserAgent(kApiUserAgent);
 
     const int http_code = client.GET();
+    set_last_adsb_http_code(http_code);
     if (http_code != HTTP_CODE_OK)
     {
         client.end();
@@ -73,6 +87,7 @@ bool https_post(const String &url, const String &body, String &response, String 
     client.addHeader("Content-Type", "application/json");
     client.addHeader("Referer", "https://adsb.lol/");
     const int http_code = client.POST(body);
+    set_last_adsb_http_code(http_code);
     if (http_code != HTTP_CODE_OK)
     {
         client.end();
@@ -447,7 +462,6 @@ bool enrich_flight_from_airlabs(flight_info &flight)
           flight.icao_airline.c_str());
     return true;
 }
-} // namespace
 
 bool get_flights(float latitude, float longitude, float range_latitude, float range_longitude, bool air, bool ground, bool gliders, bool vehicles, std::vector<flight_info> &flights, String &error_message)
 {
