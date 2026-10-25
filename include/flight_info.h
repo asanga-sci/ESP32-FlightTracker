@@ -53,5 +53,8 @@ struct flight_info
 extern bool get_flights(float latitude, float longitude, float range_latitude, float range_longitude, bool air, bool ground, bool gliders, bool vehicles, std::vector<flight_info> &flights, String &error_message);
 extern int get_last_adsb_http_code(void);
 extern void set_last_adsb_http_code(int http_code);
+// Delay requested by the server via the Retry-After header on a 429 (seconds).
+extern uint32_t get_adsb_retry_after_sec(void);
+extern void set_adsb_retry_after_sec(uint32_t seconds);
 extern size_t get_logo(const char *icao_airline, std::vector<uint8_t> &buffer, String &error_message);
 extern void png_cache_remove(const char *icao_airline);

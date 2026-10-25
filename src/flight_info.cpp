@@ -6,16 +6,21 @@
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 #include <algorithm>
+#include <cstdio>
+#include <cstring>
+#include <ctime>
 #include <esp32-hal-log.h>
 #include <math.h>
 #include <vector>
 
 namespace
 {
-constexpr const char *kApiUserAgent = "ESP32-FlightTracker (contact:gurusingha.92@gmail.com)";
+constexpr const char *kApiUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36";
+constexpr int kHttpTooManyRequestsCode = 429;
 }
 
 int g_last_adsb_http_code = 0;
+uint32_t g_adsb_retry_after_sec = 0;
 
 int get_last_adsb_http_code(void)
 {
@@ -27,14 +32,109 @@ void set_last_adsb_http_code(int http_code)
     g_last_adsb_http_code = http_code;
 }
 
+uint32_t get_adsb_retry_after_sec(void)
+{
+    return g_adsb_retry_after_sec;
+}
+
+void set_adsb_retry_after_sec(uint32_t seconds)
+{
+    g_adsb_retry_after_sec = seconds;
+}
+
+/**
+ * @brief Parse a Retry-After header value into seconds.
+ *        Supports both forms from RFC 9110:
+ *          - delay-seconds: "120"
+ *          - HTTP-date:     "Sun, 06 Nov 1994 08:49:37 GMT"
+ *        Returns 0 when the value is missing/unparseable.
+ */
+static uint32_t parse_retry_after(const String &value)
+{
+    String v = value;
+    v.trim();
+    if (v.isEmpty())
+        return 0;
+
+    bool numeric = true;
+    for (size_t i = 0; i < v.length(); ++i)
+    {
+        if (v[i] < '0' || v[i] > '9')
+        {
+            numeric = false;
+            break;
+        }
+    }
+    if (numeric)
+        return (uint32_t)v.toInt();
+
+    /* HTTP-date (IMF-fixdate). Convert the UTC components to an epoch. */
+    char mon[4] = {0};
+    int day = 0, year = 0, hh = 0, mm = 0, ss = 0;
+    if (sscanf(v.c_str(), "%*3s, %d %3s %d %d:%d:%d", &day, mon, &year, &hh, &mm, &ss) != 6)
+        return 0;
+
+    static const char kMonths[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
+    int month = 0;
+    for (int i = 0; i < 12; ++i)
+    {
+        if (strncmp(mon, kMonths + i * 3, 3) == 0)
+        {
+            month = i + 1;
+            break;
+        }
+    }
+    if (month == 0)
+        return 0;
+
+    /* days_from_civil (Howard Hinnant), epoch 1970-01-01. */
+    int y = year - (month <= 2);
+    int era = (y >= 0 ? y : y - 399) / 400;
+    unsigned yoe = (unsigned)(y - era * 400);
+    unsigned doy = (153u * (unsigned)(month + (month > 2 ? -3 : 9)) + 2u) / 5u + (unsigned)(day - 1);
+    unsigned doe = yoe * 365u + yoe / 4u - yoe / 100u + doy;
+    long long days = (long long)era * 146097LL + (long long)doe - 719468LL;
+    long long target = days * 86400LL + hh * 3600LL + mm * 60LL + ss;
+
+    time_t now = time(nullptr);
+    if (now < 1600000000)
+        return 0; /* clock not NTP-synced yet — caller falls back to the default */
+    if (target <= (long long)now)
+        return 1; /* date already passed — retry after a short delay */
+    long long delta = target - (long long)now;
+    return (uint32_t)(delta > 0xFFFFFFFFLL ? 0xFFFFFFFFLL : delta);
+}
+
+/**
+ * @brief Add the configured adsb.lol API key (if any) to an adsb.lol request.
+ *        Keys are only ever sent to adsb.lol hosts, never to third parties.
+ */
+static void add_adsb_api_key_header(HTTPClient &client, const String &url)
+{
+    if (url.indexOf("adsb.lol") < 0)
+        return;
+
+    FlightConfig cfg = webConfigGet();
+    if (cfg.adsbLolApiKey[0] != '\0')
+        client.addHeader("x-api-key", cfg.adsbLolApiKey);
+}
+
 /**
  * @brief Simple HTTPS GET helper (cert validation disabled — matches
  *        the existing airport_info.cpp pattern).
  */
 bool https_get(const String &url, String &response, String &error_message)
 {
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        error_message = "WiFi not connected";
+        log_e("%s", error_message.c_str());
+        return false;
+    }
+
     WiFiClientSecure wifi_client;
     wifi_client.setInsecure();
+    wifi_client.setTimeout(15000);
 
     HTTPClient client;
     log_i("Request: %s", url.c_str());
@@ -42,15 +142,34 @@ bool https_get(const String &url, String &response, String &error_message)
     {
         error_message = "Failed to start HTTPS client";
         log_e("%s", error_message.c_str());
+        wifi_client.stop();
         return false;
     }
     client.setUserAgent(kApiUserAgent);
+    client.addHeader("Accept", "application/json, text/plain, */*");
+    client.addHeader("Accept-Language", "en-US,en;q=0.9");
+    client.addHeader("Connection", "keep-alive");
+    add_adsb_api_key_header(client, url);
+    client.setConnectTimeout(10000);
+    client.setTimeout(15000);
 
     const int http_code = client.GET();
     set_last_adsb_http_code(http_code);
-    if (http_code != HTTP_CODE_OK)
+    if (http_code == kHttpTooManyRequestsCode)
+    {
+        const uint32_t retry_after = parse_retry_after(client.header("Retry-After"));
+        set_adsb_retry_after_sec(retry_after);
+        client.end();
+        wifi_client.stop();
+        log_w("adsb.lol rate limited (429) for %s; Retry-After=%lu s",
+              url.c_str(), (unsigned long)retry_after);
+        error_message = "HTTP 429 rate limited";
+        return false;
+    }
+    if (http_code < 0 || http_code != HTTP_CODE_OK)
     {
         client.end();
+        wifi_client.stop();
         log_e("HTTPS error code: %d for %s", http_code, url.c_str());
         error_message = "HTTP request failed (" + String(http_code) + ")";
         return false;
@@ -58,6 +177,7 @@ bool https_get(const String &url, String &response, String &error_message)
 
     response = client.getString();
     client.end();
+    wifi_client.stop();
     return true;
 }
 
@@ -71,8 +191,16 @@ bool https_get(const String &url, String &response, String &error_message)
  */
 bool https_post(const String &url, const String &body, String &response, String &error_message)
 {
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        error_message = "WiFi not connected";
+        log_e("%s", error_message.c_str());
+        return false;
+    }
+
     WiFiClientSecure wifi_client;
     wifi_client.setInsecure();
+    wifi_client.setTimeout(15000);
 
     HTTPClient client;
     log_i("POST: %s", url.c_str());
@@ -80,17 +208,36 @@ bool https_post(const String &url, const String &body, String &response, String 
     {
         error_message = "Failed to start HTTPS client";
         log_e("%s", error_message.c_str());
+        wifi_client.stop();
         return false;
     }
 
     client.setUserAgent(kApiUserAgent);
+    client.setConnectTimeout(10000);
+    client.setTimeout(15000);
     client.addHeader("Content-Type", "application/json");
+    client.addHeader("Accept", "application/json, text/plain, */*");
+    client.addHeader("Accept-Language", "en-US,en;q=0.9");
+    client.addHeader("Origin", "https://adsb.lol");
     client.addHeader("Referer", "https://adsb.lol/");
+    add_adsb_api_key_header(client, url);
     const int http_code = client.POST(body);
     set_last_adsb_http_code(http_code);
-    if (http_code != HTTP_CODE_OK)
+    if (http_code == kHttpTooManyRequestsCode)
+    {
+        const uint32_t retry_after = parse_retry_after(client.header("Retry-After"));
+        set_adsb_retry_after_sec(retry_after);
+        client.end();
+        wifi_client.stop();
+        log_w("adsb.lol routeset rate limited (429) for %s; Retry-After=%lu s",
+              url.c_str(), (unsigned long)retry_after);
+        error_message = "HTTP 429 rate limited";
+        return false;
+    }
+    if (http_code < 0 || http_code != HTTP_CODE_OK)
     {
         client.end();
+        wifi_client.stop();
         log_e("HTTPS error code: %d for %s", http_code, url.c_str());
         error_message = "HTTP request failed (" + String(http_code) + ")";
         return false;
@@ -98,6 +245,7 @@ bool https_post(const String &url, const String &body, String &response, String 
 
     response = client.getString();
     client.end();
+    wifi_client.stop();
     return true;
 }
 
@@ -112,6 +260,22 @@ float dist_km(float lat1, float lon1, float lat2, float lon2)
     return 6371.0f * 2.0f * atan2f(sqrtf(a), sqrtf(1.0f - a));
 }
 
+struct AdsbLolRouteEntry
+{
+    char callsign[16];       /* e.g. "TLM646" */
+    char airline_icao[4];    /* e.g. "TLM" */
+    char origin_iata[8];     /* e.g. "BKK" */
+    char destination_iata[8]; /* e.g. "CEI" */
+    bool plausible;
+    uint32_t last_used;
+    uint32_t cached_at_ms;
+};
+
+static bool adsb_lol_route_cache_ensure();
+static bool adsb_lol_route_cache_lookup(const char *callsign, AdsbLolRouteEntry &out);
+static void adsb_lol_route_cache_add(const AdsbLolRouteEntry &entry);
+static void adsb_lol_apply_route(flight_info &flight, const AdsbLolRouteEntry &route);
+
 /**
  * @brief Enrich one flight with route + airline data from adsb.lol's
  *        /api/0/routeset endpoint (VRS standing data).
@@ -119,10 +283,27 @@ float dist_km(float lat1, float lon1, float lat2, float lon2)
  */
 bool enrich_flight_from_adsblol(flight_info &flight)
 {
+    set_last_adsb_http_code(0);
+    
     if (flight.callsign.isEmpty())
     {
         log_w("adsb.lol: no callsign to look up");
         return false;
+    }
+
+    if (!adsb_lol_route_cache_ensure())
+        return false;
+
+    AdsbLolRouteEntry cached;
+    if (adsb_lol_route_cache_lookup(flight.callsign.c_str(), cached))
+    {
+        adsb_lol_apply_route(flight, cached);
+        log_i("adsb.lol (cached): %s: %s -> %s (airline %s)",
+              flight.iata_callsign.c_str(),
+              flight.origin_airport.c_str(),
+              flight.destination_airport.c_str(),
+              flight.icao_airline.c_str());
+        return !flight.origin_airport.isEmpty() || !flight.destination_airport.isEmpty();
     }
 
     // Airline ICAO is normally the first three letters of the callsign
@@ -192,6 +373,12 @@ bool enrich_flight_from_adsblol(flight_info &flight)
     if (!airline_code.isEmpty() && airline_code != "unknown")
         flight.icao_airline = airline_code;
 
+    AdsbLolRouteEntry cache_entry = {};
+    strncpy(cache_entry.callsign, flight.callsign.c_str(), sizeof(cache_entry.callsign) - 1);
+    strncpy(cache_entry.airline_icao, flight.icao_airline.c_str(), sizeof(cache_entry.airline_icao) - 1);
+    cache_entry.plausible = plausible;
+    cache_entry.cached_at_ms = millis();
+
     // _airport_codes_iata lists origin-destination with IATA codes where the
     // airport has one, otherwise the ICAO code (e.g. "BKK-CEI").
     String codes = route["_airport_codes_iata"] | "";
@@ -239,6 +426,18 @@ bool enrich_flight_from_adsblol(flight_info &flight)
         }
     }
 
+    if (flight.origin_airport.isEmpty() || flight.destination_airport.isEmpty())
+    {
+        cache_entry.origin_iata[0] = '\0';
+        cache_entry.destination_iata[0] = '\0';
+    }
+    else
+    {
+        strncpy(cache_entry.origin_iata, flight.origin_airport.c_str(), sizeof(cache_entry.origin_iata) - 1);
+        strncpy(cache_entry.destination_iata, flight.destination_airport.c_str(), sizeof(cache_entry.destination_iata) - 1);
+    }
+    adsb_lol_route_cache_add(cache_entry);
+
     log_i("adsb.lol: %s: %s -> %s (airline %s)",
           flight.iata_callsign.c_str(),
           flight.origin_airport.c_str(),
@@ -248,219 +447,109 @@ bool enrich_flight_from_adsblol(flight_info &flight)
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   AIRLABS ROUTE CACHE (flight_icao → route data, reduces API calls).
-   Heap-allocated on first use — BSS is already at the DRAM limit, so the
-   ~2.4 KB table must NOT be a static array.
-   ═══════════════════════════════════════════════════════════════════════*/
-#define AIRLABS_ROUTE_CACHE_MAX 50
+   ADSB.LOL ROUTE CACHE (callsign → route data, reduces repeated /routeset calls).
+   Heap-allocated on first use — keeps large tables out of BSS.
+   ═══════════════════════════════════════════════════════════════*/
+#define ADSB_LOL_ROUTE_CACHE_MAX 25
+#define ADSB_LOL_ROUTE_CACHE_TTL_MS (5UL * 60UL * 1000UL)
 
-struct AirlabsRouteEntry
+static AdsbLolRouteEntry *s_adsb_lol_route_cache = nullptr;
+static int s_adsb_lol_route_cache_count = 0;
+static uint32_t s_adsb_lol_route_tick = 0;
+
+static bool adsb_lol_route_cache_ensure()
 {
-    char callsign[10];      /* flight_icao, e.g. "TVJ134" */
-    char airline_icao[4];   /* e.g. "TVJ" */
-    char airline_iata[4];   /* e.g. "VZ" */
-    char flight_iata[7];    /* e.g. "VZ134" */
-    char dep_iata[4];       /* e.g. "BKK" */
-    char dep_icao[5];       /* e.g. "VTBS" */
-    char arr_iata[4];       /* e.g. "CEI" */
-    char arr_icao[5];       /* e.g. "VTCT" */
-    uint32_t last_used;     /* LRU timestamp */
-};
-
-static AirlabsRouteEntry *s_airlabs_route_cache = nullptr;
-static int s_airlabs_route_cache_count = 0;
-static uint32_t s_airlabs_route_tick = 0;
-
-static bool airlabs_route_cache_ensure()
-{
-    if (s_airlabs_route_cache != nullptr)
+    if (s_adsb_lol_route_cache != nullptr)
         return true;
 
-    s_airlabs_route_cache = (AirlabsRouteEntry *)calloc(AIRLABS_ROUTE_CACHE_MAX, sizeof(AirlabsRouteEntry));
-    if (s_airlabs_route_cache == nullptr)
+    s_adsb_lol_route_cache = (AdsbLolRouteEntry *)calloc(ADSB_LOL_ROUTE_CACHE_MAX, sizeof(AdsbLolRouteEntry));
+    if (s_adsb_lol_route_cache == nullptr)
     {
-        log_e("airlabs route cache: calloc failed (%u bytes)",
-              (unsigned)(AIRLABS_ROUTE_CACHE_MAX * sizeof(AirlabsRouteEntry)));
+        log_e("adsb.lol route cache: calloc failed (%u bytes)",
+              (unsigned)(ADSB_LOL_ROUTE_CACHE_MAX * sizeof(AdsbLolRouteEntry)));
         return false;
     }
-    log_i("airlabs route cache: allocated %d entries (Heap=%u)",
-          AIRLABS_ROUTE_CACHE_MAX, ESP.getFreeHeap());
+    log_i("adsb.lol route cache: allocated %d entries (Heap=%u)",
+          ADSB_LOL_ROUTE_CACHE_MAX, ESP.getFreeHeap());
     return true;
 }
 
-static bool airlabs_route_cache_lookup(const char *callsign, AirlabsRouteEntry &out)
+static bool adsb_lol_route_cache_lookup(const char *callsign, AdsbLolRouteEntry &out)
 {
-    if (s_airlabs_route_cache == nullptr)
+    if (s_adsb_lol_route_cache == nullptr)
         return false;
 
-    for (int i = 0; i < s_airlabs_route_cache_count; i++)
+    const uint32_t now_ms = millis();
+    for (int i = 0; i < s_adsb_lol_route_cache_count; i++)
     {
-        if (strcmp(s_airlabs_route_cache[i].callsign, callsign) == 0)
+        if (strcmp(s_adsb_lol_route_cache[i].callsign, callsign) == 0)
         {
-            s_airlabs_route_cache[i].last_used = s_airlabs_route_tick++;
-            out = s_airlabs_route_cache[i];
-            log_i("airlabs route cache HIT: %s", callsign);
-            return true;
+            s_adsb_lol_route_cache[i].last_used = s_adsb_lol_route_tick++;
+            out = s_adsb_lol_route_cache[i];
+            if ((now_ms - s_adsb_lol_route_cache[i].cached_at_ms) < ADSB_LOL_ROUTE_CACHE_TTL_MS)
+            {
+                log_i("adsb.lol route cache HIT: %s", callsign);
+                return true;
+            }
+            log_i("adsb.lol route cache STALE: %s", callsign);
+            return false;
         }
     }
     return false;
 }
 
-static void airlabs_route_cache_add(const AirlabsRouteEntry &entry)
+static void adsb_lol_route_cache_add(const AdsbLolRouteEntry &entry)
 {
-    if (s_airlabs_route_cache == nullptr)
+    if (s_adsb_lol_route_cache == nullptr)
         return;
 
-    /* Refresh an existing entry, if present */
-    for (int i = 0; i < s_airlabs_route_cache_count; i++)
+    for (int i = 0; i < s_adsb_lol_route_cache_count; i++)
     {
-        if (strcmp(s_airlabs_route_cache[i].callsign, entry.callsign) == 0)
+        if (strcmp(s_adsb_lol_route_cache[i].callsign, entry.callsign) == 0)
         {
-            s_airlabs_route_cache[i] = entry;
-            s_airlabs_route_cache[i].last_used = s_airlabs_route_tick++;
+            s_adsb_lol_route_cache[i] = entry;
+            s_adsb_lol_route_cache[i].last_used = s_adsb_lol_route_tick++;
             return;
         }
     }
 
-    AirlabsRouteEntry *slot = nullptr;
-    if (s_airlabs_route_cache_count < AIRLABS_ROUTE_CACHE_MAX)
+    AdsbLolRouteEntry *slot = nullptr;
+    if (s_adsb_lol_route_cache_count < ADSB_LOL_ROUTE_CACHE_MAX)
     {
-        slot = &s_airlabs_route_cache[s_airlabs_route_cache_count++];
+        slot = &s_adsb_lol_route_cache[s_adsb_lol_route_cache_count++];
     }
     else
     {
-        /* Evict the least-recently-used entry */
         int lru_idx = 0;
-        uint32_t oldest = s_airlabs_route_cache[0].last_used;
-        for (int i = 1; i < AIRLABS_ROUTE_CACHE_MAX; i++)
+        uint32_t oldest = s_adsb_lol_route_cache[0].last_used;
+        for (int i = 1; i < ADSB_LOL_ROUTE_CACHE_MAX; i++)
         {
-            if (s_airlabs_route_cache[i].last_used < oldest)
+            if (s_adsb_lol_route_cache[i].last_used < oldest)
             {
-                oldest = s_airlabs_route_cache[i].last_used;
+                oldest = s_adsb_lol_route_cache[i].last_used;
                 lru_idx = i;
             }
         }
-        slot = &s_airlabs_route_cache[lru_idx];
-        log_i("airlabs route cache: evicted %s", slot->callsign);
+        slot = &s_adsb_lol_route_cache[lru_idx];
+        log_i("adsb.lol route cache: evicted %s", slot->callsign);
     }
 
     *slot = entry;
-    slot->last_used = s_airlabs_route_tick++;
-    log_i("airlabs route cache ADD: %s (entries=%d/%d)", entry.callsign,
-          s_airlabs_route_cache_count, AIRLABS_ROUTE_CACHE_MAX);
+    slot->last_used = s_adsb_lol_route_tick++;
+    log_i("adsb.lol route cache ADD: %s (entries=%d/%d)", entry.callsign,
+          s_adsb_lol_route_cache_count, ADSB_LOL_ROUTE_CACHE_MAX);
 }
-
-/**
- * @brief Apply a cached/fresh AirLabs route to a flight.
- */
-static void airlabs_apply_route(flight_info &flight, const AirlabsRouteEntry &route)
+static void adsb_lol_apply_route(flight_info &flight, const AdsbLolRouteEntry &route)
 {
     if (route.airline_icao[0] != '\0')
         flight.icao_airline = route.airline_icao;
 
-    if (route.flight_iata[0] != '\0')
-        flight.iata_callsign = route.flight_iata;
+    flight.route_plausible = route.plausible;
 
-    // IATA code is preferred for the compact route row; fall back to ICAO
-    flight.origin_airport = route.dep_iata;
-    if (flight.origin_airport.isEmpty())
-        flight.origin_airport = route.dep_icao;
-
-    flight.destination_airport = route.arr_iata;
-    if (flight.destination_airport.isEmpty())
-        flight.destination_airport = route.arr_icao;
-}
-
-/**
- * @brief Fallback enrichment using the AirLabs routes API.
- *        Used when adsb.lol reports an unknown/non-plausible route.
- * @return true if the route was resolved (from cache or network).
- */
-bool enrich_flight_from_airlabs(flight_info &flight)
-{
-    if (flight.callsign.isEmpty())
-    {
-        log_w("airlabs: no callsign to look up");
-        return false;
-    }
-
-    FlightConfig cfg = webConfigGet();
-    if (!cfg.airlabsFallback)
-    {
-        log_i("airlabs: fallback disabled, skipping %s", flight.callsign.c_str());
-        return false;
-    }
-    if (cfg.airlabsApiKey[0] == '\0')
-    {
-        log_i("airlabs: no API key configured, skipping fallback for %s",
-              flight.callsign.c_str());
-        return false;
-    }
-
-    /* ── Check route cache first ── */
-    AirlabsRouteEntry cached;
-    if (airlabs_route_cache_lookup(flight.callsign.c_str(), cached))
-    {
-        airlabs_apply_route(flight, cached);
-        log_i("airlabs (cached): %s: %s -> %s (airline %s)",
-              flight.iata_callsign.c_str(),
-              flight.origin_airport.c_str(),
-              flight.destination_airport.c_str(),
-              flight.icao_airline.c_str());
-        return true;
-    }
-
-    if (!airlabs_route_cache_ensure())
-        return false;
-
-    const String url = "https://airlabs.co/api/v9/routes?api_key=" + String(cfg.airlabsApiKey) +
-                       "&flight_icao=" + flight.callsign +
-                       "&_fields=airline_iata,airline_icao,flight_iata,flight_number,dep_iata,dep_icao,arr_iata,arr_icao";
-
-    String response;
-    String error_message;
-    if (!https_get(url, response, error_message))
-    {
-        log_e("airlabs: %s", error_message.c_str());
-        return false;
-    }
-
-    JsonDocument doc;
-    const DeserializationError parse_error = deserializeJson(doc, response);
-    if (parse_error != DeserializationError::Ok)
-    {
-        log_e("airlabs: parse error: %s", parse_error.c_str());
-        return false;
-    }
-
-    const JsonArray routes = doc["response"];
-    if (routes.isNull() || routes.size() == 0)
-    {
-        log_w("airlabs: no route for %s", flight.callsign.c_str());
-        return false;
-    }
-
-    const JsonObject route = routes[0];
-
-    AirlabsRouteEntry entry = {};
-    strncpy(entry.callsign, flight.callsign.c_str(), sizeof(entry.callsign) - 1);
-    strncpy(entry.airline_icao, route["airline_icao"] | "", sizeof(entry.airline_icao) - 1);
-    strncpy(entry.airline_iata, route["airline_iata"] | "", sizeof(entry.airline_iata) - 1);
-    strncpy(entry.flight_iata, route["flight_iata"] | "", sizeof(entry.flight_iata) - 1);
-    strncpy(entry.dep_iata, route["dep_iata"] | "", sizeof(entry.dep_iata) - 1);
-    strncpy(entry.dep_icao, route["dep_icao"] | "", sizeof(entry.dep_icao) - 1);
-    strncpy(entry.arr_iata, route["arr_iata"] | "", sizeof(entry.arr_iata) - 1);
-    strncpy(entry.arr_icao, route["arr_icao"] | "", sizeof(entry.arr_icao) - 1);
-
-    airlabs_apply_route(flight, entry);
-    airlabs_route_cache_add(entry);
-
-    log_i("airlabs: %s: %s -> %s (airline %s)",
-          flight.iata_callsign.c_str(),
-          flight.origin_airport.c_str(),
-          flight.destination_airport.c_str(),
-          flight.icao_airline.c_str());
-    return true;
+    if (route.origin_iata[0] != '\0')
+        flight.origin_airport = route.origin_iata;
+    if (route.destination_iata[0] != '\0')
+        flight.destination_airport = route.destination_iata;
 }
 
 bool get_flights(float latitude, float longitude, float range_latitude, float range_longitude, bool air, bool ground, bool gliders, bool vehicles, std::vector<flight_info> &flights, String &error_message)
@@ -469,6 +558,10 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
     (void)air;
     (void)gliders;
     (void)vehicles;
+
+    /* Reset per-cycle status so stale 429 from a previous cycle/phase doesn't leak */
+    set_last_adsb_http_code(0);
+    set_adsb_retry_after_sec(0);
 
     int radius_km = (int)(range_latitude + 0.5f);
     if (radius_km < 1)
@@ -509,7 +602,7 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
 
     JsonDocument doc;
     const DeserializationError parse_error = deserializeJson(doc, response);
-    response = ""; /* free the raw payload before adsb.lol enrichment */
+    response = ""; /* free the raw payload before enrichment */
     if (parse_error != DeserializationError::Ok)
     {
         log_e("adsb.lol: parse error: %s", parse_error.c_str());
@@ -586,12 +679,7 @@ bool get_flights(float latitude, float longitude, float range_latitude, float ra
               });
 
     // ── 3. adsb.lol: resolve route/airline data for the closest aircraft ─
-    // If adsb.lol reports an unknown/non-plausible route, fall back to
-    // AirLabs routes (when configured).
-    if (!enrich_flight_from_adsblol(flights.front()))
-    {
-        enrich_flight_from_airlabs(flights.front());
-    }
+    enrich_flight_from_adsblol(flights.front());
 
     log_i(
         "get_flights done: size=%u Heap=%u Largest=%u",

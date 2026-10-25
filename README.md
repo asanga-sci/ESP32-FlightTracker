@@ -14,7 +14,7 @@ Two hardware variants are supported:
 ## 🚀 Features
 
 *   **Real-time Tracking:** Fetches live flight data including ICAO address, flight number, aircraft type, altitude, speed, and heading.
-*   **Open Data Sources:** Live ADS-B positions from **adsb.lol** (`/v2/point`) and route/airline data from adsb.lol's `/api/0/routeset` endpoint — no proprietary API keys required. An optional **AirLabs** fallback resolves routes when adsb.lol reports an unknown or non-plausible route.
+*   **Open Data Sources:** Live ADS-B positions from **adsb.lol** (`/v2/point`) and route/airline data from adsb.lol's `/api/0/routeset` endpoint — no proprietary API keys required. An optional **adsb.lol API key** can be supplied in settings to lift anonymous rate limits.
 *   **Optimized UI:** Built with **LVGL 9.1**, featuring a radar display and detailed flight information panels optimized for the 2.8" TFT.
 *   **Dual-Core Architecture:** 
     *   **Core 0:** Dedicated to UI rendering and resistive touch handling.
@@ -69,8 +69,8 @@ On first boot, the device will enter **Setup Mode**:
     *   **WiFi SSID & Password.**
     *   **Coordinates:** Your Latitude and Longitude.
     *   **Radius:** Tracking range in Kilometers.
+    *   **adsb.lol API Key (optional)** — sent as the `x-api-key` header for higher rate limits; leave blank for anonymous access.
     *   **Enable airline logos** — required to use the LogoStream API key field (the key input is greyed out until the checkbox is ticked).
-    *   **Enable AirLabs route fallback** — required to use the AirLabs API key field; adds route/airline data when adsb.lol can't resolve a route.
 
 Once connected, open `http://<device-ip>/settings` to change these later. Saving reboots the device.
 
@@ -90,7 +90,6 @@ This project is only possible thanks to the community that keeps these data sour
 *   **[adsb.lol](https://adsb.lol)** — open ADS-B aggregator providing live aircraft positions, headings, altitudes and speeds via its `/v2/point` API, plus route/airline data via the `/api/0/routeset` endpoint (VRS standing data). (Previously FlightRadar24 and airplanes.live; the retired FR24 feed is kept in `legacy/` for reference).
 
 **Optional enrichment & branding**
-*   **[AirLabs](https://airlabs.co)** — optional route/airline fallback API used when adsb.lol reports an *unknown or non-plausible route*. ⚠️ **Not supported on the CYD (`esp32-2432S028R`):** the additional HTTPS/TLS session requires more free RAM than the CYD has available, so enable it only on the CBD (`esp32-s3-es3c28p`, 8 MB PSRAM) variant.
 *   **[LogoStream](https://logostream.dev)** — optional airline logo API; logos are decoded with **LodePNG** and cached in RAM with retry-on-failure.
 
 **Libraries**

@@ -84,10 +84,15 @@ typedef struct {
     int count;
 } airport_runway_payload_t;
 
+typedef struct {
+    int http_code;
+} service_status_msg_t;
+
 static QueueHandle_t s_apQueue = nullptr;
 static QueueHandle_t g_flight_queue = NULL;
 static QueueHandle_t g_airline_logo_req_queue = NULL;
 static QueueHandle_t g_airline_logo_response_queue = NULL;
+static QueueHandle_t g_service_status_queue = NULL;
 static airport_runway_payload_t g_airport_runway_payload = {0};
 
 static TaskHandle_t fetch_logo_task_handle;
@@ -250,8 +255,9 @@ void http_fetch_task(void *param)
     UBaseType_t highWaterMark = uxTaskGetStackHighWaterMark(NULL);
     log_i("[Flight Fetch Task]: Initial stack high water mark: %u bytes", highWaterMark * sizeof(StackType_t));
 
-    int base_fetch_interval_ms = 10000; /* Start with a 10s base poll interval */
+    int base_fetch_interval_ms = 30000; /* 30s base poll interval with jitter */
     int fetch_interval_ms = base_fetch_interval_ms;
+    int fail_count = 0;
     uint32_t last_fetch = millis();
     uint32_t last_http_hb = 0;
     while (true)
@@ -263,6 +269,11 @@ void http_fetch_task(void *param)
             log_i("[HTTP] alive @%u ms, free heap=%u, HTTP stack HWM=%u",
                   (unsigned)now, (unsigned)ESP.getFreeHeap(),
                   (unsigned)uxTaskGetStackHighWaterMark(NULL));
+        }
+        if (WiFi.status() != WL_CONNECTED)
+        {
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+            continue;
         }
         if (now - last_fetch >= fetch_interval_ms)
         {
@@ -282,22 +293,45 @@ void http_fetch_task(void *param)
             // range_latitude now carries the search radius in km
             const bool fetch_ok = get_flights(cfg.lat, cfg.lon, cfg.radiusKm, cfg.radiusKm, true, false, true, true, local_flights, error_message);
             const int last_http_code = get_last_adsb_http_code();
-            flight_tracker_set_service_status(last_http_code);
+            {
+                service_status_msg_t svc = {0};
+                svc.http_code = last_http_code;
+                if (g_service_status_queue)
+                {
+                    xQueueOverwrite(g_service_status_queue, &svc);
+                }
+            }
 
             const bool have_flight_data = !local_flights.empty();
+            const bool rate_limited = (last_http_code == 429);
             int target_interval_ms = base_fetch_interval_ms;
-            if (!fetch_ok || !error_message.isEmpty())
+            if (rate_limited)
             {
-                target_interval_ms = 15000;
+                fail_count++;
+                uint32_t retry_after_s = get_adsb_retry_after_sec();
+                if (retry_after_s == 0)
+                    retry_after_s = 60; // no/invalid Retry-After → conservative default
+                if (retry_after_s < 5)
+                    retry_after_s = 5;
+                if (retry_after_s > 3600)
+                    retry_after_s = 3600; // never sleep longer than 1 h
+                target_interval_ms = (int)(retry_after_s * 1000UL);
+                log_w("[Flight Fetch Task]: 429 received, Retry-After=%lus, enforcing %d ms cooldown (fail count=%d)",
+                      (unsigned long)retry_after_s, target_interval_ms, fail_count);
+            }
+            else if (!fetch_ok || !error_message.isEmpty())
+            {
+                target_interval_ms = 30000;
                 log_e("[Flight Fetch Task]: Error fetching flights: %s", error_message.c_str());
             }
             else if (!have_flight_data)
             {
-                target_interval_ms = 15000;
+                target_interval_ms = 30000;
                 log_w("[Flight Fetch Task]: Empty flight payload, slowing polling to 30s");
             }
             else
             {
+                fail_count = 0;
                 flight_msg_t flight_msg = {0};
                 wrapper_msg.count = 0;
                 // Send to UI queue (non-blocking)
@@ -353,14 +387,23 @@ void http_fetch_task(void *param)
                 xQueueOverwrite(g_flight_queue, &wrapper_msg);
             }
 
-            /* Add a small random jitter to avoid synchronized polling bursts */
-            int jitter_ms = (millis() % 3000) - 1500;
-            fetch_interval_ms = target_interval_ms + jitter_ms;
-            if (fetch_interval_ms < 8000) {
-                fetch_interval_ms = 8000;
+            /* Keep polling at roughly 30s + a small jitter window to avoid bursts.
+               After a 429, honor the server's Retry-After delay: add only positive
+               jitter so we never retry before the requested time. */
+            if (rate_limited)
+            {
+                fetch_interval_ms = target_interval_ms + (int)(millis() % 3000UL);
             }
-            if (fetch_interval_ms > 32000) {
-                fetch_interval_ms = 32000;
+            else
+            {
+                int jitter_ms = (millis() % 6000) - 3000;
+                fetch_interval_ms = target_interval_ms + jitter_ms;
+                if (fetch_interval_ms < 30000) {
+                    fetch_interval_ms = 30000;
+                }
+                if (fetch_interval_ms > 65000) {
+                    fetch_interval_ms = 65000;
+                }
             }
             log_i("[Flight Fetch Task]: Next poll in %d ms", fetch_interval_ms);
             log_i("[Flight Fetch Task]: Fetch flight data task stack high water mark: %u words", uxTaskGetStackHighWaterMark(NULL));
@@ -388,6 +431,12 @@ void ui_update_task(void *param)
     /* Initialize display - order matters here to properly set radar ring labels*/
     setRadarOrigin(cfg.lat, cfg.lon);
     setRadarRadius(cfg.radiusKm); // default 50 km radar radius
+    if (g_service_status_queue)
+    {
+        service_status_msg_t svc_init = {0};
+        svc_init.http_code = 0;
+        xQueueOverwrite(g_service_status_queue, &svc_init);
+    }
     flight_tracker_ui_init();
 
     uint32_t last_update = 0;
@@ -410,6 +459,15 @@ void ui_update_task(void *param)
         if (g_airport_runway_payload.count > 0)
         {
             update_airport_runways(g_airport_runway_payload.airports, g_airport_runway_payload.count);
+        }
+
+        if (g_service_status_queue)
+        {
+            service_status_msg_t svc_msg = {0};
+            if (xQueueReceive(g_service_status_queue, &svc_msg, 0) == pdTRUE)
+            {
+                flight_tracker_set_service_status(svc_msg.http_code);
+            }
         }
 
         /* Check for new flight data from HTTP task */
@@ -471,9 +529,6 @@ void ui_update_task(void *param)
                 }
                 else if (!adsb_has_airline && msg.airline[0] != '\0')
                 {
-                    // adsb.lol no longer resolves this callsign. The AirLabs fallback
-                    // may still have supplied the airline ICAO code — retry the
-                    // LittleFS lookup before giving up.
                     if (strcmp(airline_name, "N/A") != 0 && lookupAirline(airlines, msg.airline, airline_name))
                     {
                         log_i("Resolved airline name (lookup fallback): %s", airline_name);
@@ -809,6 +864,7 @@ void setup()
     g_flight_queue = xQueueCreate(1, sizeof(flights_wrapper_msg_t));
     g_airline_logo_req_queue = xQueueCreate(1, sizeof(airline_logo_req_t));
     g_airline_logo_response_queue = xQueueCreate(1, sizeof(decoded_airline_logo_t));
+    g_service_status_queue = xQueueCreate(1, sizeof(service_status_msg_t));
 
     s_cfgEvents = webConfigInit(1, onAPReady);
     FlightConfig cfg = webConfigGet();

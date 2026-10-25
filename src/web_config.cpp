@@ -19,8 +19,7 @@ static constexpr const char* KEY_LON     = "lon";
 static constexpr const char* KEY_RADIUS  = "radius";
 static constexpr const char* LOGO_SUPPORT  = "logoSupport";
 static constexpr const char* LOGOSTREAM_KEY  = "logostreamKey";
-static constexpr const char* AIRLABS_FALLBACK = "airlabsFallback";
-static constexpr const char* AIRLABS_KEY  = "airlabsKey";
+static constexpr const char* ADSB_LOL_KEY  = "adsbLolApiKey";
 
 // ─── AP defaults ──────────────────────────────────────────────────────────────
 static constexpr const char* AP_SSID = "FlightTracker-Setup";
@@ -37,6 +36,8 @@ static WebServer         s_server(80);
 static DNSServer         s_dns;
 static Preferences       s_prefs;
 static WebConfigAPReadyCb s_apReadyCb  = nullptr;
+
+static void trimInPlace(char* s);
 
 // ─── HTML (PROGMEM) ───────────────────────────────────────────────────────────
 
@@ -129,6 +130,16 @@ static const char PAGE_SETUP[] PROGMEM = R"raw(
   </div>
 </div>
 
+<p class="sec">Data Sources</p>
+
+<div class="f">
+  <label>adsb.lol API Key <span style="font-weight:400;color:#475569">(optional — sent as x-api-key)</span></label>
+  <input type="text"
+         name="adsbLolApiKey"
+         placeholder="Optional — sent as x-api-key"
+         maxlength="50">
+</div>
+
 <p class="sec">Airline Logos</p>
 
 <div class="f">
@@ -150,27 +161,6 @@ static const char PAGE_SETUP[] PROGMEM = R"raw(
          disabled>
 </div>
 
-<p class="sec">Data Sources</p>
-
-<div class="f">
-  <label>
-    <input type="checkbox"
-           name="airlabsFallback"
-           onchange="toggleKey(this,'airlabsKey')">
-    Enable AirLabs route fallback
-  </label>
-</div>
-
-<div class="f">
-  <label>AirLabs API Key</label>
-  <input type="text"
-         name="airlabsApiKey"
-         id="airlabsKey"
-         placeholder="Optional — route fallback"
-         maxlength="50"
-         disabled>
-</div>
-
 <button type="submit" class="bs">
   💾 Save & Connect
 </button>
@@ -181,8 +171,7 @@ function toggleKey(cb,id){var e=document.getElementById(id);if(e)e.disabled=!cb.
 
 // Settings page template — printf tokens in order:
 //   ssid, ip, saved_banner, ssid, lat, lon, radius,
-//   logoChecked, logoKeyDisabled, logostreamApiKey,
-//   airlabsChecked, airlabsKeyDisabled, airlabsApiKey
+//   adsbLolApiKey, logoChecked, logoKeyDisabled, logostreamApiKey
 static const char PAGE_SETTINGS_TPL[] PROGMEM = R"raw(
 <div class="icon">⚙️</div>
 <h1>Flight Tracker Settings</h1>
@@ -204,6 +193,16 @@ static const char PAGE_SETTINGS_TPL[] PROGMEM = R"raw(
     <div class="f"><label>Radius km</label>
       <input type="number" name="radius" value="%.1f" min="10" max="500" required></div>
   </div>
+  <p class="sec">Data Sources</p>
+
+  <div class="f">
+    <label>adsb.lol API Key <span style="font-weight:400;color:#475569">(optional — sent as x-api-key)</span></label>
+    <input type="text"
+          name="adsbLolApiKey"
+          value="%s"
+          maxlength="50">
+  </div>
+
   <p class="sec">Airline Logos</p>
 
   <div class="f">
@@ -221,27 +220,6 @@ static const char PAGE_SETTINGS_TPL[] PROGMEM = R"raw(
     <input type="text"
           name="logostreamApiKey"
           id="logostreamKey"
-          value="%s"
-          %s>
-  </div>
-
-  <p class="sec">Data Sources</p>
-
-  <div class="f">
-    <label>
-      <input type="checkbox"
-            name="airlabsFallback"
-            %s
-            onchange="toggleKey(this,'airlabsKey')">
-      Enable AirLabs route fallback
-    </label>
-  </div>
-
-  <div class="f">
-    <label>AirLabs API Key <span style="font-weight:400;color:#475569">(optional — route fallback)</span></label>
-    <input type="text"
-          name="airlabsApiKey"
-          id="airlabsKey"
           value="%s"
           %s>
   </div>
@@ -276,8 +254,8 @@ static bool nvsLoad(FlightConfig& c) {
     c.radiusKm  = s_prefs.getFloat(KEY_RADIUS, 150.0f);
     c.logoSupport = s_prefs.getBool(LOGO_SUPPORT, false);
     s_prefs.getString(LOGOSTREAM_KEY, c.logostreamApiKey, sizeof(c.logostreamApiKey));
-    c.airlabsFallback = s_prefs.getBool(AIRLABS_FALLBACK, false);
-    s_prefs.getString(AIRLABS_KEY, c.airlabsApiKey, sizeof(c.airlabsApiKey));
+    s_prefs.getString(ADSB_LOL_KEY, c.adsbLolApiKey, sizeof(c.adsbLolApiKey));
+    trimInPlace(c.adsbLolApiKey);
     s_prefs.end();
     return true;
 }
@@ -291,8 +269,7 @@ static void nvsSave(const FlightConfig& c) {
     s_prefs.putFloat(KEY_RADIUS,  c.radiusKm);
     s_prefs.putBool(LOGO_SUPPORT, c.logoSupport);
     s_prefs.putString(LOGOSTREAM_KEY, c.logostreamApiKey);
-    s_prefs.putBool(AIRLABS_FALLBACK, c.airlabsFallback);
-    s_prefs.putString(AIRLABS_KEY, c.airlabsApiKey);
+    s_prefs.putString(ADSB_LOL_KEY, c.adsbLolApiKey);
     s_prefs.putBool(KEY_VALID,    true);
     s_prefs.end();
 }
@@ -301,6 +278,17 @@ static void nvsSave(const FlightConfig& c) {
 
 static String formArg(const char* name) {
     return s_server.hasArg(name) ? s_server.arg(name) : String();
+}
+
+// Strip leading/trailing whitespace (pasted keys often carry a trailing space).
+static void trimInPlace(char* s) {
+    if (!s || !s[0]) return;
+    char* start = s;
+    while (*start == ' ' || *start == '\t' || *start == '\r' || *start == '\n') ++start;
+    if (start != s) memmove(s, start, strlen(start) + 1);
+    size_t len = strlen(s);
+    while (len > 0 && (s[len-1] == ' ' || s[len-1] == '\t' || s[len-1] == '\r' || s[len-1] == '\n'))
+        s[--len] = '\0';
 }
 
 // Parse POST body into dst.  isEdit=true → blank password fields keep existing value.
@@ -317,21 +305,30 @@ static void parseForm(FlightConfig& dst, bool isEdit) {
     if (dst.radiusKm < 10) dst.radiusKm = 10;
 
     dst.logoSupport = formArg("logoSupport") == "on";
-    dst.airlabsFallback = formArg("airlabsFallback") == "on";
 
     // Disabled inputs are not submitted by the browser. When a feature is
     // turned off, keep the previously-saved key so re-enabling it restores
     // the value; on a fresh setup (isEdit=false) leave it empty.
     if (dst.logoSupport || !isEdit)
         strncpy(dst.logostreamApiKey, formArg("logostreamApiKey").c_str(), sizeof(dst.logostreamApiKey) - 1);
-    if (dst.airlabsFallback || !isEdit)
-        strncpy(dst.airlabsApiKey, formArg("airlabsApiKey").c_str(), sizeof(dst.airlabsApiKey) - 1);
+    strncpy(dst.adsbLolApiKey, formArg("adsbLolApiKey").c_str(), sizeof(dst.adsbLolApiKey) - 1);
+    dst.adsbLolApiKey[sizeof(dst.adsbLolApiKey) - 1] = '\0';
+    trimInPlace(dst.adsbLolApiKey);
 }
 
 // ─── Response helpers ─────────────────────────────────────────────────────────
 
+// Config pages carry live fields (and maxlength attrs), so never let the
+// browser reuse a stale copy — an old cached page can silently truncate input.
+static void sendNoCacheHeaders() {
+    s_server.sendHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+    s_server.sendHeader("Pragma", "no-cache");
+    s_server.sendHeader("Expires", "0");
+}
+
 static void sendPage(const char* body_P) {
     s_server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    sendNoCacheHeaders();
     s_server.send(200, "text/html", "");
     s_server.sendContent_P(HTML_HEAD);
     s_server.sendContent_P(body_P);
@@ -374,14 +371,13 @@ static void onSettingsGet() {
         "",           // saved-banner slot (empty on GET)
         snap.ssid,
         snap.lat, snap.lon, snap.radiusKm,
+        snap.adsbLolApiKey,
         snap.logoSupport ? "checked" : "",
         snap.logoSupport ? "" : "disabled",
-        snap.logostreamApiKey,
-        snap.airlabsFallback ? "checked" : "",
-        snap.airlabsFallback ? "" : "disabled",
-        snap.airlabsApiKey);
+        snap.logostreamApiKey);
 
     s_server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    sendNoCacheHeaders();
     s_server.send(200, "text/html", "");
     s_server.sendContent_P(HTML_HEAD);
     s_server.sendContent(body);

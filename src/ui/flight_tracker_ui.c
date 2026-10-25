@@ -495,6 +495,8 @@ static void display_airline_logo(const lv_img_dsc_t *logo_dsc)
     lv_obj_invalidate(airline_logo);
 }
 
+static void set_service_overlay_visible(bool visible);
+
 void flight_tracker_set_service_status(int http_code)
 {
     g_service_http_code = http_code;
@@ -507,6 +509,14 @@ void flight_tracker_set_service_status(int http_code)
         else
             snprintf(buf, sizeof(buf), "HTTP code N/A");
         lv_label_set_text(g_service_code, buf);
+    }
+
+    if (g_service_overlay != NULL)
+    {
+        if (http_code > 0 && http_code != 200)
+            set_service_overlay_visible(true);
+        else if (http_code == 0)
+            set_service_overlay_visible(false);
     }
 }
 
@@ -755,7 +765,9 @@ static void ui_timer_cb(lv_timer_t *t)
         snprintf(buf, sizeof(buf), "last update: %lus ago", (unsigned long)elapsed_secs);
         lv_label_set_text(g_lbl_last_upd, buf);
 
-        if (elapsed_secs >= 60U)
+        if (g_service_http_code > 0 && g_service_http_code != 200)
+            set_service_overlay_visible(true);
+        else if (elapsed_secs >= 60U)
             set_service_overlay_visible(true);
         else
             set_service_overlay_visible(false);
