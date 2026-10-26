@@ -4,6 +4,7 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <DNSServer.h>
+#include <ESPmDNS.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/event_groups.h>
@@ -468,12 +469,20 @@ static bool connectWiFi(const FlightConfig& c, uint32_t timeoutMs = 15000) {
 // ─── Station-mode server setup ────────────────────────────────────────────────
 
 static void startSettingsServer() {
+    if (MDNS.begin("esp32-flighttracker")) {
+        MDNS.addService("http", "tcp", 80);
+        log_i("[WebConfig] mDNS started: http://esp32-flighttracker.local");
+    } else {
+        log_w("[WebConfig] mDNS failed to start");
+    }
+
     s_server.on("/",              HTTP_GET,  []() { redirect("/settings"); });
     s_server.on("/settings",      HTTP_GET,  onSettingsGet);
     s_server.on("/settings/save", HTTP_POST, onSettingsPost);
     s_server.on("/reset",         HTTP_POST, onReset);
     s_server.begin();
     log_i("[WebConfig] Settings at http://%s/settings", WiFi.localIP().toString().c_str());
+    log_i("[WebConfig] Also available at http://esp32-flighttracker.local/settings");
 }
 
 // ─── FreeRTOS task ────────────────────────────────────────────────────────────
@@ -497,16 +506,15 @@ static void configTask(void* /*pvParams*/) {
 
     // 3. Publish that we're ready
     xEventGroupSetBits(s_evtGroup, CFG_EVT_READY);
-    vTaskDelete(NULL); // delete self — we don't need to run a server on this task, just needed to manage config and WiFi setup
 
-    // 4. Start the settings web server
-    // startSettingsServer();
+    // 4. Start the settings web server so it can be updated while running
+    startSettingsServer();
 
     // 5. Service HTTP clients forever
-    // while (true) {
-    //     s_server.handleClient();
-    //     vTaskDelay(pdMS_TO_TICKS(10));
-    // }
+    while (true) {
+        s_server.handleClient();
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
