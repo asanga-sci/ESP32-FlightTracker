@@ -2,100 +2,118 @@
 
 ![Screenshot](images/screenshot_1.png)
 
-A real-time flight tracking station for **ESP32 boards with a 2.8" 240x320 ILI9341 TFT**. This project fetches live ADS-B data from the **adsb.lol** community feed and visualizes aircraft on a radar-style interface, with optional route/airline enrichment and airline logos.
+A real-time flight tracking display for ESP32 boards with a 2.8" 240x320 ILI9341 TFT. The project fetches live ADS-B aircraft data from adsb.lol, plots nearby flights on a radar-style map, and optionally enriches them with airline and route metadata plus airline logos.
 
-Two hardware variants are supported:
+## Supported hardware
 
-| Variant | Board | Env | Config |
+Two board variants are supported:
+
+| Variant | Board | PlatformIO env | Display config |
 | :--- | :--- | :--- | :--- |
-| **CBD** (Cheap Black Display) — **default env** | ESP32-S3 ES3C28P / Freenove FNK0104A-B | `esp32-s3-es3c28p` | `include/User_Setup_S3.h` |
+| **CBD** (Cheap Black Display) — default | ESP32-S3 ES3C28P / Freenove FNK0104A-B | `esp32-s3-es3c28p` | `include/User_Setup_S3.h` |
 | **CYD** (Cheap Yellow Display) | ESP32-2432S028R | `esp32-2432S028R` | `include/User_Setup.h` |
 
-## 🚀 Features
+## What this project does
 
-*   **Real-time Tracking:** Fetches live flight data including ICAO address, flight number, aircraft type, altitude, speed, and heading.
-*   **Open Data Sources:** Live ADS-B positions from **adsb.lol** (`/v2/point`) and route/airline data from adsb.lol's `/api/0/routeset` endpoint — no proprietary API keys required. An optional **adsb.lol API key** can be supplied in settings to lift anonymous rate limits.
-*   **Optimized UI:** Built with **LVGL 9.1**, featuring a radar display and detailed flight information panels optimized for the 2.8" TFT.
-*   **Dual-Core Architecture:** 
-    *   **Core 0:** Dedicated to UI rendering and resistive touch handling.
-    *   **Core 1:** Manages WiFi, HTTP requests, JSON parsing, and image decoding.
-*   **Web Configuration:** Integrated WiFi Manager and settings portal to configure your GPS coordinates, tracking radius, and optional API keys without reflashing.
-*   **Airline Logos:** Dynamically fetches, decodes (LodePNG) and caches airline logos using the LogoStream API (optional) — with retry on transient failures.
-*   **Local Database:** Resolves airline ICAO codes to full names using a database stored in `LittleFS`.
+- Fetches live aircraft positions from adsb.lol `/v2/point`
+- Sorts aircraft by distance from your configured GPS center
+- Enriches the closest aircraft with route and airline data from adsb.lol `/api/0/routeset`
+- Displays aircraft on a radar map with speed, altitude, heading and flight metadata
+- Supports optional airline logo fetches via LogoStream
+- Stores configuration in NVS/Preferences and airline names in LittleFS
+- Runs as a dual-core FreeRTOS application with split UI and network responsibilities
 
-## 🛠️ Hardware
+## Architecture
 
-*   **CYD:** ESP32-2432S028R (ESP32-WROOM-32) with 2.8" ILI9341 TFT, resistive touch (XPT2046), 4 MB flash.
-*   **CBD:** ESP32-S3 ES3C28P (ESP32-S3-WROOM-1) with 2.8" ILI9341 TFT, resistive touch (XPT2046), **16 MB flash + 8 MB OPI PSRAM**, native USB CDC (no UART bridge chip).
-*   **Storage:** Internal Flash used via `LittleFS` for configuration and airline data.
+The app is structured around a few key tasks and components:
 
-## 📦 Software Setup
+| Task / Component | Core | Purpose |
+| :--- | :--- | :--- |
+| `UI_Task` | 0 | LVGL timer handling, screen refreshes, flight rendering |
+| `HTTP_Task` | 1 | Fetches aircraft data, enriches closest flight, pushes updates to queue |
+| `Fetch_Logo_Task` | 1 | Downloads and decodes airline PNG logos in background |
+| `webConfig` | shared | WiFi AP/STA configuration, captive portal, NVS persistence |
+| `flight_tracker_ui` | UI thread | LVGL scene and radar drawing logic |
 
-This project is built using **PlatformIO**.
+### Data flow
 
-### Dependencies
-*   **LVGL 9.1.0+**
-*   **TFT_eSPI** (Pre-configured per board via `include/User_Setup.h` / `include/User_Setup_S3.h`)
-*   **ArduinoJson 7.x**
-*   **LodePNG** (vendored under `lib/lodepng`)
+1. `HTTP_Task` calls `get_flights()` and fetches aircraft from adsb.lol `/v2/point`.
+2. Aircraft are sorted by distance from the configured location.
+3. The closest aircraft is enriched via adsb.lol `/api/0/routeset`, which may include airline and route details.
+4. Updates are pushed to the single-slot queue using overwrite semantics.
+5. `UI_Task` consumes the latest aircraft snapshot and redraws the radar and info panels.
+6. Logo requests follow a separate queue, decode pipeline, and UI response path.
 
-### Build & Flash
+## Build and flash
 
-The **CBD** variant (`esp32-s3-es3c28p`) is the default environment, so a bare `pio run` targets it:
+This project uses **PlatformIO**.
 
 ```bash
-pio run                          # compile the default env (CBD / esp32-s3-es3c28p)
-pio run -e esp32-2432S028R       # compile the CYD variant
-pio run -t upload                # build + flash the active variant
-pio run -t uploadfs              # flash LittleFS image (airlines.txt, etc.)
+pio run                        # build the default env (CBD / esp32-s3-es3c28p)
+pio run -e esp32-2432S028R     # build the CYD variant
+pio run -t upload              # compile + flash the active environment
+pio run -t uploadfs            # upload LittleFS data files like airlines.txt
+pio device monitor            # serial monitor at 115200 baud
 ```
 
-Notes:
-*   The **CYD** variant uses the `huge_app.csv` partition scheme; the **CBD** variant uses `default_16MB.csv` (specified in `platformio.ini`).
-*   The CBD variant flashes over native USB CDC at 921600 baud.
+### Notes
 
-### Uploading the Airline Database
+- The default build is `esp32-s3-es3c28p`.
+- The CYD target uses `huge_app.csv` as its partition layout.
+- The CBD target uses `default_16MB.csv`.
+- The default platform settings include `monitor_filters = esp32_exception_decoder`.
+- TFT driver setup is board-specific and is included from `include/User_Setup.h` or `include/User_Setup_S3.h`.
 
-1.  Place your `airlines.txt` in the `data` folder.
-2.  Use `pio run -t uploadfs` to flash the `LittleFS` partition.
+## Configuration
 
-## ⚙️ Configuration
+On first boot, the device starts in setup mode:
 
-On first boot, the device will enter **Setup Mode**:
+1. Connect to the WiFi network named `FlightTracker-Setup`
+2. Open `http://192.168.4.1` in a browser
+3. Configure:
+   - WiFi SSID and password
+   - Latitude and longitude
+   - Tracking radius in kilometers
+   - Optional adsb.lol API key for higher rate limits
+   - Logo support toggle for airline image fetching
+4. Save the settings; the device reboots and reconnects to your WiFi
 
-1.  Connect to the WiFi network: `FlightTracker-Setup`.
-2.  Navigate to `192.168.4.1` in your browser.
-3.  Configure:
-    *   **WiFi SSID & Password.**
-    *   **Coordinates:** Your Latitude and Longitude.
-    *   **Radius:** Tracking range in Kilometers.
-    *   **adsb.lol API Key (optional)** — sent as the `x-api-key` header for higher rate limits; leave blank for anonymous access.
-    *   **Enable airline logos** — required to use the LogoStream API key field (the key input is greyed out until the checkbox is ticked).
+After the device is online, open `http://esp32-flighttracker.local/settings` to change the same values later. If your network does not support mDNS, use the device's IP address instead.
 
-Once connected, open `http://<device-ip>/settings` to change these later. Saving reboots the device.
+## Filesystem and data files
 
-## 🏗️ Technical Details
+The project stores runtime data in LittleFS.
 
-| Component | Core | Description |
-| :--- | :--- | :--- |
-| `UI_Task` | 0 | Handles the LVGL timer handler and screen updates. |
-| `HTTP_Task`| 1 | Periodically fetches flight data and updates the aircraft model. |
-| `Logo_Task`| 1 | Background fetching and LodePNG decoding for airline icons. |
+- `data/airlines.txt` contains ICAO-to-airline-name mappings in the format `ICAO|FullName`
+- This file is uploaded to the device using:
 
-## 📜 Data Sources & Credits
+```bash
+pio run -t uploadfs
+```
 
-This project is only possible thanks to the community that keeps these data sources free and open:
+## Dependencies
 
-**Flight data**
-*   **[adsb.lol](https://adsb.lol)** — open ADS-B aggregator providing live aircraft positions, headings, altitudes and speeds via its `/v2/point` API, plus route/airline data via the `/api/0/routeset` endpoint (VRS standing data). (Previously FlightRadar24 and airplanes.live; the retired FR24 feed is kept in `legacy/` for reference).
+- TFT_eSPI `^2.5.43`
+- ArduinoJson `^7.4.3`
+- LVGL `^9.1.0`
+- LodePNG (vendored under `lib/lodepng`)
 
-**Optional enrichment & branding**
-*   **[LogoStream](https://logostream.dev)** — optional airline logo API; logos are decoded with **LodePNG** and cached in RAM with retry-on-failure.
+## Project notes and caveats
 
-**Libraries**
-*   **LVGL** (UI framework), **TFT_eSPI** (ILI9341 driver), **ArduinoJson** (JSON parsing), **LodePNG** (PNG decoding), **Preferences** (NVS configuration storage).
+- LVGL is C-based; the UI code in `src/ui/flight_tracker_ui.c` uses `extern "C"` linkage.
+- The radar canvas and other large allocations are sensitive to heap limits; memory pressure is a real concern on ESP32.
+- Inter-task communication uses FreeRTOS queues with single-slot overwrite semantics.
+- The app uses a hardcoded NTP timezone offset of `25200` (UTC+7) in `main.cpp`.
+- The project has no automated test suite at this time; the `test/` directory is currently empty.
+- The old FlightRadar24 implementation is retained in `legacy/` for reference but is not part of the active build.
 
-Distance and bearing are calculated using the Haversine formula.
+## Data sources
+
+- **adsb.lol**: live aircraft positions and route/airline enrichment data
+- **LogoStream**: optional airline logo fetching and caching
+
+Distance and bearing calculations use the Haversine approach.
 
 ---
-*Disclaimer: This project is for educational purposes. Ensure you comply with the terms of service of the data providers.*
+
+This project is for educational and personal use. Please respect the terms of service of all data providers and upstream APIs used by the device.
